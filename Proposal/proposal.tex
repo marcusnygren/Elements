@@ -38,15 +38,15 @@
 \chapter{Proposal}
 
 \section{Prelude}
-The aim for the project is to create a fluid simulation and visualize it in real-time. Simulation of various fluids can be done by e.g. modify the parameters of the Navier-Stokes equations and change the rendering method.
+The aim for the project is to create a fluid simulation and visualize it in real-time. Simulation of various fluids can be done by e.g. modify the parameters of the Navier-Stokes equations and changing the rendering method.
 
 \section{Description of the physical system}
 The Navier-Stokes equations used for the fluid simulation:\\
-\(\frac{du}{dt} = - (\textbf{u}\cdot{\Delta})\textbf{u} - \frac{1}{\rho}\Delta p + v \Delta^2 \textbf{u} + \textbf{F}\) \\
-\(\Delta \cdot \textbf{u} = 0 \)
+\(\frac{du}{dt} = - (\textbf{u}\cdot{\nabla})\textbf{u} - \frac{1}{\rho}\nabla p + v \nabla^2 \textbf{u} + \textbf{F}\) \\
+\(\nabla \cdot \textbf{u} = 0 \)
 
 \section{Simulation of the system}
-A pre-study will be done in Matlab to get a basic understanding for how the system works. The simulation will later be implemented in C++ with OpenGL and GLSL. When simulating the fluids we will benefit heavily from the GPU being optimized for performing the same actions on every object, which is not the case in Matlab.
+A pre-study will be done in Matlab to get a basic understanding for how the system works. The simulation will later be implemented in C++ with OpenGL and GLSL were the majority of calculations are performed on GPU. When simulating the fluids we will benefit heavily from the GPU being optimized for performing the same operations on different data in parallel.
 
 \section{Implementation of the animation}
 Since we aim to animate different kinds of fluids we will need to visualize different characteristics of each unique fluid.
@@ -56,9 +56,8 @@ Since the simulation will be calculated throughout a 3-dimensional volume of vox
 We hope that a real-time rendering of the fluid simulation will allow the user to interact with the simulation by e.g. modifying the mathematical parameters or through direct physical interaction.\\
 
 \section{Documentation}
-We want to keep a good structure for our work. Documentation of the project is mostly done in Google Drive, whereas our code (including Tex code) is available on GitHub.
-
-We update a detailed hourly log to make sure we reach our deadlines in time and so that we do not work more or less than we have planned.
+Documentation of the project is mostly done in Google Drive, whereas our code (including Tex code) is available on GitHub.
+We keep a detailed log to make sure we reach our deadlines in time and so that we do not work more or less than we have planned.
 
 \section{Plan of the work}
 Our time plan is calculated as that every team member works two days a week with the project. This will allow for the group to spend time on this project as well as the course TNM094 which is done in parallell to this course.
@@ -69,5 +68,6 @@ Gabriel Baravdish	gabba873	Developer
 Joakim Deborg	joade361	Developer
 Kristofer Janukiewicz	krija286	Developer
 Marcus Nygren	marny568	Developer, Interaction
+
 
 \end{document}
