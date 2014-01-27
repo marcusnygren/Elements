@@ -1,0 +1,57 @@
+\documentclass[a4paper,12pt,twoside,swedish]{report}
+
+%\graphicspath{{figures/}}
+
+
+\usepackage{times}  
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{theorem}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{babel}
+
+\headsep          0.25in
+\headheight       12pt
+\setlength{\topmargin}{-\headsep}
+\addtolength{\topmargin}{-\headheight}
+\oddsidemargin      0in
+\evensidemargin     0in
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-2.0in}
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-2.0in}
+\addtolength{\textheight}{-1\topskip}
+\divide\textheight  by \baselineskip
+\multiply\textheight  by \baselineskip
+\addtolength{\textheight}{\topskip}
+\setcounter{secnumdepth}{-2}
+
+\begin{document}
+
+\pagestyle{plain}
+
+\setcounter{page}{1}
+
+\section{Inledning}
+Målet med projektet är att skapa en fluidsimulering och visualisera i realtid. Simulering av olika fluider kan göras genom att exempelvis reglera de olika parametrarna i Navier-Stokes ekvationer och ändra renderingsmetod. 
+
+\section{Beskrivning av Systemet}
+För fluidsimuleringen används Navier-Stokes ekvationer:\\
+\(\frac{du}{dt} = - (\textbf{u}\cdot{\Delta})\textbf{u} - \frac{1}{\rho}\Delta p + v \Delta^2 \textbf{u} + \textbf{F}\) \\
+\(\Delta \cdot \textbf{u} = 0 \) \\
+
+\section{Simulering av Systemet}
+En förstudie kommer utföras i Matlab för att få en övergrippande förståelse för hur systemet fungerar. Sedan kommer simuleringen implementeras i C++ med OpenGL och GLSL för att köras på GPU. Fluidsimulering lämpar sig mycket väl för en GPU-implementation då grafikkortet kan parallellisera beräkningarna och på så vis uppnås en högre nivå av prestanda. 
+ 
+\section{Implementation av Animering}
+Visualiseringen kommer implementeras som en volymsrendering på GPU. Eftersom vi strävar efter att animera olika fluider kommer olika egenskaper att behöva visualiseras.
+
+\section{Dokumentation}
+
+\section{Arbetsplanering}
+	
+
+\end{document}
