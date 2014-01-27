@@ -35,23 +35,23 @@
 
 \setcounter{page}{1}
 
-\section{Inledning}
-Målet med projektet är att skapa en fluidsimulering och visualisera i realtid. Simulering av olika fluider kan göras genom att exempelvis reglera de olika parametrarna i Navier-Stokes ekvationer och ändra renderingsmetod. 
+\section{Introduction}
 
-\section{Beskrivning av Systemet}
-För fluidsimuleringen används Navier-Stokes ekvationer:\\
+
+\section{Description of the physical system}
+
 \(\frac{du}{dt} = - (\textbf{u}\cdot{\Delta})\textbf{u} - \frac{1}{\rho}\Delta p + v \Delta^2 \textbf{u} + \textbf{F}\) \\
 \(\Delta \cdot \textbf{u} = 0 \) \\
 
-\section{Simulering av Systemet}
-En förstudie kommer utföras i Matlab för att få en övergrippande förståelse för hur systemet fungerar. Sedan kommer simuleringen implementeras i C++ med OpenGL och GLSL för att köras på GPU. Fluidsimulering lämpar sig mycket väl för en GPU-implementation då grafikkortet kan parallellisera beräkningarna och på så vis uppnås en högre nivå av prestanda. 
- 
-\section{Implementation av Animering}
-Visualiseringen kommer implementeras som en volymsrendering på GPU. Eftersom vi strävar efter att animera olika fluider kommer olika egenskaper att behöva visualiseras.
+\section{Simulation of the system}
 
-\section{Dokumentation}
+\section{Implementation of the animation}
+For example; during smoke simulation the temperature must be calculated at each point in the volume so that the appearance of hot smoke rising and cold smoke falling to the ground can be correctly modeled. In the case of simulating fire, it is required to keep track of how long it has been since the fuel was ignited. This provides the means to model how the fuel becomes exhausted.
 
-\section{Arbetsplanering}
+
+\section{Documentation}
+
+\section{Plan of the work}
 	
 
 \end{document}
