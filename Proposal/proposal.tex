@@ -35,21 +35,29 @@
 
 \setcounter{page}{1}
 
-\section{Introduction}
 
+\section{Prelude}
+The aim for the project is to create a fluid simulation and visualize it in real-time. Simulation of various fluids can be done by e.g. modify the parameters of the Navier-Stokes equations and change the rendering method.
 
 \section{Description of the physical system}
+The Navier-Stokes equations are used for the fluid simulation:\\
 
 \(\frac{du}{dt} = - (\textbf{u}\cdot{\Delta})\textbf{u} - \frac{1}{\rho}\Delta p + v \Delta^2 \textbf{u} + \textbf{F}\) \\
 \(\Delta \cdot \textbf{u} = 0 \) \\
 
 \section{Simulation of the system}
+A pre-study will be done in Matlab to get a basic understanding for how the system works. The simulation will later be implemented in C++ with OpenGL and GLSL. When simulating the fluids we will benefit heavily from the GPU being optimized for performing the same actions on every object, which is not the case in Matlab.
 
 \section{Implementation of the animation}
+The visualization will be implemented as a volume rendering on the GPU. Since we aim to animate different kind of fluids we will need to visualize the different characteristics of the fluids.
+
+In terms of animation, we hope that a real-time rendering of the fluid simulation will allow the user to interact with the simulation by e.g. modifying the mathematical parameters.
+
 For example; during smoke simulation the temperature must be calculated at each point in the volume so that the appearance of hot smoke rising and cold smoke falling to the ground can be correctly modeled. In the case of simulating fire, it is required to keep track of how long it has been since the fuel was ignited. This provides the means to model how the fuel becomes exhausted.
 
 
 \section{Documentation}
+
 
 \section{Plan of the work}
 	
