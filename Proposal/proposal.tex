@@ -38,15 +38,15 @@
 \section{Inledning}
 Målet med projektet är att skapa en fluidsimulering och visualisera i realtid. Simulering av olika fluider kan göras genom att exempelvis reglera de olika parametrarna i Navier-Stokes ekvationer och ändra renderingsmetod. 
 
-\section{Beskrivning av Systemet}
+\section{Beskrivning av systemet}
 För fluidsimuleringen används Navier-Stokes ekvationer:\\
 \(\frac{du}{dt} = - (\textbf{u}\cdot{\Delta})\textbf{u} - \frac{1}{\rho}\Delta p + v \Delta^2 \textbf{u} + \textbf{F}\) \\
 \(\Delta \cdot \textbf{u} = 0 \) \\
 
-\section{Simulering av Systemet}
-En förstudie kommer utföras i Matlab för att få en övergrippande förståelse för hur systemet fungerar. Sedan kommer simuleringen implementeras i C++ med OpenGL och GLSL för att köras på GPU. Fluidsimulering lämpar sig mycket väl för en GPU-implementation då grafikkortet kan parallellisera beräkningarna och på så vis uppnås en högre nivå av prestanda. 
+\section{Simulering av systemet}
+En förstudie kommer utföras i Matlab för att få en övergripande förståelse för hur systemet fungerar. Sedan kommer simuleringen implementeras i C++ med OpenGL och GLSL för att köras på GPU. Fluidsimulering lämpar sig mycket väl för en GPU-implementation då grafikkortet kan parallellisera beräkningarna, vilket ger bättre  prestanda.
  
-\section{Implementation av Animering}
+\section{Implementation av animering}
 Visualiseringen kommer implementeras som en volymsrendering på GPU. Eftersom vi strävar efter att animera olika fluider kommer olika egenskaper att behöva visualiseras.
 
 \section{Dokumentation}
