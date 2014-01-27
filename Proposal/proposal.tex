@@ -35,23 +35,25 @@
 
 \setcounter{page}{1}
 
-\section{Inledning}
-Målet med projektet är att skapa en fluidsimulering och visualisera i realtid. Simulering av olika fluider kan göras genom att exempelvis reglera de olika parametrarna i Navier-Stokes ekvationer och ändra renderingsmetod. 
+\section{Prelude}
+The aim for the project is to create a fluid simulation and visualize it in real-time. Simulation of various fluids can be done by e.g. modify the parameters of the Navier-Stokes equations and change the rendering method.
 
-\section{Beskrivning av systemet}
-För fluidsimuleringen används Navier-Stokes ekvationer:\\
+\section{Description of the physical system}
+The Navier-Stokes equations are used for the fluid simulation:\\
 \(\frac{du}{dt} = - (\textbf{u}\cdot{\Delta})\textbf{u} - \frac{1}{\rho}\Delta p + v \Delta^2 \textbf{u} + \textbf{F}\) \\
 \(\Delta \cdot \textbf{u} = 0 \) \\
 
-\section{Simulering av systemet}
-En förstudie kommer utföras i Matlab för att få en övergripande förståelse för hur systemet fungerar. Sedan kommer simuleringen implementeras i C++ med OpenGL och GLSL för att köras på GPU. Fluidsimulering lämpar sig mycket väl för en GPU-implementation då grafikkortet kan parallellisera beräkningarna, vilket ger bättre  prestanda.
+\section{Simulation of the system}
+A pre-study will be done in Matlab to get a basic understanding for how the system works. The simulation will later be implemented in C++ with OpenGL and GLSL. When simulating the fluids we will benefit heavily from the GPU being optimized for performing the same actions on every object, which is not the case in Matlab.
  
-\section{Implementation av animering}
-Visualiseringen kommer implementeras som en volymsrendering på GPU. Eftersom vi strävar efter att animera olika fluider kommer olika egenskaper att behöva visualiseras.
+\section{Implementation of the animation}
+The visualization will be implemented as a volume rendering on the GPU. Since we aim to animate different kind of fluids we will need to visualize the different characteristics of the fluids.
 
-\section{Dokumentation}
+In terms of animation, we hope that a real-time rendering of the fluid simulation will allow the user to interact with the simulation by e.g. modifying the mathematical parameters.
 
-\section{Arbetsplanering}
+\section{Documentation}
+
+\section{Plan of the work}
 	
 
 \end{document}
