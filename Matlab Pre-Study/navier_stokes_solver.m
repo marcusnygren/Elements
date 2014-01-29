@@ -1,8 +1,8 @@
 function [ ] = main()
     
-    nrFrames = 10;
+    nrFrames = 100;
     nrParticles = 10;
-    timeStep = 0.1;
+    timeStep = 10;
     gridSizeX = 100;
     gridSizeY = 100;
 
@@ -14,27 +14,40 @@ function [ ] = main()
     particles((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles)) = 1;
     
     for frames = 1 : nrFrames
-        newVelocityTexture = zeros(gridSizeX, gridSizeY, 100,2);
+        newVelocityTexture = zeros(gridSizeX, gridSizeY, 2);
         newPreasureTexture = zeros(gridSizeX, gridSizeY);
+        divergenceTexture = zeros(gridSizeX, gridSizeY);
         
-        for x = 1 : gridSizeX;
-            for y = 1 : gridSizeY;
+        for x = 10 : (gridSizeX - 10);
+            for y = 10 : (gridSizeY - 10);
+                
                 % Advect velocity.
                 newVelocityTexture(x, y) = calculateAdvection(x, y, timeStep, 1 / gridSizeX, velocityTexture, velocityTexture);
+                
+                % Advect particles
+                particles(x, y) = calculateAdvection(x, y, timeStep, 1 / gridSizeX, velocityTexture, particles);
                 
                 % Calculate Viscous Diffusion.
                 
                 % Add forces.
                 newVelocityTexture(x, y) = addForces(x, y, forces, newVelocityTexture);
                 
+                % Comupte divergence
+                divergenceTexture(x, y) = divergence(x, y, velocityTexture, 1/gridSizeX);
+                
                 % Compute Pressure.
-                newPreasureTexture = calculateJacobiInteration(x, y, -(1/gridSizeX)^2, 4, preasureTexture, )
+                newPreasureTexture(x, y) = calculateJacobiInteration(x, y, -(1/gridSizeX)^2, 4, preasureTexture, divergenceTexture);
+                
                 % Substract pressure gradient.
+                newVelocityTexture(x, y) = gradiantSubtraction(x, y, velocityTexture, preasureTexture, 1/gridSizeX);
             end
         end
         
         velocityTexture = newVelocityTexture;
         preasureTexture = newPreasureTexture;
+        figure
+        imshow(particles)
+
     end
 end
 
@@ -55,13 +68,20 @@ function [result] = addForces(x, y, forces, texture)
     result = texture(x, y) + forces(x, y); 
 end
 
+function [div] = divergence(x, y, w, dx)
+% nabla(dot)w
+    div = (w(x+1,y)-w(x-1,y) + w(x,y+1)-w(x,y-1))*0.5*dx;
+end
 
-
-
-
-
-
-
-
+function [result] = gradiantSubtraction(x, y, w, p, dx)
+%  du/dt = u(dot)nabla*u - (1/rho)*grad(p) + F
+% OBS dx = 0.5 => 1/2
+% equation 8
+    uNew(x, y, :) = w(x, y,:);
+    temp = [p(x+1,y) - p(x-1,y); p(x,y+1) - p(x,y-1)]*0.5*dx;
+    size(temp)
+%     uNew(x, y, :) = uNew(x, y, :) - ;
+    result = uNew(x, y, :);
+end
 
 
