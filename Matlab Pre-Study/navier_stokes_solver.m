@@ -28,3 +28,25 @@ function [] = calculateAdvection(x, y, timestep, dx, velocityTexture, advectionT
     
     result = advectionTexture(positionX, positionY);
 end
+
+
+function [div] = divergence(w, dx)
+% nabla(dot)w
+    div = (w(x+1,y)-w(x-1,y) + w(x,y+1)-w(x,y-1))*dx;
+end
+
+function [uNew] = gradiantSubtraction(w, p, dx)
+%  du/dt = u(dot)nabla*u - (1/rho)*grad(p) + F
+% OBS dx = 0.5 => 1/2
+% equation 8
+    uNew = w;
+    uNew = uNew - (p(x+1,y) - p(x-1,y)) - (p(x,y+1) - p(x,y-1))*dx;
+end
+
+
+
+
+A(1,:) = discreteLap;
+discreteLap = [0 1 0; 
+               1 -4 1; 
+               0 1 0];
