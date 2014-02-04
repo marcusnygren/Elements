@@ -1,11 +1,13 @@
 import QtQuick 2.0
 import OpenGLUnderQML 1.0
 import QtQuick.Controls 1.1
+import QtQml 2.0
 
 Item {
+    id: item1
 
-    width: 320
-    height: 480
+    width: 800
+    height: 600
 
     Squircle {
         SequentialAnimation on t {
@@ -37,18 +39,23 @@ Item {
         anchors.margins: 20
     }
 
-    Row{
-        anchors.centerIn: parent
-        spacing: parent.width/6
+    Rectangle {
+        id: container
+        radius: 10
+        border.width: 1
+        border.color: "white"
+        width: 250
+        height: 500
+        anchors {right : item1.right; top: item1.top}
+        anchors.margins: 10
+        color: Qt.rgba(1, 1, 1, 0.5)
 
-        Button{
-            id: loadButton
+        TopGui{
+            
         }
-        Button{
-            id: saveButton
-        }
-        Button{
-            id: exitButton
+
+        BottomGui{
+
         }
     }
 }

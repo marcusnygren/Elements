@@ -3,6 +3,7 @@
 #include <QtQuick/qquickwindow.h>
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtGui/QOpenGLContext>
+#include <QtQml>
 
 Squircle::Squircle()
     : m_program(0)

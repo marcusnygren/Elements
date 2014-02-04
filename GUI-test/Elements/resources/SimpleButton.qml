@@ -1,7 +1,10 @@
 import QtQuick 2.0
+import OpenGLUnderQML 1.0
+import QtQuick.Controls 1.1
 
 Rectangle  {
     id: container
+    radius: 10
 
     property string text: "Button"
 
@@ -10,7 +13,6 @@ Rectangle  {
     width: buttonLabel.width + 20; height: buttonLabel.height + 5
     border  { width: 1; color: Qt.darker(activePalette.button) }
     smooth: true
-    radius: 8
 
     // color the button with a gradient
     gradient: Gradient  {
@@ -34,8 +36,8 @@ Rectangle  {
 
     Text  {
         id: buttonLabel
+        color: "#da2a2a"
+        text: "KnappN"
         anchors.centerIn: container
-        color: activePalette.buttonText
-        text: container.text
     }
 }
