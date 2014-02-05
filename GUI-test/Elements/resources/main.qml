@@ -2,12 +2,13 @@ import QtQuick 2.0
 import OpenGLUnderQML 1.0
 import QtQuick.Controls 1.1
 import QtQml 2.0
+import QtQuick.Window 2.0
 
 Item {
     id: item1
 
-    width: 800
-    height: 600
+    width: Screen.width
+    height: Screen.height
 
     Squircle {
         SequentialAnimation on t {
@@ -19,7 +20,7 @@ Item {
     }
 
     Rectangle {
-		opacity: 0.5
+        opacity: 0.5
         color: Qt.rgba(1, 1, 1, 0.7)
         radius: 10
         border.width: 1
@@ -50,12 +51,14 @@ Item {
         anchors.margins: 10
         color: Qt.rgba(1, 1, 1, 0.5)
 
-        TopGui{
-            
-        }
-
-        BottomGui{
-
+        Column{
+            id: guiComposition
+            spacing: 10
+            height: parent.height
+            width: parent.width*(19/20)
+            anchors {right: container.right; top: container.top; topMargin: 15}
+            TopGui{}
+            BottomGui{}
         }
     }
 }
