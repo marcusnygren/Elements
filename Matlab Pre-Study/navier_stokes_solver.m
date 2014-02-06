@@ -1,17 +1,22 @@
+<<<<<<< HEAD
 function [sameSame] = navier_stokes_solver()
+=======
+function [F] = navier_stokes_solver()
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
     clc
     nrFrames = 100;
     nrParticles = 10;
     timeStep = 0.3;
     gridSizeX = 100;
     gridSizeY = 100;
-
+    temp = 100*ones(gridSizeX, gridSizeY);
     dimension = 2;
     velocityTexture = zeros(gridSizeX, gridSizeY, dimension);
 %     velocityTexture = 600*rand(gridSizeX, gridSizeY, dimension);
     preasureTexture = zeros(gridSizeX, gridSizeY, dimension);
     
 %   constant force everywhere
+<<<<<<< HEAD
     forces = zeros(gridSizeX, gridSizeY, dimension);
 %     forces = ones(gridSizeX, gridSizeY, dimension);
 
@@ -24,26 +29,41 @@ function [sameSame] = navier_stokes_solver()
 %     r = randi([1 99],1,2);
 %     particles(r(1),r(2)) = 1;
 
+=======
+      forces = zeros(gridSizeX, gridSizeY, dimension);
+      forces(:,:,1) = 10;
+      forces(:,:,2) = 10;
+%     forces = ones(gridSizeX, gridSizeY, dimension);
+
+%     forces((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles),1) = 1;
+%     forces((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles),2) = 500;
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
 
 
     particles = zeros(gridSizeX, gridSizeY);
     particles((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles)) = 1;
     
+<<<<<<< HEAD
     fig = figure;
     
+=======
+    
+%     fig = figure;
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
     
     for frames = 1 : nrFrames
         newVelocityTexture = zeros(gridSizeX, gridSizeY, dimension);
         newPreasureTexture = zeros(gridSizeX, gridSizeY, dimension);
         divergenceTexture = zeros(gridSizeX, gridSizeY);
         
-        for x = 10 : (gridSizeX - 10);
-            for y = 10 : (gridSizeY - 10);
+        for x = 2 : (gridSizeX - 1);
+            for y = 2 : (gridSizeY - 1);
                 
                 % Advect velocity.
                 newVelocityTexture(x, y) = calculateAdvection(x, y, timeStep, 1 / gridSizeX, velocityTexture, velocityTexture);
                 
                 % Advect particles
+<<<<<<< HEAD
                 
                 % TODO: TRACE BACKWARDS. The particles can only 'move' if
                 % particles(x,y) =/= 0. Therefore, check why
@@ -52,6 +72,16 @@ function [sameSame] = navier_stokes_solver()
                 % 40 < x < 60 and 40 < y < 60. Check this too.
                 
                 particles(x, y) = calculateAdvection(x, y, timeStep, 1 / gridSizeX, velocityTexture, particles);
+=======
+                particles(x, y) = calculateAdvection(x, y, timeStep, 1 / gridSizeX, velocityTexture, particles);
+                % TODO: TRACE BACKWARDS. The particles can only 'move' if
+                % particles(x,y) =/= 0. Therefore, check why
+                % particles(x,y) = 0 for all x and y.
+                % A possible scenario is: particles(x,y) = 1 only when
+                % 40 < x < 60 and 40 < y < 60. Check this too.
+                
+                
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
 
                 % Calculate Viscous Diffusion.
                 
@@ -70,12 +100,48 @@ function [sameSame] = navier_stokes_solver()
                 
             end
         end
+        
+        % Hörn
+            newVelocityTexture(2,2,:) = calculateBoundary(1,1,velocityTexture,1,1,-1);
+            newVelocityTexture(2,gridSizeY-1,:) = calculateBoundary(1,gridSizeY,velocityTexture,1,-1,-1);
+            newVelocityTexture(gridSizeX-1,2,:) = calculateBoundary(gridSizeX,1,velocityTexture,-1,1,-1);
+            newVelocityTexture(gridSizeX-1,gridSizeY-1,:) = calculateBoundary(gridSizeX,gridSizeY,velocityTexture,-1,-1,-1);
+            
+            
+        % Vänster
+            for x = 2 : gridSizeX-1;
+                newVelocityTexture(x,2,:) = calculateBoundary(x,1,velocityTexture,0,1,-1);
+            end
+        % höger
+            for x = 2 : gridSizeX-1;
+                
+                newVelocityTexture(x,gridSizeY-1,:) = calculateBoundary(x,gridSizeY,velocityTexture,0,-1,-1);
+            end
+        
+        % Upp      
+            for y = 2 : gridSizeY-1;
+                 newVelocityTexture(2,y,:) = calculateBoundary(1,y,velocityTexture,1,0,-1);
+            end
+        % Ner
+            for y = 2 : gridSizeY-1;
+                 newVelocityTexture(gridSizeX-1,y,:) = calculateBoundary(gridSizeX,y,velocityTexture,-1,0,-1);
+            end
+            
+        
         velocityTexture = newVelocityTexture;
         preasureTexture = newPreasureTexture;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
         
 %         figure
 %         colormap gray;
 %         imagesc(particles)4
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
         imshow(particles);
         F(frames) = getframe;
 % %         % draw new 'frame' (imshow)
@@ -83,6 +149,7 @@ function [sameSame] = navier_stokes_solver()
 %        drawnow()
 
     end
+<<<<<<< HEAD
     
     close all
     imshow(F(1).cdata)
@@ -90,6 +157,9 @@ function [sameSame] = navier_stokes_solver()
     imshow(F(nrFrames).cdata)
     
     
+=======
+       
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
 end
 
 % Jacobi iteration, pressure difference. texture1 = pressure, texture2 = divergence
@@ -103,6 +173,7 @@ end
 
 % Advection, Euler implicit
 
+<<<<<<< HEAD
 % TODO: Implement interpolation (typ bilinear). Also: Check if this function 
 % is correct.
 function [result] = calculateAdvection(x, y, timestep, dx, velocityTexture, advectionTexture)
@@ -119,6 +190,35 @@ function [result] = calculateAdvection(x, y, timestep, dx, velocityTexture, adve
 %        disp('hej')
 %     end
     result = advectionTexture(positionX, positionY);
+=======
+% TODO: Implement interpolation (typ bilinear). Do it before round() or
+% after?
+function [result] = calculateAdvection(x, y, timestep, dx, velocityTexture, advectionTexture)
+% timestep * dx * velocityTexture(x,y,1)
+% timestep * dx * velocityTexture(x,y,1)
+    
+    X = x - timestep * dx * velocityTexture(x,y,1);
+    Y = y - timestep * dx * velocityTexture(x,y,2);
+
+    x1 = floor(X);
+    x2 = ceil(X);
+    y1 = floor(Y);
+    y2 = ceil(Y);
+    if(rem(X,1) == 0 && rem(Y,1) == 0)
+        result = advectionTexture(X,Y);
+    elseif (rem(X,1) == 0)
+        result = ((y2-Y)/(y2-y1))*advectionTexture(X,y1) + ((Y-y1)/(y2-y1))*advectionTexture(X,y2);
+    
+    elseif (rem(Y,1) == 0)
+        result = ((x2-X)/(x2-x1))*advectionTexture(x1,Y) + ((X-x1)/(x2-x1))*advectionTexture(x2,Y);
+    else
+        R1 = ((x2-X)/(x2-x1))*advectionTexture(x1,y1) + ((X-x1)/(x2-x1))*advectionTexture(x2,y1);
+        R2 = ((x2-X)/(x2-x1))*advectionTexture(x1,y2) + ((X-x1)/(x2-x1))*advectionTexture(x2,y2);
+        result = ((y2-Y)/(y2-y1))*R1 + ((Y-y1)/(y2-y1))*R2;
+        
+    end
+
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
 end
 
 % Adding force: u = u + f
@@ -142,4 +242,11 @@ function [result] = gradientSubtraction(x, y, w, p, dx)
     U = [Ux; Uy];
     final = U - centralDiff;
     result = final;
+<<<<<<< HEAD
+=======
+end
+
+function [result] = calculateBoundary(x, y, texture, offsetX, offsetY, scale)
+    result = scale*texture(x + offsetX, y + offsetY);
+>>>>>>> 88f7ed4ea8331ade72d4186abdb364884fdcb58e
 end
