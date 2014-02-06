@@ -3,5 +3,6 @@
         <file>BottomGui.qml</file>
         <file>main.qml</file>
         <file>TopGui.qml</file>
+        <file>Tooltip.qml</file>
     </qresource>
 </RCC>

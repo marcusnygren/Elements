@@ -3,6 +3,7 @@ import OpenGLUnderQML 1.0
 import QtQuick.Controls 1.1
 import QtQuick.Window 2.0
 
+
 Row{
     id: koefRow
     width: parent.width
@@ -30,14 +31,59 @@ Row{
                 Text{
                     id: fi
                     text: "Fi:"
+                    z: 5
+
+                    Tooltip {
+                        id: toolTipFi
+                        text: "Testing Tooltip Testing"
+                        visible: mouseAreaFi.hoverEnabled
+                    }
+
+                    MouseArea {
+                        id: mouseAreaFi
+                        hoverEnabled: true
+                        onEntered: { toolTipFi.opacity = 1.0 }
+                        onExited: { toolTipFi.opacity = 0.0 }
+                        anchors.fill: parent                        
+                    }
                 }
                 Text{
                     id: delta
                     text: "Delta:"
+                    z: 4
+
+                    Tooltip {
+                        id: toolTipDelta
+                        text: "Testing Tooltip Testing"
+                        visible: mouseAreaDelta.hoverEnabled
+                    }
+
+                    MouseArea {
+                        id: mouseAreaDelta
+                        hoverEnabled: true
+                        onEntered: { toolTipDelta.opacity = 1.0 }
+                        onExited: { toolTipDelta.opacity = 0.0 }
+                        anchors.fill: parent
+                    }
                 }
                 Text{
                     id: roo
                     text: "Roo:"
+                    z: 3
+
+                    Tooltip {
+                        id: toolTipRoo
+                        text: "Testing Tooltip Testing"
+                        visible: mouseAreaRoo.hoverEnabled
+                    }
+
+                    MouseArea {
+                        id: mouseAreaRoo
+                        hoverEnabled: true
+                        onEntered: { toolTipRoo.opacity = 1.0 }
+                        onExited: { toolTipRoo.opacity = 0.0 }
+                        anchors.fill: parent
+                    }
                 }
             }
 
@@ -45,6 +91,7 @@ Row{
                 id: koefSliderColumn
                 spacing: 10
                 width: parent.width*(5/7)
+                z: -1
 
                 Slider{
                     id: fiSlider
