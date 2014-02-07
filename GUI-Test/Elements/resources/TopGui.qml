@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import OpenGLUnderQML 1.0
+import QtQuick.Controls.Styles 1.0
 import QtQuick.Controls 1.1
 import QtQuick.Window 2.0
 
@@ -40,5 +41,6 @@ Column{
         minimumValue: 1
         maximumValue: 3
         width: (parent.width - 10)
+        style: SliderStyle{ groove: Rectangle {radius: 5; height: 5; color: "lightgray"}}
     }
 }

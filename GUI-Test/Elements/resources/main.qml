@@ -39,26 +39,38 @@ Item {
         anchors.bottom: parent.bottom
         anchors.margins: 20
     }
-
-    Rectangle {
-        id: container
-        radius: 10
-        border.width: 1
-        border.color: "white"
+    MouseArea{
+        id: dragMouseArea
         width: 250
         height: 500
         anchors {right : item1.right; top: item1.top}
-        anchors.margins: 10
-        color: Qt.rgba(1, 1, 1, 0.5)
+        x: container.x
+        y: container.y
+        drag.target: container
+        onReleased: parent = container.Drag.target !== null ? container.Drag.target : item1
 
-        Column{
-            id: guiComposition
-            spacing: 10
-            height: parent.height
-            width: parent.width*(19/20)
-            anchors {right: container.right; top: container.top; topMargin: 15}
-            TopGui{}
-            BottomGui{}
+        Rectangle {
+            id: container
+            radius: 10
+            border.width: 1
+            border.color: "white"
+            width: 250
+            height: 500
+            //anchors {right : item1.right; top: item1.top}
+            anchors.margins: 10
+            color: Qt.rgba(1, 1, 1, 0.5)
+
+            Drag.active: dragMouseArea.drag.active
+
+            Column{
+                id: guiComposition
+                spacing: 10
+                height: parent.height
+                width: parent.width*(19/20)
+                anchors {right: container.right; top: container.top; topMargin: 15}
+                TopGui{}
+                BottomGui{}
+            }
         }
     }
 }
