@@ -3,17 +3,21 @@ function [c] = navier_stokes_solver()
     c = 0;    
     timeStep = 0.3;
     nrParticles = 10;
-    nrFrames = 50;
+    nrFrames = 75;
     gridSizeX = 50;
     gridSizeY = 50;
     dimension = 2;
     h = 1/gridSizeX;
     velocityTexture = zeros(gridSizeX, gridSizeY, dimension);
     divergenceTexture = zeros(gridSizeX, gridSizeX);
-    preasureTexture = zeros(gridSizeX, gridSizeY, dimension);
+
+    %     ÄNDRA TILL ZEROS
+    preasureTexture = 10*rand(gridSizeX, gridSizeY, dimension);
+    
+    
     T0 = 20;
     T = zeros(gridSizeX, gridSizeY);
-    T((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles)) = 100;
+    T((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles)) = 10;
     newT = zeros(gridSizeX, gridSizeY);
     rho = 0.5;
     rho_t = 1.3*ones(gridSizeX, gridSizeY);
@@ -25,7 +29,7 @@ function [c] = navier_stokes_solver()
 %     preasureTexture(:, :, 2) = 130*rand(gridSizeX,gridSizeY);
     
 %   constant force everywhere
-    forces = -10*rand(gridSizeX, gridSizeY, dimension);
+    forces = -50*ones(gridSizeX, gridSizeY, dimension);
     forces(:,:,2) = 0;
     
     
@@ -47,21 +51,23 @@ function [c] = navier_stokes_solver()
        % För stabiltet: deltaT = h/u_max
        for x = 1 : gridSizeX;
             for y = 1 : gridSizeY;
-                timeStep = h/(2*length(velocityTexture(x,y)));
+%                 timeStep = h/(2*length(velocityTexture(x,y)));
 %               particles((gridSizeX/2 - nrParticles) : (gridSizeX/2 + nrParticles), (gridSizeY/2 - nrParticles) : (gridSizeY/2 + nrParticles)) = 1;
                 % Advect velocity.
                 newVelocityTexture(x, y,:) = -calculateAdvection(x, y, timeStep, h, velocityTexture, velocityTexture);
                 particles(x, y) = calculateAdvection(x, y, timeStep, h, velocityTexture, particles); 
             end
        end
-       
-       for x = 1 : gridSizeX-1;
-            for y = 1 : gridSizeY-1;
-%                 timeStep = h/(2*length(velocityTexture(x,y)));
-                newT(x,y) = -timeStep*(velocityTexture(x,y,1)*(T(x+1,y)-T(x,y)) + velocityTexture(x,y,2)*(T(x,y+1)-T(x,y))) + T(x,y);
-                newRho(x,y) = -timeStep*(velocityTexture(x,y,1)*(rho_t(x+1,y)-rho_t(x,y)) + velocityTexture(x,y,2)*(rho_t(x,y+1)-rho_t(x,y))) + rho_t(x,y);
-            end
-       end
+%        max(max(velocityTexture))
+%        for x = 1 : gridSizeX-1;
+%             for y = 1 : gridSizeY-1;
+%                 timeStep = h/(0.8*length(velocityTexture(x,y)));
+%                 newT(x,y) = -timeStep*(velocityTexture(x,y,1)*(T(x+1,y)-T(x,y)) + velocityTexture(x,y,2)*(T(x,y+1)-T(x,y))) + T(x,y);
+%                 newRho(x,y) = -timeStep*(velocityTexture(x,y,1)*(rho_t(x+1,y)-rho_t(x,y)) + velocityTexture(x,y,2)*(rho_t(x,y+1)-rho_t(x,y))) + rho_t(x,y);
+%             end
+%        end
+%        b = max(max(newRho))
+%        a = max(max(newT))
        
        for x = 1 : gridSizeX;
             for y = 1 : gridSizeY;
@@ -132,9 +138,14 @@ function [c] = navier_stokes_solver()
 %         figure
 %         colormap gray;
 %         imagesc(newVelocityTexture(:,:,2));
+
         imshow(particles);
         F(frames) = getframe;
+
 %        drawnow()
+        if frames == nrFrames
+            imshow(particles);
+        end
     end
 end
 
@@ -215,8 +226,9 @@ end
 % Adding force: u = u + f
 function [result] = addForces(x, y, forces, newVelocityTexture, newT, T0, newRho)
     alpha = 1;
-    beta = 1;
+    beta = 0.1;
     a(1,1,1) = -alpha*newRho(x,y) + beta*(newT(x,y)-T0);
+%   a
 %     f_bouy = -alpha*smoke_rho*[0 1] + beta*(Temper-T0)*[0 1];
 %     result = newVelocityTexture(x, y,:) + forces(x, y,:) + a;
     result = newVelocityTexture(x, y,:) + forces(x, y,:) + a;
