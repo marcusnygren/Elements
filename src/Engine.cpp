@@ -1,9 +1,4 @@
 ﻿#include "Engine.h"
-#include <QQmlContext>
-#include <QQmlEngine>
-#include <QSurfaceFormat>
-#include <QSurface>
-
 
 
 Engine::Engine()
@@ -16,38 +11,24 @@ Engine::Engine()
 	addConsoleCommands();
 #endif // ELEMENTS_DEBUG__
 	
-
-	//_data = new DataHandler();
 }
 
 
 Engine::~Engine()
 {
-	//close();
 
 #if ELEMENTS_DEBUG__
 	if(_debug)
 		delete _debug;
 #endif // ELEMENTS_DEBUG__
 
-	// Placed after deleting _debug to make sure the Console 
-	// can access the data while running.
-//	if(_data)
-	//	delete _data;
 }
-
 
 void Engine::setData(DataHandler* data)
 {
 	_data = data;
 }
 
-/*
-DataHandler* Engine::getData(void) const
-{
-	return _data;
-}
-*/
 
 #if ELEMENTS_DEBUG__
 void Engine::addConsoleCommands()
@@ -115,14 +96,6 @@ void Engine::init()
 {
 		std::cout << "INIT" << std::endl;
 
-/*
-			std::cout << "INNN";
-			QQmlEngine *en = QQmlEngine::contextForObject(this->findChild<QObject *>("engine"))->engine();
-			 qDebug() << "\nENGINE:	baseUrl() = " << en->baseUrl();
-			en->rootContext()->setContextProperty("data", _data);
-			std::cout << "HEJ";
-*/
-
 	{
 		std::condition_variable cv;
 		std::mutex m;
@@ -141,61 +114,23 @@ void Engine::init()
 	_win->setClearBeforeRendering(false);
 
 
+	// TODO: fix
 	_timer = new QTimer(this);
 	connect(_timer, SIGNAL(timeout()), this, SLOT(QQuickView::update()), Qt::DirectConnection);
 	_timer->start(16);
 
 
-
-
-/*
-	// http://qt-project.org/doc/qt-5.0/qtgui/qsurfaceformat.html#QSurfaceFormat
-  _format = new QSurfaceFormat();
-	_format->setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
-	_format->setMajorVersion(3);
-	_format->setMinorVersion(3);
-//_win->openglContext()->setFormat(*_format);
-
-
-	// http://qt-project.org/doc/qt-5.0/qtgui/qopenglcontext.html#setFormat
-
-
-  _context = new QOpenGLContext(this);
-  _context->setFormat(*_format);
-  _context->create(); // Can't find EGL config, returning NULL.
-  _context->makeCurrent(_win);
-	
-
-
-	if(!_program) {
-		std::cout << "New Program" << std::endl;
-		_program = new QOpenGLShaderProgram();
-		_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
-		_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
-		
-		_program->bindAttributeLocation("vertices", 0);
-		_program->link();
-
-		connect(_win->openglContext(), SIGNAL(aboutToBeDestroyed()), this, SLOT(cleanup()), Qt::DirectConnection);
-
-	}
-*/
-
-	std::cout << "init done" << std::endl;
+	std::cout << "INIT DONE" << std::endl;
 }
 
 
 // Before painting.
 void Engine::sync()
 {
-	std::cout << "SYNC" << std::endl;
+//	std::cout << "SYNC" << std::endl;
 	_nParticlesLive = _data->getNParticles();
 }
 
-
-// During painting.
-// http://www.kdab.com/opengl-in-qt-5-1-part-1/
-// http://www.kdab.com/opengl-in-qt-5-1-part-2/
 void Engine::paint()
 {	
 //	 std::cout << "PAINT" << std::endl;
@@ -255,7 +190,6 @@ void Engine::calculateFPS()
 	_currentTime = QTime::currentTime();
 	_elapsedTime = (_currentTime.second()*1000 + _currentTime.msec()) - (_lastTime.second()*1000 + _lastTime.msec());
 	_fps = 1000 / _elapsedTime;
-	std::cout << _fps << std::endl;
 
 	std::ostringstream fps;
 	fps << "Elements [" << _fps << "]";
@@ -269,7 +203,7 @@ void Engine::cleanup()
 }
 
 
-// When closing the window / ~Engine() is called.
+// When closing the window 
 void Engine::close()
 {
 	std::cout << "CLOSE" << std::endl;

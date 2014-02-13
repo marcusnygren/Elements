@@ -14,7 +14,13 @@
 #include <QtQuick/qquickwindow.h>
 #include <QtGui/QOpenGLContext>
 #include <QTime>
+#include <QTimer>
 #include <QOpenGLFunctions>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QSurfaceFormat>
+#include <QSurface>
+
 
 #include "Parameters.h"
 #include "DataHandler.h"
@@ -24,12 +30,7 @@
 #endif // ELEMENTS_DEBUG__
 
 
-
-#include <QTimer>
-
 #define QML_FORCE_THREADED_RENDERER 1 
-
-
 
 
 class Engine : public QQuickItem
@@ -41,7 +42,6 @@ public:
 	~Engine();
 
 	Q_INVOKABLE void setData(DataHandler* data);
-	//Q_INVOKABLE DataHandler* getData(void) const;
 
 public slots:
 	void paint();
@@ -65,10 +65,10 @@ private:
 
 	QSurfaceFormat* _format;
 	QOpenGLContext* _context;
-
-
 	QOpenGLShaderProgram* _program;
+
 	float t;
+
 
 	// For maximum FPS
 	QTimer* _timer;
