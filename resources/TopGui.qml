@@ -3,7 +3,7 @@ import ElementsEngine 1.0
 import QtQuick.Controls 1.1
 import QtQuick.Window 2.0
 
-import "js/predefineValue.js" as predefineValue
+import "js/predefineValue.js" as PredefineValue
 
 Column{
     id: presetColumn
@@ -23,7 +23,8 @@ Column{
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: { parent.color = 'red' }
+                onPressed: { parent.source = 'pics/fire.png' }
+                onReleased: { parent.source = 'pics/smoke.png' }
             }
         }
 
