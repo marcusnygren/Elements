@@ -37,9 +37,9 @@ Item {
     Rectangle {
         opacity: 0.5
         color: Qt.rgba(1, 1, 1, 0.7)
-        radius: 10
+        radius: 0
         border.width: 1
-        border.color: "white"
+        border.color: "darkgray"
         anchors.fill: label
         anchors.margins: -10
     }
@@ -65,12 +65,12 @@ Item {
 
 		Rectangle {
 			id: container
-			radius: 10
+            radius: 0
 			border.width: 1
 			border.color: "white"
 			width: 250
 			height: 500
-			color: Qt.rgba(0.1, 0.1, 0.9, 0.5)
+            color: Qt.rgba(0.5, 0.5, 0.5, 0.5)
 
 			Column{
 				id: guiComposition

@@ -48,7 +48,7 @@ Item {
         anchors.fill: parent
         color: "black"
         opacity: 0.8
-        radius: 5
+        radius: 0
         Text {
             id: toolTipText
             x: 10
