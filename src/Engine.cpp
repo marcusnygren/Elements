@@ -118,13 +118,8 @@ void Engine::init()
 
 	// Displays FPS in windowtitle.
 	_timer = new QTimer(this);
-<<<<<<< HEAD
-	connect(_timer, SIGNAL(timeout()), this, SLOT(update()), Qt::DirectConnection);
-	_timer->start(16);
-=======
 	connect(_timer, SIGNAL(timeout()), this, SLOT(showFPS()), Qt::DirectConnection);
 	_timer->start(50);
->>>>>>> 6dc93084a489b6d563f494bdd1b9462abf290397
 
 
 	std::cout << "INIT DONE" << std::endl;
