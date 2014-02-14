@@ -17,8 +17,8 @@ Column{
         spacing: 10
 
         Image{
-            id = fire
-            property string filename = "pics/fire_inactive.png"
+            id: fire
+            property string filename: "pics/fire_inactive.png"
 
             width: (parent.width*(1/3) - 10)
             height: parent.height
@@ -27,17 +27,16 @@ Column{
             MouseArea {
                 anchors.fill: parent
                 onClicked: { 
-                    //PreValue.fireSettings();
-                    fiSlider.value: 50
-                    deltaSlider.value: 2
-                    rooSlider.value: 3
+                    fiSlider.value = 50
+                    deltaSlider.value = 2
+                    rooSlider.value = 3
                 }
             }
         }
 
         Image{
-            id = smoke
-            property string filename = "pics/smoke_inactive.png"
+            id: smoke
+            property string filename: "pics/smoke_inactive.png"
 
             width: (parent.width*(1/3) - 10)
             height: parent.height
@@ -50,8 +49,8 @@ Column{
         }
 
         Image{
-            id = water
-            property string filename = "pics/smoke_inactive.png"
+            id: water
+            property string filename: "pics/smoke_inactive.png"
 
             width: (parent.width*(1/3) - 10)
             height: parent.height
