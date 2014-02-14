@@ -199,7 +199,8 @@ void Engine::calculateFPS()
 	_lastTime = _currentTime;
 	_currentTime = QTime::currentTime();
 	_elapsedTime = (_currentTime.second()*1000 + _currentTime.msec()) - (_lastTime.second()*1000 + _lastTime.msec());
-	_fps = 1000 / _elapsedTime;
+	if (_elapsedTime != 0)
+		_fps = 1000 / _elapsedTime;
 }
 
 
