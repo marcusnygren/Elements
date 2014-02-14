@@ -19,7 +19,10 @@ Engine::~Engine()
 
 #if ELEMENTS_DEBUG__
 	if(_debug)
+	{
+		_debug->setIsRunning(false);
 		delete _debug;
+	}
 #endif // ELEMENTS_DEBUG__
 
 }
@@ -122,11 +125,16 @@ void Engine::init()
 	std::cout << "INIT DONE" << std::endl;
 }
 
+void Engine::update()
+{
+	// this->openglContext()->makeCurrent(_win);
+	// paint();
+}
 
 // Before painting, get data from GUI.
 void Engine::sync()
 {
-//	std::cout << "SYNC" << std::endl;
+	std::cout << "SYNC" << std::endl;
 	_nParticlesLive = _data->getNParticles();
 }
 
@@ -140,8 +148,10 @@ if(!_program) {
 		std::cout << "New Program" << std::endl;
 		t = 0;
 		_program = new QOpenGLShaderProgram();
-		_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
-		_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+		// _program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
+		// _program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+		_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "resources/shaders/trivial.vs");
+		_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "resources/shaders/simulation/jacobi.frag");
 		
 		_program->bindAttributeLocation("vertices", 0);
 		_program->link();
