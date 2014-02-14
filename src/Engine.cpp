@@ -113,7 +113,7 @@ void Engine::init()
 	// Make sure QML don't clear what we paint.
 	_win->setClearBeforeRendering(false);
 
-
+	// Displays FPS in windowtitle.
 	_timer = new QTimer(this);
 	connect(_timer, SIGNAL(timeout()), this, SLOT(showFPS()), Qt::DirectConnection);
 	_timer->start(50);
