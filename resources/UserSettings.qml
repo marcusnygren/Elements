@@ -10,8 +10,50 @@ Column{
     width: parent.width
     spacing: 100
 
+    Row{
+        id: resizeWindow
+        width: parent.width
+        height: parent.height*(1/10)
+        spacing: 200
+
+        Rectangle{
+            color: Qt.rgba(0, 0, 0, 0.25)
+            width: parent.width
+            height: parent.height
+        
+            Text{
+                id: minimize
+                text: "Minimize window"
+                z: 4
+
+                Tooltip {
+                    id: toolTipMinimize
+                    text: "Testing Tooltip Testing"
+                    visible: mouseAreaMinimize.hoverEnabled
+                }
+
+                MouseArea {
+                    id: mouseAreaMinimize
+                    hoverEnabled: true
+                    onEntered: { toolTipMinimize.opacity = 1.0 }
+                    onExited: { toolTipMinimize.opacity = 0.0 }
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { 
+                    dragMouseArea.height = 50
+                    koefRow.visible = false
+                    elementPicker.visible = false
+                }
+            }
+        }
+    }
+
     //TopGUI
     Row{
+        id: elementPicker
         height: parent.height*(2/3)
         width: parent.width
         spacing: 10
