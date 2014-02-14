@@ -30,9 +30,6 @@
 #endif // ELEMENTS_DEBUG__
 
 
-#define QML_FORCE_THREADED_RENDERER 1 
-
-
 class Engine : public QQuickItem
 {
 Q_OBJECT
@@ -42,12 +39,14 @@ public:
 	~Engine();
 
 	Q_INVOKABLE void setData(DataHandler* data);
+	Q_INVOKABLE void update() const;
 
 public slots:
 	void paint();
 	void cleanup();
 	void sync();
 	void calculateFPS();
+	void showFPS();
 
 protected:
 	void itemChange(ItemChange change, const ItemChangeData&);
