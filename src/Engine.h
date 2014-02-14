@@ -45,7 +45,6 @@ public slots:
 	void paint();
 	void cleanup();
 	void sync();
-	void calculateFPS();
 	void showFPS();
 
 protected:
@@ -54,7 +53,7 @@ protected:
 private:
 	void init();
 	void close();
-
+	void calculateFPS();
 
 	QQuickWindow* _win;
 	DataHandler* _data;
