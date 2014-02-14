@@ -92,8 +92,7 @@ Item {
 				height: parent.height
 				width: parent.width*(19/20)
 				anchors {right: container.right; top: container.top; topMargin: 15}
-				TopGui{}
-				BottomGui{}
+				Settings{}
 			}
 		}
 	}

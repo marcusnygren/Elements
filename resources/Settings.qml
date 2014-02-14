@@ -26,7 +26,12 @@ Column{
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: { PreValue.fireSettings() }
+                onClicked: { 
+                    PreValue.fireSettings()
+                    fiSlider.value = 50;
+                    deltaSlider.value = 2;
+                    rooSlider.value = 3;
+                }
             }
         }
 
@@ -151,8 +156,8 @@ Row{
 
                 Slider{
                     id: fiSlider
-                    property int fiSliderValue
-                    value: fiSliderValue
+                    /*property int fiSliderValue
+                    value: fiSliderValue*/
                     tickmarksEnabled: true
                     stepSize: 0
                     minimumValue: 0
@@ -163,8 +168,8 @@ Row{
 
                 Slider{
                     id: deltaSlider
-                    property int deltaSliderValue
-                    value: deltaSliderValue
+                    /*property int deltaSliderValue
+                    value: deltaSliderValue*/
                     tickmarksEnabled: true
                     stepSize: 1
                     minimumValue: 1
@@ -174,8 +179,8 @@ Row{
 
                 Slider{
                     id: rooSlider
-                    property int rooSliderValue
-                    value: rooSliderValue
+                    /*property int rooSliderValue
+                    value: rooSliderValue*/
                     tickmarksEnabled: true
                     stepSize: 1
                     minimumValue: 1
