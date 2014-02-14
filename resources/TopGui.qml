@@ -26,17 +26,13 @@ Column{
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: { 
-                    fiSlider.value = 50
-                    deltaSlider.value = 2
-                    rooSlider.value = 3
-                }
+                onClicked: { PreValue.fireSettings() }
             }
         }
 
         Image{
             id: smoke
-            property string filename: "pics/smoke_inactive.png"
+            property string filename = "pics/smoke_inactive.png"
 
             width: (parent.width*(1/3) - 10)
             height: parent.height

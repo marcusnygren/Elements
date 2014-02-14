@@ -5,6 +5,10 @@ import QtQuick.Window 2.0
 
 import "js/predefineValue.js" as PreValue
 
+TopGui {
+ id: TopGUI
+}
+
 Row{
     id: koefRow
     width: parent.width
