@@ -2,6 +2,9 @@
     <qresource prefix="/Elements">
         <file>GUI.qml</file>
         <file>Tooltip.qml</file>
+        <file>pics/fire2.png</file>
+        <file>pics/smoke2.png</file>
+        <file>pics/water2.png</file>
         <file>pics/fire.png</file>
         <file>pics/smoke.png</file>
         <file>pics/water.png</file>

@@ -17,36 +17,59 @@ Column{
         spacing: 10
 
         Image{
+            id: smoke
             width: (parent.width*(1/3) - 10)
             height: parent.height
-            source: "pics/smoke.png"
+            source: "pics/smoke_inactive.png"
 
             MouseArea {
                 anchors.fill: parent
-                onPressed: { parent.source = 'pics/fire.png' }
-                onReleased: { parent.source = 'pics/smoke.png' }
+                onClicked: { 
+                    parent.source = 'pics/smoke2.png'
+                    fiSlider.value = Math.floor(Math.random()*(fiSlider.maximumValue-fiSlider.minimumValue+1)+fiSlider.minimumValue)
+                    deltaSlider.value = Math.floor(Math.random()*(deltaSlider.maximumValue-deltaSlider.minimumValue+1)+deltaSlider.minimumValue)
+                    rooSlider.value = Math.floor(Math.random()*(rooSlider.maximumValue-rooSlider.minimumValue+1)+rooSlider.minimumValue)
+                    fire.source = "pics/fire_inactive.png"
+                    water.source = "pics/water_inactive.png"
+                }
             }
         }
 
         Image{
+            id: fire
             width: (parent.width*(1/3) - 10)
             height: parent.height
-            source: "pics/fire.png"
+            source: "pics/fire_inactive.png"
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: { parent.color = 'green' }
+                onClicked: { 
+                    parent.source = 'pics/fire2.png'
+                    fiSlider.value = Math.floor(Math.random()*(fiSlider.maximumValue-fiSlider.minimumValue+1)+fiSlider.minimumValue)
+                    deltaSlider.value = Math.floor(Math.random()*(deltaSlider.maximumValue-deltaSlider.minimumValue+1)+deltaSlider.minimumValue)
+                    rooSlider.value = Math.floor(Math.random()*(rooSlider.maximumValue-rooSlider.minimumValue+1)+rooSlider.minimumValue)
+                    smoke.source = "pics/smoke_inactive.png"
+                    water.source = "pics/water_inactive.png"
+                }
             }
         }
 
         Image{
+            id: water
             width: (parent.width*(1/3) - 10)
             height: parent.height
-            source: "pics/water.png"
+            source: "pics/water_inactive.png"
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: { parent.color = 'blue' }
+                onClicked: { 
+                    parent.source = 'pics/water2.png'
+                    fiSlider.value = Math.floor(Math.random()*(fiSlider.maximumValue-fiSlider.minimumValue+1)+fiSlider.minimumValue)
+                    deltaSlider.value = Math.floor(Math.random()*(deltaSlider.maximumValue-deltaSlider.minimumValue+1)+deltaSlider.minimumValue)
+                    rooSlider.value = Math.floor(Math.random()*(rooSlider.maximumValue-rooSlider.minimumValue+1)+rooSlider.minimumValue)
+                    smoke.source = "pics/smoke_inactive.png"
+                    fire.source = "pics/fire_inactive.png"
+                }
             }
         }
     }
