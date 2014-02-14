@@ -5,8 +5,59 @@ import QtQuick.Window 2.0
 
 import "js/predefineValue.js" as PreValue
 
-TopGui {
- id: TopGUI
+Column{
+    id: presetColumn
+    height: parent.height/3
+    width: parent.width
+    spacing: 10
+
+    Row{
+        height: parent.height*(2/3)
+        width: parent.width
+        spacing: 10
+
+        Image{
+            id: fire
+            property string imagepath: "pics/fire_inactive.png"
+
+            width: (parent.width*(1/3) - 10)
+            height: parent.height
+            source: imagepath
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { PreValue.fireSettings() }
+            }
+        }
+
+        Image{
+            id: smoke
+            property string imagepath = "pics/smoke_inactive.png"
+
+            width: (parent.width*(1/3) - 10)
+            height: parent.height
+            source: imagepath
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { PreValue.smokeSettings() }
+            }
+        }
+
+        Image{
+            id: water
+            property string imagepath: "pics/smoke_inactive.png"
+
+            width: (parent.width*(1/3) - 10)
+            height: parent.height
+            source: imagepath
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { PreValue.waterSettings() }
+            }
+        }
+    }
 }
 
 Row{

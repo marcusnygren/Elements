@@ -1,23 +1,23 @@
 function fireSettings(){
-    fire.filename = "pics/fire.png";
-    fiSlider.fiSliderValue = 50;
+    fire.imagepath = "pics/fire.png";
+    /*fiSlider.fiSliderValue = 50;
     deltaSlider.deta = 2;
     rooSlider.roo = 3;
-    return;
+    return;*/
 }
 
 function smokeSettings(){
-    smoke.filename = "pics/smoke.png";
-    fiSlider.fiSliderValue = 100;
+    smoke.imagepath = "pics/smoke.png";
+    /*fiSlider.fiSliderValue = 100;
     deltaSlider.deta = 1;
     rooSlider.roo = 3;
-    return;
+    return;*/
 }
 
 function waterSettings(){
-	water.filename = "pics/water.png";
-    fiSlider.fiSliderValue = 3;
+	water.imagepath = "pics/water.png";
+    /*fiSlider.fiSliderValue = 3;
     deltaSlider.deta = 4;
     rooSlider.roo = 2;
-    return;
+    return;*/
 }
