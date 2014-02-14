@@ -19,7 +19,10 @@ Engine::~Engine()
 
 #if ELEMENTS_DEBUG__
 	if(_debug)
+	{
+		_debug->setIsRunning(false);
 		delete _debug;
+	}
 #endif // ELEMENTS_DEBUG__
 
 }
@@ -116,32 +119,39 @@ void Engine::init()
 
 	// TODO: fix
 	_timer = new QTimer(this);
-	connect(_timer, SIGNAL(timeout()), this, SLOT(QQuickView::update()), Qt::DirectConnection);
+	connect(_timer, SIGNAL(timeout()), this, SLOT(update()), Qt::DirectConnection);
 	_timer->start(16);
 
 
 	std::cout << "INIT DONE" << std::endl;
 }
 
+void Engine::update()
+{
+	// this->openglContext()->makeCurrent(_win);
+	// paint();
+}
 
 // Before painting.
 void Engine::sync()
 {
-//	std::cout << "SYNC" << std::endl;
+	std::cout << "SYNC" << std::endl;
 	_nParticlesLive = _data->getNParticles();
 }
 
 void Engine::paint()
 {	
-//	 std::cout << "PAINT" << std::endl;
+	 std::cout << "PAINT" << std::endl;
 
 
 if(!_program) {
 		std::cout << "New Program" << std::endl;
 		t = 0;
 		_program = new QOpenGLShaderProgram();
-		_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
-		_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+		// _program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
+		// _program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+		_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "resources/shaders/trivial.vs");
+		_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "resources/shaders/simulation/jacobi.frag");
 		
 		_program->bindAttributeLocation("vertices", 0);
 		_program->link();

@@ -9,6 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 
+#include <QQuickView>
 #include <QtQuick/QQuickItem>
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtQuick/qquickwindow.h>
@@ -44,6 +45,7 @@ public:
 	Q_INVOKABLE void setData(DataHandler* data);
 
 public slots:
+	void update();
 	void paint();
 	void cleanup();
 	void sync();
