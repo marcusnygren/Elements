@@ -32,42 +32,7 @@ Item {
 				engine.setData(data);
 			}
 		}
-
-		Timer 
-		{
-			id: updateTimer
-
-            interval: 0;
-			running: true; 
-			repeat: true
-
-			onTriggered: 
-			{
-				engine.update();
-			}
-		}
 	}
-
-    Rectangle {
-        opacity: 0.5
-        color: Qt.rgba(1, 1, 1, 0.7)
-        radius: 0
-        border.width: 1
-        border.color: "darkgray"
-        anchors.fill: label
-        anchors.margins: -10
-    }
-
-    Text {
-        id: label
-        color: Qt.rgba(0, 0, 0, 0.5)
-        wrapMode: Text.WordWrap
-        text: "The background here is a squircle rendered with raw OpenGL using the 'beforeRender()' signal in QQuickWindow. This text label and its border is rendered using QML"
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.margins: 20
-    }
 
 	MouseArea {
         id: dragMouseArea
@@ -92,8 +57,7 @@ Item {
 				height: parent.height
 				width: parent.width*(19/20)
 				anchors {right: container.right; top: container.top; topMargin: 15}
-				TopGui{}
-				BottomGui{}
+                UserSettings {}
 			}
 		}
 	}
