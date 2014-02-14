@@ -208,6 +208,8 @@ void Engine::calculateFPS()
 	_elapsedTime = (_currentTime.second()*1000 + _currentTime.msec()) - (_lastTime.second()*1000 + _lastTime.msec());
 	if (_elapsedTime != 0)
 		_fps = 1000 / _elapsedTime;
+	else
+		_fps = 0;
 }
 
 
