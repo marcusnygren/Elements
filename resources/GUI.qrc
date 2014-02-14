@@ -1,11 +1,14 @@
 <RCC>
     <qresource prefix="/Elements">
-	    <file>GUI.qml</file>
-        <file>BottomGui.qml</file>
-        <file>TopGui.qml</file>
+        <file>GUI.qml</file>
+        <file>Settings.qml</file>
         <file>Tooltip.qml</file>
         <file>pics/fire.png</file>
         <file>pics/smoke.png</file>
         <file>pics/water.png</file>
+        <file>pics/fire_inactive.png</file>
+        <file>pics/smoke_inactive.png</file>
+        <file>pics/water_inactive.png</file>
+        <file>js/predefineValue.js</file>
     </qresource>
 </RCC>

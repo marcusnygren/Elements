@@ -32,6 +32,20 @@ Item {
 				engine.setData(data);
 			}
 		}
+
+		Timer 
+		{
+			id: updateTimer
+
+			interval: 10; 
+			running: true; 
+			repeat: true
+
+			onTriggered: 
+			{
+				engine.update();
+			}
+		}
 	}
 
     Rectangle {

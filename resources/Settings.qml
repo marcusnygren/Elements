@@ -3,6 +3,62 @@ import ElementsEngine 1.0
 import QtQuick.Controls 1.1
 import QtQuick.Window 2.0
 
+import "js/predefineValue.js" as PreValue
+
+Column{
+    id: presetColumn
+    height: parent.height/3
+    width: parent.width
+    spacing: 10
+
+    Row{
+        height: parent.height*(2/3)
+        width: parent.width
+        spacing: 10
+
+        Image{
+            id: fire
+            property string imagepath: "pics/fire_inactive.png"
+
+            width: (parent.width*(1/3) - 10)
+            height: parent.height
+            source: imagepath
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { PreValue.fireSettings() }
+            }
+        }
+
+        Image{
+            id: smoke
+            property string imagepath = "pics/smoke_inactive.png"
+
+            width: (parent.width*(1/3) - 10)
+            height: parent.height
+            source: imagepath
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { PreValue.smokeSettings() }
+            }
+        }
+
+        Image{
+            id: water
+            property string imagepath: "pics/smoke_inactive.png"
+
+            width: (parent.width*(1/3) - 10)
+            height: parent.height
+            source: imagepath
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { PreValue.waterSettings() }
+            }
+        }
+    }
+}
 
 Row{
     id: koefRow
@@ -95,6 +151,8 @@ Row{
 
                 Slider{
                     id: fiSlider
+                    property int fiSliderValue
+                    value: fiSliderValue
                     tickmarksEnabled: true
                     stepSize: 0
                     minimumValue: 0
@@ -105,6 +163,8 @@ Row{
 
                 Slider{
                     id: deltaSlider
+                    property int deltaSliderValue
+                    value: deltaSliderValue
                     tickmarksEnabled: true
                     stepSize: 1
                     minimumValue: 1
@@ -114,6 +174,8 @@ Row{
 
                 Slider{
                     id: rooSlider
+                    property int rooSliderValue
+                    value: rooSliderValue
                     tickmarksEnabled: true
                     stepSize: 1
                     minimumValue: 1

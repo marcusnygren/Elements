@@ -116,11 +116,15 @@ void Engine::init()
 	// Make sure QML don't clear what we paint.
 	_win->setClearBeforeRendering(false);
 
-
-	// TODO: fix
+	// Displays FPS in windowtitle.
 	_timer = new QTimer(this);
+<<<<<<< HEAD
 	connect(_timer, SIGNAL(timeout()), this, SLOT(update()), Qt::DirectConnection);
 	_timer->start(16);
+=======
+	connect(_timer, SIGNAL(timeout()), this, SLOT(showFPS()), Qt::DirectConnection);
+	_timer->start(50);
+>>>>>>> 6dc93084a489b6d563f494bdd1b9462abf290397
 
 
 	std::cout << "INIT DONE" << std::endl;
@@ -132,16 +136,17 @@ void Engine::update()
 	// paint();
 }
 
-// Before painting.
+// Before painting, get data from GUI.
 void Engine::sync()
 {
 	std::cout << "SYNC" << std::endl;
 	_nParticlesLive = _data->getNParticles();
 }
 
+
 void Engine::paint()
 {	
-	 std::cout << "PAINT" << std::endl;
+	 //std::cout << "PAINT" << std::endl;
 
 
 if(!_program) {
@@ -173,8 +178,9 @@ if(!_program) {
 	_program->setAttributeArray(0, GL_FLOAT, values, 2);
 	
 	
-		_program->setUniformValue("t", (float)1.0/_fps);
+	_program->setUniformValue("t", (float)t);
 	t = t +0.01;
+	if(t > 1.0) t = 0;
 	glViewport(0, 0, window()->width(), window()->height());
 
 	glDisable(GL_DEPTH_TEST);
@@ -194,17 +200,30 @@ if(!_program) {
 }
 
 
+// Keeps the loop going.
+void Engine::update() const
+{
+	//std::cout << "Update" << std::endl;
+	_win->update();
+}
+
+
 void Engine::calculateFPS()
 {
 	_lastTime = _currentTime;
 	_currentTime = QTime::currentTime();
 	_elapsedTime = (_currentTime.second()*1000 + _currentTime.msec()) - (_lastTime.second()*1000 + _lastTime.msec());
 	_fps = 1000 / _elapsedTime;
+}
 
+
+void Engine::showFPS()
+{
 	std::ostringstream fps;
 	fps << "Elements [" << _fps << "]";
 	_win->setTitle(fps.str().c_str());
 }
+
 
 // After painting.
 void Engine::cleanup()
@@ -213,7 +232,7 @@ void Engine::cleanup()
 }
 
 
-// When closing the window 
+// When closing the window. 
 void Engine::close()
 {
 	std::cout << "CLOSE" << std::endl;
