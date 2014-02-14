@@ -113,7 +113,7 @@ void Engine::init()
 	// Make sure QML don't clear what we paint.
 	_win->setClearBeforeRendering(false);
 
-
+	// Displays FPS in windowtitle.
 	_timer = new QTimer(this);
 	connect(_timer, SIGNAL(timeout()), this, SLOT(showFPS()), Qt::DirectConnection);
 	_timer->start(50);
@@ -123,7 +123,7 @@ void Engine::init()
 }
 
 
-// Before painting.
+// Before painting, get data from GUI.
 void Engine::sync()
 {
 //	std::cout << "SYNC" << std::endl;
@@ -185,6 +185,7 @@ if(!_program) {
 }
 
 
+// Keeps the loop going.
 void Engine::update() const
 {
 	//std::cout << "Update" << std::endl;
@@ -216,7 +217,7 @@ void Engine::cleanup()
 }
 
 
-// When closing the window 
+// When closing the window. 
 void Engine::close()
 {
 	std::cout << "CLOSE" << std::endl;
