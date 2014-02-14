@@ -185,6 +185,7 @@ if(!_program) {
 }
 
 
+// Keeps the loop going.
 void Engine::update() const
 {
 	//std::cout << "Update" << std::endl;
@@ -216,7 +217,7 @@ void Engine::cleanup()
 }
 
 
-// When closing the window 
+// When closing the window. 
 void Engine::close()
 {
 	std::cout << "CLOSE" << std::endl;
