@@ -123,7 +123,7 @@ void Engine::init()
 }
 
 
-// Before painting.
+// Before painting, get data from GUI.
 void Engine::sync()
 {
 //	std::cout << "SYNC" << std::endl;
