@@ -1,6 +1,0 @@
-program1 test.vs test2.fs
-program2 test2.fs test.vs
-
-
-
-
