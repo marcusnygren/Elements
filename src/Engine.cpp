@@ -134,15 +134,40 @@ void Engine::initialize()
 {
 	std::cout << "INITA" << std::endl;
 
-	_window->openglContext()->format().setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
-	_window->openglContext()->format().setMajorVersion(3);
-	_window->openglContext()->format().setMinorVersion(3);
+/*
+	_GUIContext = _window->openglContext();
+	_GLContext = new QOpenGLContext();
+*/
+	_GLContext = new QOpenGLContext();
+	_GUIContext = _window->openglContext();
 
+	_format = new QSurfaceFormat();
+	_format->setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
+	_format->setMajorVersion(3);
+	_format->setMinorVersion(3);
+	_format->setProfile(QSurfaceFormat::OpenGLContextProfile::CompatibilityProfile);
 
-	//qlFunctions = _window->openglContext()->functions();
+	_GLContext->setFormat(*_format);
+	_GLContext->create();
+
+	if(_GLContext->isValid())
+		std::cout << "_GLContext is valid." << std::endl;
+	else
+		std::cout << "_GLContext is not valid." << std::endl;
+
+ 
+	 _GLContext->makeCurrent(_window);
+	 //_GUIContext->makeCurrent(_window);
+/*
+  QSurfaceFormat f = _window->openglContext()->format();
+  f.setVersion(3, 3);
+  f.setProfile(QSurfaceFormat::CompatibilityProfile);
+  _window->openglContext()->setFormat(f);
+*/
+
+	_GLFunctions = _window->openglContext()->functions();
 	//GLuint hej;
 	//_qlFunctions->glGenFramebuffers(1, &hej);
-
 
 
 	t = 0;
@@ -157,12 +182,14 @@ void Engine::initialize()
 	connect(_window->openglContext(), SIGNAL(aboutToBeDestroyed()),
               this, SLOT(cleanup()), Qt::DirectConnection);
 
-	// createVolume(1,1,1,1);
+	createVolume(1,1,1,1);
 
 	if(_window->openglContext()->isValid())
-		std::cout << "Context is valid." << std::endl;
+		std::cout << "_window->openglContext() is valid." << std::endl;
 	else
-		std::cout << "Context is not valid." << std::endl;
+		std::cout << "_window->openglContext() is not valid." << std::endl;
+
+
 	// GLuint fboHandle;
  //    glGenFramebuffers(1, &fboHandle);
  //    glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
@@ -271,10 +298,11 @@ void Engine::keyReleaseEvent(QKeyEvent* keyEvent)
 	std::cout << "Released: " << keyEvent->text().toUtf8().constData() << std::endl;
 }
 
-/*
 
-Volume Engine::createVolume(uint width, uint height, uint depth, uint nrComponents)
+
+void Engine::createVolume(uint width, uint height, uint depth, uint nrComponents)
 {
+/*
 	GLuint fbo;
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -287,6 +315,7 @@ Volume Engine::createVolume(uint width, uint height, uint depth, uint nrComponen
   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 
 
   switch (nrComponents) {
@@ -303,6 +332,5 @@ Volume Engine::createVolume(uint width, uint height, uint depth, uint nrComponen
             glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA16F, width, height, depth, 0, GL_RGBA, GL_HALF_FLOAT, 0);
             break;
   }
-
+	*/
 }
-*/

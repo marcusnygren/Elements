@@ -23,6 +23,7 @@
 #include <QSurface>
 #include <QKeyEvent>
 #include <QOpenGLFunctions_3_3_Core>
+#include <QtGui/QOpenGLVersionFunctions>
 
 #include "Parameters.h"
 #include "DataHandler.h"
@@ -32,7 +33,7 @@
 #endif // ELEMENTS_DEBUG__
 
 
-class Engine : public QQuickItem //, protected QOpenGLFunctions_3_3_Core
+class Engine : public QQuickItem// , protected QOpenGLFunctions_3_3_Core
 {
 Q_OBJECT
 	
@@ -55,6 +56,8 @@ protected:
 	void keyPressEvent(QKeyEvent* keyEvent);
 	void keyReleaseEvent(QKeyEvent* keyEvent);
 	
+
+void createVolume(uint width, uint height, uint depth, uint nrComponents);
 	virtual bool initializeOpenGLFunctions() 
 	{
 		return true;
@@ -72,7 +75,9 @@ private:
 	int _nParticlesLive;
 
 	QSurfaceFormat* _format;
-	QOpenGLContext* _context;
+	QOpenGLFunctions * _GLFunctions;
+	QOpenGLContext* _GUIContext;        
+	QOpenGLContext* _GLContext;
 	QOpenGLShaderProgram* _program;
 
 	float t;
