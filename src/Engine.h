@@ -22,6 +22,7 @@
 #include <QSurfaceFormat>
 #include <QSurface>
 #include <QKeyEvent>
+#include <QOpenGLFunctions_3_3_Core>
 
 #include "Parameters.h"
 #include "DataHandler.h"
@@ -31,7 +32,7 @@
 #endif // ELEMENTS_DEBUG__
 
 
-class Engine : public QQuickItem
+class Engine : public QQuickItem //, protected QOpenGLFunctions_3_3_Core
 {
 Q_OBJECT
 	
@@ -53,6 +54,11 @@ protected:
 	void itemChange(ItemChange change, const ItemChangeData&);
 	void keyPressEvent(QKeyEvent* keyEvent);
 	void keyReleaseEvent(QKeyEvent* keyEvent);
+	
+	virtual bool initializeOpenGLFunctions() 
+	{
+		return true;
+	}
 
 private:
 	void init();

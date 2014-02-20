@@ -137,11 +137,12 @@ void Engine::initialize()
 	_window->openglContext()->format().setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
 	_window->openglContext()->format().setMajorVersion(3);
 	_window->openglContext()->format().setMinorVersion(3);
-	
-	if(_window->openglContext()->isValid())
-		std::cout << "Context is valid." << std::endl;
-	else
-		std::cout << "Context is not valid." << std::endl;
+
+
+	//qlFunctions = _window->openglContext()->functions();
+	//GLuint hej;
+	//_qlFunctions->glGenFramebuffers(1, &hej);
+
 
 
 	t = 0;
@@ -155,20 +156,30 @@ void Engine::initialize()
 
 	connect(_window->openglContext(), SIGNAL(aboutToBeDestroyed()),
               this, SLOT(cleanup()), Qt::DirectConnection);
+
+	// createVolume(1,1,1,1);
+
+	if(_window->openglContext()->isValid())
+		std::cout << "Context is valid." << std::endl;
+	else
+		std::cout << "Context is not valid." << std::endl;
+	// GLuint fboHandle;
+ //    glGenFramebuffers(1, &fboHandle);
+ //    glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
 }
 
 
 // Before painting, get data from GUI.
 void Engine::sync()
 {
-//	std::cout << "SYNC" << std::endl;
+	// std::cout << "SYNC" << std::endl;
 	_nParticlesLive = _data->getNParticles();
 }
 
 
 void Engine::paint()
 {	
-	 //std::cout << "PAINT" << std::endl;
+	 // std::cout << "PAINT" << std::endl;
 
 	_program->bind();
 
@@ -182,7 +193,7 @@ void Engine::paint()
 	};
 	_program->setAttributeArray(0, GL_FLOAT, values, 2);
 	
-	
+
 	_program->setUniformValue("t", (float)t);
 	t = t +0.01;
 	if(t > 1.0) t = 0;
@@ -203,6 +214,7 @@ void Engine::paint()
 	
 	calculateFPS();
 	_window->update();
+	// std::cout << "PAINT2" << std::endl;
 }
 
 
@@ -221,6 +233,8 @@ void Engine::calculateFPS()
 	_elapsedTime = (_currentTime.second()*1000 + _currentTime.msec()) - (_lastTime.second()*1000 + _lastTime.msec());
 	if (_elapsedTime != 0)
 		_fps = 1000 / _elapsedTime;
+	else
+		_fps = 0;
 }
 
 
@@ -256,3 +270,39 @@ void Engine::keyReleaseEvent(QKeyEvent* keyEvent)
 {
 	std::cout << "Released: " << keyEvent->text().toUtf8().constData() << std::endl;
 }
+
+/*
+
+Volume Engine::createVolume(uint width, uint height, uint depth, uint nrComponents)
+{
+	GLuint fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_3D, texture);
+  glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+  switch (nrComponents) {
+        case 1:
+           glTexImage3D(GL_TEXTURE_3D, 0, GL_R16F, width, height, depth, 0, GL_RED, GL_HALF_FLOAT, 0);
+            break;
+        case 2:
+         glTexImage3D(GL_TEXTURE_3D, 0, GL_RG16F, width, height, depth, 0, GL_RG, GL_HALF_FLOAT, 0);
+            break;
+        case 3:
+           glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F, width, height, depth, 0, GL_RGB, GL_HALF_FLOAT, 0);
+            break;
+        case 4:
+            glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA16F, width, height, depth, 0, GL_RGBA, GL_HALF_FLOAT, 0);
+            break;
+  }
+
+}
+*/
