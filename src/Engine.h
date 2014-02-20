@@ -30,6 +30,15 @@
 	#include "Debug.h"
 #endif // ELEMENTS_DEBUG__
 
+struct volume
+{
+	uint width;
+	uint height;
+	uint depth;
+	uint nrComponents;
+	GLuint fbo;
+	GLuint texture;
+};
 
 class Engine : public QQuickItem
 {
@@ -58,6 +67,8 @@ private:
 	void init();
 	void close();
 	void calculateFPS();
+
+	void createVolume(uint width, uint height, uint depth, uint nrComponents);
 
 	QQuickWindow* _window;
 	DataHandler* _data;

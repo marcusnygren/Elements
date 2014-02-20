@@ -146,6 +146,10 @@ void Engine::initialize()
 
 	connect(_window->openglContext(), SIGNAL(aboutToBeDestroyed()),
               this, SLOT(cleanup()), Qt::DirectConnection);
+
+	GLuint fboHandle;
+    glGenFramebuffers(1, &fboHandle);
+    glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
 }
 
 
