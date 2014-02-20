@@ -143,8 +143,6 @@ void Engine::initialize()
 	else
 		std::cout << "Context is not valid." << std::endl;
 
-	//_window->openglContext()->makeCurrent(_format);
-
 
 	t = 0;
 	_program = new QOpenGLShaderProgram();
