@@ -8,15 +8,16 @@ Column{
     id: presetColumn
     height: parent.height/3
     width: parent.width
-    spacing: 100
+    spacing: 10
 
     Row{
         id: resizeWindow
         width: parent.width
         height: parent.height*(1/10)
-        spacing: 200
+        spacing: 50
 
         Rectangle{
+            id: minimizeButton
             color: Qt.rgba(0, 0, 0, 0.25)
             width: parent.width
             height: parent.height
@@ -43,9 +44,51 @@ Column{
             MouseArea {
                 anchors.fill: parent
                 onClicked: { 
-                    dragMouseArea.height = 50
+                    dragMouseArea.height = 100
                     koefRow.visible = false
                     elementPicker.visible = false
+                }
+            }
+        }
+    }
+
+    Row{
+        id: maximizeWindow
+        width: parent.width
+        height: parent.height*(1/10)
+        spacing: 50
+
+        Rectangle{
+            id: maximizeButton
+            color: Qt.rgba(0, 0, 0, 0.25)
+            width: parent.width
+            height: parent.height
+        
+            Text{
+                id: maximize
+                text: "Maximize window"
+                z: 4
+
+                Tooltip {
+                    id: toolTipMaximize
+                    text: "Testing Tooltip Testing"
+                    visible: mouseAreaMinimize.hoverEnabled
+                }
+
+                MouseArea {
+                    id: mouseAreaMaximize
+                    hoverEnabled: true
+                    onEntered: { toolTipMinimize.opacity = 1.0 }
+                    onExited: { toolTipMinimize.opacity = 0.0 }
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { 
+                    dragMouseArea.height = 500
+                    koefRow.visible = true
+                    elementPicker.visible = true
                 }
             }
         }
