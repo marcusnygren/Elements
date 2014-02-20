@@ -69,7 +69,7 @@ void Engine::itemChange(ItemChange change, const ItemChangeData&)
 			return;
 		}
 	
-		_win = window();
+		_window = window();
 		init();
 	}
 }
@@ -91,10 +91,11 @@ static char* fragmentShader = "uniform lowp float t;"
                                            "    gl_FragColor = vec4(coords * .5 + .5, i, i);"
                                            "}\0";
 
+
 // At start up.
 void Engine::init()
 {
-		std::cout << "INIT" << std::endl;
+	std::cout << "INIT" << std::endl;
 
 	{
 		std::condition_variable cv;
@@ -107,19 +108,40 @@ void Engine::init()
 		std::cout << "GOT DATA SAFELY"<< std::endl;
 	}
 
-	connect(_win, SIGNAL(beforeSynchronizing()), this, SLOT(sync()), Qt::DirectConnection);
-	connect(_win, SIGNAL(beforeRendering()), this, SLOT(paint()), Qt::DirectConnection);
+	// Connect QT Signals inorder to be able to use OpenGL
+	connect(_window, SIGNAL(sceneGraphInitialized()), this, SLOT(initialize()), Qt::DirectConnection);
+	connect(_window, SIGNAL(beforeSynchronizing()), this, SLOT(sync()), Qt::DirectConnection);
+	connect(_window, SIGNAL(beforeRendering()), this, SLOT(paint()), Qt::DirectConnection);
 	
 	// Make sure QML don't clear what we paint.
-	_win->setClearBeforeRendering(false);
+	_window->setClearBeforeRendering(false);
 
 	// Displays FPS in windowtitle.
 	_timer = new QTimer(this);
 	connect(_timer, SIGNAL(timeout()), this, SLOT(showFPS()), Qt::DirectConnection);
 	_timer->start(50);
 
-
 	std::cout << "INIT DONE" << std::endl;
+}
+
+
+// OpenGL initialization
+void Engine::initialize()
+{
+	std::cout << "INITA" << std::endl;
+	
+	std::cout << "New Program" << std::endl;
+	t = 0;
+	_program = new QOpenGLShaderProgram();
+	_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
+	_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+		
+	_program->bindAttributeLocation("vertices", 0);
+		
+	_program->link();
+
+	connect(_window->openglContext(), SIGNAL(aboutToBeDestroyed()),
+              this, SLOT(cleanup()), Qt::DirectConnection);
 }
 
 
@@ -135,21 +157,6 @@ void Engine::paint()
 {	
 	 //std::cout << "PAINT" << std::endl;
 
-
-if(!_program) {
-		std::cout << "New Program" << std::endl;
-		t = 0;
-		_program = new QOpenGLShaderProgram();
-		_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
-		_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
-		
-		_program->bindAttributeLocation("vertices", 0);
-		_program->link();
-
-		connect(window()->openglContext(), SIGNAL(aboutToBeDestroyed()),
-                this, SLOT(cleanup()), Qt::DirectConnection);
-
-	}
 	_program->bind();
 
 	_program->enableAttributeArray(0);
@@ -182,7 +189,7 @@ if(!_program) {
 	_program->release();
 	
 	calculateFPS();
-	_win->update();
+	_window->update();
 }
 
 
@@ -190,7 +197,7 @@ if(!_program) {
 void Engine::update() const
 {
 	//std::cout << "Update" << std::endl;
-	//_win->update();
+	//_window->update();
 }
 
 
@@ -208,7 +215,7 @@ void Engine::showFPS()
 {
 	std::ostringstream fps;
 	fps << "Elements [" << _fps << "]";
-	_win->setTitle(fps.str().c_str());
+	_window->setTitle(fps.str().c_str());
 }
 
 

@@ -9,6 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 
+#include <QtGui>
 #include <QtQuick/QQuickItem>
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtQuick/qquickwindow.h>
@@ -42,10 +43,12 @@ public:
 	Q_INVOKABLE void update() const;
 
 public slots:
+	void initialize();
+	void sync();
 	void paint();
 	void cleanup();
-	void sync();
 	void showFPS();
+
 
 protected:
 	void itemChange(ItemChange change, const ItemChangeData&);
@@ -55,7 +58,7 @@ private:
 	void close();
 	void calculateFPS();
 
-	QQuickWindow* _win;
+	QQuickWindow* _window;
 	DataHandler* _data;
 
 
