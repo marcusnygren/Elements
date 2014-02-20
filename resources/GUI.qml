@@ -50,11 +50,11 @@ Item {
 
 		Rectangle {
 			id: container
-            radius: 1
-			border.width: 1
+            radius: 3
+			border.width: 0
 			width: parent.width
 			height: parent.height
-            color: Qt.rgba(0.0, 0.0, 0.0, 0.5)
+            color: Qt.rgba(0.2, 0.2, 0.2, 0.75)
 
 			Column{
 				id: guiComposition
