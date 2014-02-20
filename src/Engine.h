@@ -1,6 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+
 #include <iostream>
 #include <cassert>
 #include <istream>
@@ -22,6 +23,7 @@
 #include <QSurfaceFormat>
 #include <QSurface>
 #include <QKeyEvent>
+#include <QOpenGLFunctions_3_3_Core>
 
 #include "Parameters.h"
 #include "DataHandler.h"
@@ -30,8 +32,17 @@
 	#include "Debug.h"
 #endif // ELEMENTS_DEBUG__
 
+struct Volume
+{
+	uint width;
+	uint height;
+	uint depth;
+	uint nrComponents;
+	GLuint fbo;
+	GLuint texture;
+};
 
-class Engine : public QQuickItem
+class Engine : public QQuickItem, protected QOpenGLFunctions_3_3_Core
 {
 Q_OBJECT
 	
@@ -59,6 +70,8 @@ private:
 	void close();
 	void calculateFPS();
 
+	Volume createVolume(uint width, uint height, uint depth, uint nrComponents);
+
 	QQuickWindow* _window;
 	DataHandler* _data;
 
@@ -67,6 +80,7 @@ private:
 
 	QSurfaceFormat* _format;
 	QOpenGLContext* _context;
+	QOpenGLFunctions* _qlFunctions;
 	QOpenGLShaderProgram* _program;
 
 	float t;
