@@ -18,13 +18,14 @@ Column{
 
         Rectangle{
             id: minimizeButton
-            color: Qt.rgba(0, 0, 0, 0.25)
-            width: parent.width
+            color: Qt.rgba(0.2, 0.2, 0.2, 0)
+            width: 20
             height: parent.height
         
             Text{
                 id: minimize
-                text: "Minimize window"
+                text: "-"
+                color: "white"
                 z: 4
 
                 Tooltip {
@@ -44,29 +45,25 @@ Column{
             MouseArea {
                 anchors.fill: parent
                 onClicked: { 
-                    dragMouseArea.height = 100
+                    dragMouseArea.height = 500
                     koefRow.visible = false
                     elementPicker.visible = false
                 }
             }
         }
-    }
-
-    Row{
-        id: maximizeWindow
-        width: parent.width
-        height: parent.height*(1/10)
-        spacing: 50
 
         Rectangle{
             id: maximizeButton
-            color: Qt.rgba(0, 0, 0, 0.25)
-            width: parent.width
+            color: Qt.rgba(0.2, 0.2, 0.2, 0)
+            width: 20
             height: parent.height
+            
+            anchors.left: minimizeButton
         
             Text{
                 id: maximize
-                text: "Maximize window"
+                text: "+"
+                color: "white"
                 z: 4
 
                 Tooltip {
@@ -93,6 +90,16 @@ Column{
             }
         }
     }
+
+    /*Row{
+        id: maximizeWindow
+        width: 50
+        height: parent.height*(1/10)
+        spacing: 50
+        anchors.left: minimizeButton.right;
+
+
+    }*/
 
     //TopGUI
     Row{
@@ -173,7 +180,7 @@ Column{
             id: containerBackground
             width: parent.width*(19/20)
             height: parent.height*(3/4)
-            color: Qt.rgba(0, 0, 0, 0.25)
+            color: container.color
 
             Row{
                 id: columnContainer
