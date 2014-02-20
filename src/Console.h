@@ -563,7 +563,6 @@ public:
 				std::cout << "Console thread id: " << std::this_thread::get_id() << std::endl;
 			}, "void", "Prints the thread id for Console.");
 
-			// Is only called from executeCommand which already has the lock for _commandItemsMutex
 			addItem("info", [&](std::string args)
 			{
 				std::istringstream is(args);

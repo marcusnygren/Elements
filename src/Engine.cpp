@@ -22,6 +22,9 @@ Engine::~Engine()
 		delete _debug;
 #endif // ELEMENTS_DEBUG__
 
+	if(_timer)
+		delete _timer;
+
 }
 
 void Engine::setData(DataHandler* data)
@@ -36,8 +39,9 @@ void Engine::addConsoleCommands()
 	Console* console = Console::getInstance();
 
 
-	console->addItem("exit", [](std::string args)
+	console->addItem("exit", [&](std::string args)
 	{
+		_debug->setIsRunning(false);
 		exit(EXIT_SUCCESS);
 	}, "void", "Exits the program.");
 
@@ -232,4 +236,16 @@ void Engine::cleanup()
 void Engine::close()
 {
 	std::cout << "CLOSE" << std::endl;
+}
+
+
+void Engine::keyPressEvent(QKeyEvent* keyEvent)
+{
+	std::cout << "Pressed: " << keyEvent->text().toUtf8().constData() << std::endl;
+}	
+
+
+void Engine::keyReleaseEvent(QKeyEvent* keyEvent)
+{
+	std::cout << "Released: " << keyEvent->text().toUtf8().constData() << std::endl;
 }
