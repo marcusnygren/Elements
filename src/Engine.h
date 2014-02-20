@@ -83,7 +83,7 @@ private:
 	float t;
 
 
-	// For maximum FPS
+	// For showing FPS
 	QTimer* _timer;
 
 	// For calculating FPS
