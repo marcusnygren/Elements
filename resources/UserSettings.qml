@@ -106,18 +106,34 @@ Column{
             source: "pics/Smoke.png"
             width: (parent.width*(1/3) - 10)
             height: parent.height
-            opacity: 0.75
+            opacity: 0.60
+            verticalAlignment: AlignBottom;
+
 
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: { if(parent.opacity != 1.00){playSmokeEnterHover.start()} }
+                onExited: { if(parent.opacity != 1.00){playSmokeExitHover.start()} }
                 onClicked: { 
                     parent.opacity = 1.00
                     fiSlider.value = Math.floor(Math.random()*(fiSlider.maximumValue-fiSlider.minimumValue+1)+fiSlider.minimumValue)
                     deltaSlider.value = Math.floor(Math.random()*(deltaSlider.maximumValue-deltaSlider.minimumValue+1)+deltaSlider.minimumValue)
                     rooSlider.value = Math.floor(Math.random()*(rooSlider.maximumValue-rooSlider.minimumValue+1)+rooSlider.minimumValue)
-                    fire.opacity = 0.75
-                    water.opacity = 0.75
+                    playFireExitHover.start()
+                    playWaterExitHover.start()
                 }
+            }
+
+            SequentialAnimation {
+                id: playSmokeEnterHover
+                running: false
+                NumberAnimation { target: smoke; property: "opacity"; to: 0.8; duration: 200}
+            }
+            SequentialAnimation {
+                id: playSmokeExitHover
+                running: false
+                NumberAnimation { target: smoke; property: "opacity"; to: 0.5; duration: 200}
             }
         }
 
@@ -126,18 +142,33 @@ Column{
             source: "pics/Fire.png"
             width: (parent.width*(1/3) - 10)
             height: parent.height
-            opacity: 0.75
+            opacity: 0.60
+            verticalAlignment: AlignBottom;
 
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: { if(parent.opacity != 1.00){playFireEnterHover.start()} }
+                onExited: { if(parent.opacity != 1.00){playFireExitHover.start()} }
                 onClicked: { 
                     parent.opacity = 1.00
                     fiSlider.value = Math.floor(Math.random()*(fiSlider.maximumValue-fiSlider.minimumValue+1)+fiSlider.minimumValue)
                     deltaSlider.value = Math.floor(Math.random()*(deltaSlider.maximumValue-deltaSlider.minimumValue+1)+deltaSlider.minimumValue)
                     rooSlider.value = Math.floor(Math.random()*(rooSlider.maximumValue-rooSlider.minimumValue+1)+rooSlider.minimumValue)
-                    smoke.opacity = 0.75
-                    water.opacity = 0.75
+                    playSmokeExitHover.start()
+                    playWaterExitHover.start()
                 }
+            }
+
+            SequentialAnimation {
+                id: playFireEnterHover
+                running: false
+                NumberAnimation { target: fire; property: "opacity"; to: 0.8; duration: 200}
+            }
+            SequentialAnimation {
+                id: playFireExitHover
+                running: false
+                NumberAnimation { target: fire; property: "opacity"; to: 0.5; duration: 200}
             }
         }
 
@@ -146,18 +177,33 @@ Column{
             source: "pics/Water.png"
             width: (parent.width*(1/3) - 10)
             height: parent.height
-            opacity: 0.75
+            opacity: 0.50
+            verticalAlignment: AlignBottom;
 
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: { if(water.opacity != 1.00){playWaterEnterHover.start()} }
+                onExited: { if(water.opacity != 1.00){playWaterExitHover.start()} }
                 onClicked: { 
                     parent.opacity = 1.00
                     fiSlider.value = Math.floor(Math.random()*(fiSlider.maximumValue-fiSlider.minimumValue+1)+fiSlider.minimumValue)
                     deltaSlider.value = Math.floor(Math.random()*(deltaSlider.maximumValue-deltaSlider.minimumValue+1)+deltaSlider.minimumValue)
                     rooSlider.value = Math.floor(Math.random()*(rooSlider.maximumValue-rooSlider.minimumValue+1)+rooSlider.minimumValue)
-                    smoke.opacity = 0.75
-                    fire.opacity = 0.75
+                    playSmokeExitHover.start()
+                    playFireExitHover.start()
                 }
+            }
+
+            SequentialAnimation {
+                id: playWaterEnterHover
+                running: false
+                NumberAnimation { target: water; property: "opacity"; to: 0.8; duration: 200}
+            }
+            SequentialAnimation {
+                id: playWaterExitHover
+                running: false
+                NumberAnimation { target: water; property: "opacity"; to: 0.5; duration: 200}
             }
         }
     }
@@ -262,7 +308,7 @@ Column{
                         minimumValue: 0
                         maximumValue: 100
                         width: parent.width
-                        onValueChanged: print(Window.width)
+                        onValueChanged: print(water.width, water.height)
                     }
 
                     Slider{
