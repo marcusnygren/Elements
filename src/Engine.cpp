@@ -155,7 +155,7 @@ void Engine::initialize()
 	connect(_window->openglContext(), SIGNAL(aboutToBeDestroyed()),
               this, SLOT(cleanup()), Qt::DirectConnection);
 
-// createVolume(1,1,1,1);
+createVolume(1,1,1,1);
 
 	if(_window->openglContext()->isValid())
 		std::cout << "Context is valid." << std::endl;
@@ -170,14 +170,14 @@ void Engine::initialize()
 // Before painting, get data from GUI.
 void Engine::sync()
 {
-//	std::cout << "SYNC" << std::endl;
+	// std::cout << "SYNC" << std::endl;
 	_nParticlesLive = _data->getNParticles();
 }
 
 
 void Engine::paint()
 {	
-	 //std::cout << "PAINT" << std::endl;
+	 // std::cout << "PAINT" << std::endl;
 
 	_program->bind();
 
@@ -212,6 +212,7 @@ void Engine::paint()
 	
 	calculateFPS();
 	_window->update();
+	// std::cout << "PAINT2" << std::endl;
 }
 
 
