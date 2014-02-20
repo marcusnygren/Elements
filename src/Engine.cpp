@@ -138,6 +138,7 @@ void Engine::initialize()
 	_GUIContext = _window->openglContext();
 	_GLContext = new QOpenGLContext();
 */
+/*
 	_GUIContext = _window->openglContext();
 	_GLContext = new QOpenGLContext();
 
@@ -167,7 +168,7 @@ void Engine::initialize()
 	_window->openglContext()->format().setMajorVersion(3);
 	_window->openglContext()->format().setMinorVersion(3);
 	std::cout << "GL info: " << glGetString(GL_VERSION) << std::endl;
-
+*/
 
 	 //_GUIContext->makeCurrent(_window);
 /*

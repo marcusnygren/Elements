@@ -3,7 +3,7 @@ TARGET = Elements
 DESTDIR = bin
 OBJECTS_DIR = debug
 MOC_DIR = moc
-QT += qml quick widgets
+QT += gui qml quick widgets opengl
 CONFIG += console
 CONFIG += c++11
 
