@@ -21,7 +21,7 @@
 #include <QQmlEngine>
 #include <QSurfaceFormat>
 #include <QSurface>
-
+#include <QKeyEvent>
 
 #include "Parameters.h"
 #include "DataHandler.h"
@@ -49,9 +49,10 @@ public slots:
 	void cleanup();
 	void showFPS();
 
-
 protected:
 	void itemChange(ItemChange change, const ItemChangeData&);
+	void keyPressEvent(QKeyEvent* keyEvent);
+	void keyReleaseEvent(QKeyEvent* keyEvent);
 
 private:
 	void init();
@@ -71,7 +72,7 @@ private:
 	float t;
 
 
-	// For maximum FPS
+	// For showing FPS
 	QTimer* _timer;
 
 	// For calculating FPS

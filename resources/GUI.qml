@@ -23,6 +23,12 @@ Item {
 
 		width: 800
 		height: 600
+			
+		Item 
+		{
+			id: keyHandler
+			focus: true
+		}
 
 		Data 
 		{
