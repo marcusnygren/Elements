@@ -133,8 +133,19 @@ void Engine::init()
 void Engine::initialize()
 {
 	std::cout << "INITA" << std::endl;
+
+	_window->openglContext()->format().setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
+	_window->openglContext()->format().setMajorVersion(3);
+	_window->openglContext()->format().setMinorVersion(3);
 	
-	std::cout << "New Program" << std::endl;
+	if(_window->openglContext()->isValid())
+		std::cout << "Context is valid." << std::endl;
+	else
+		std::cout << "Context is not valid." << std::endl;
+
+	//_window->openglContext()->makeCurrent(_format);
+
+
 	t = 0;
 	_program = new QOpenGLShaderProgram();
 	_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
