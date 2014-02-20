@@ -1,0 +1,82 @@
+\documentclass[a4paper,12pt,twoside,swedish]{report}
+
+\usepackage{times}  
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{theorem}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{babel}
+
+\headsep          0.25in
+\headheight       12pt
+\setlength{\topmargin}{-\headsep}
+\addtolength{\topmargin}{-\headheight}
+\oddsidemargin      0in
+\evensidemargin     0in
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-2.0in}
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-2.0in}
+\addtolength{\textheight}{-1\topskip}
+\divide\textheight  by \baselineskip
+\multiply\textheight  by \baselineskip
+\addtolength{\textheight}{\topskip}
+\setcounter{secnumdepth}{-2}
+
+\begin{document}
+
+\pagestyle{plain}
+
+\setcounter{page}{1}
+
+\chapter{Modellbygge och Simulering - Elements}
+
+\section{Sammanfattning}
+\textit{En kort sammanfattning om hela rapporten. Ca 100 - 150 tecken. Ska skrivas sist.}
+
+\section{Innehållsförteckning}
+\textit{Rapportens innehållsförteckning}
+
+\section{Introduktion}
+\textit{Bakgrund - Projektets bakgrund, inspiration, research osv. Vad behövde vi veta för att skapa detta projekt?
+Syfte - Projektets ursprungssyfte. Varför ville vi göra det vi gjorde?}
+
+Elements är gränssnitt för att visa olika partikelsystem i en mjukvara och låta användaren experimentera med Navier-stokes ekvationer. Syftet är att användaren ska kunna se sambandet och förstå kopplingen mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering på skärmen. Simuleringarna kommer i form av: Rök, eld och vatten.
+
+\section{Introduktion}
+\textit{Vad har vi använt för metoder? Formler? Beräkningar? Programmering? Hela workflowen i kort sammanfattning: Research - Matlab - C++ - OpenGL - QT. Vilka delar skedde parallellt?}
+
+\subsection{Research}
+\textit{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
+
+\subsection{Matlab}
+\textit{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}
+
+\subsection{C++}
+\textit{Varför vi valde just C++? Hur gick vi tillväga med C++? Hur gick vi över ekvationerna till C++?}
+
+\subsection{OpenGL}
+\textit{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
+
+\subsection{QT}
+\textit{Varför valde vi QT? Hur kommunicerar QT med resten av projektet? C++ - QT? GUI?}
+
+\section{Diskussion}
+\textit{Vilka saker gick snett? Vilka saker gick strålande? Varför?}
+
+\section{Resultat}
+\textit{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
+
+\section{Referenser}
+\textit{En lista på alla våra referenser i ordning där de används först i texten. Exempelvis: Papers på internet, böcker och andra externa informationskällor.}
+
+\section{Bilaga A}
+\textit{Här kan man lägga första bilagan om det behövs.}
+
+\section{Bilaga B}
+\textit{Här kan man lägga andra bilagan om det behövs. Fler bilagor blir bara nästa bokstav i alfabetet.}
+
+\end{document}
