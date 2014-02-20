@@ -138,8 +138,8 @@ void Engine::initialize()
 	_GUIContext = _window->openglContext();
 	_GLContext = new QOpenGLContext();
 */
-	_GLContext = new QOpenGLContext();
 	_GUIContext = _window->openglContext();
+	_GLContext = new QOpenGLContext();
 
 	_format = new QSurfaceFormat();
 	_format->setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
@@ -150,13 +150,25 @@ void Engine::initialize()
 	_GLContext->setFormat(*_format);
 	_GLContext->create();
 
+
 	if(_GLContext->isValid())
 		std::cout << "_GLContext is valid." << std::endl;
 	else
 		std::cout << "_GLContext is not valid." << std::endl;
 
  
-	 _GLContext->makeCurrent(_window);
+	if(_GLContext->makeCurrent(_window))
+		std::cout << "Made current: _GLContext" << std::endl;
+	else 
+		std::cout << "Didn't make current: _GLContext" << std::endl;
+
+	_window->openglContext()->format().setRenderableType(QSurfaceFormat::RenderableType::OpenGL);
+	_window->openglContext()->format().setProfile(QSurfaceFormat::OpenGLContextProfile::CompatibilityProfile);
+	_window->openglContext()->format().setMajorVersion(3);
+	_window->openglContext()->format().setMinorVersion(3);
+	std::cout << "GL info: " << glGetString(GL_VERSION) << std::endl;
+
+
 	 //_GUIContext->makeCurrent(_window);
 /*
   QSurfaceFormat f = _window->openglContext()->format();
@@ -188,6 +200,8 @@ void Engine::initialize()
 		std::cout << "_window->openglContext() is valid." << std::endl;
 	else
 		std::cout << "_window->openglContext() is not valid." << std::endl;
+
+
 
 
 	// GLuint fboHandle;
