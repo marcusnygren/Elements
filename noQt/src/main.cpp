@@ -83,6 +83,7 @@ int main( void )
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+
 	/* Render Loop
 	***************************************************************/
 	while(isRunning && glfwWindowShouldClose(window) == 0)
