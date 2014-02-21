@@ -2,6 +2,8 @@
 #define SHADER_H
 
 #include <string>
+// Include GLEW
+#include <GL/glew.h>
 
 
 class Shader

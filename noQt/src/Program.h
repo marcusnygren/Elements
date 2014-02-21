@@ -2,6 +2,8 @@
 #define PROGRAM_H
 
 #include <string>
+// Include GLEW
+#include <GL/glew.h>
 
 class Program
 {
