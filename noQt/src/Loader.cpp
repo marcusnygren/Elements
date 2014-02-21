@@ -128,7 +128,7 @@ void Loader::loadShader(const std::string file, const GLenum shaderType)
 
 GLuint Loader::accessShader(const std::string name) const
 {
-	GLuint shader = NULL;
+	GLuint shader;
 	for_each(_shaders.begin(), _shaders.end(), [&name, &shader](Shader* pshader)
 	{
 		if(name == pshader->getName())
@@ -157,7 +157,7 @@ std::string Loader::loadCode(const std::string file)
 		std::cout << "Error loading vertex-shader: " << file << std::endl;
 	}
 	
-	assert(!code.empty());
+	//assert(!code.empty());
 	//std::cout << "Code: " << std::endl;
 	//std::cout << code << std::endl << std::endl << std::endl;
 	return code;
@@ -269,6 +269,7 @@ void Loader::loadPrograms(const std::string file)
 			std::string files;
 			
 			is >> name;
+			std::cout << "NAME: " << name << std::endl;
 			getline(is, files);
 
 			loadProgram(name, path, files);
@@ -278,7 +279,7 @@ void Loader::loadPrograms(const std::string file)
 	{
 		std::cout << "Error loading programs from: " << file << std::endl;
 	}
-	
+
 	input.close();
 }
 
@@ -297,13 +298,14 @@ GLuint Loader::accessProgram(std::string name) const
 		}
 	});
 
-	assert(found);
+	// assert(found);
 	return program;
 }
 
 
 void Loader::printAvailableShaders() const
 {
+	std::cout << "size: " << _shaders.size() << std::endl;
 	for_each(_shaders.begin(), _shaders.end(), [](Shader* pShader)
 	{
 		std::cout << "\t" << pShader->getName() << std::endl;

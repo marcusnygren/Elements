@@ -8,6 +8,9 @@
 #include <vector>
 #include <algorithm>
 #include <cassert>
+// Include GLEW
+#include <GL/glew.h>
+
 
 #include "Shader.h"
 #include "Program.h"
@@ -17,11 +20,11 @@
 
 // To determine the shader filetype (string)
 #ifndef VERTEX_SHADER_TYPE__
-	#define VERTEX_SHADER_TYPE__ ".vs"
+	#define VERTEX_SHADER_TYPE__ ".vertex"
 #endif // VERTEX_SHADER_TYPE__
 
 #ifndef FRAGMENT_SHADER_TYPE__
-	#define FRAGMENT_SHADER_TYPE__ ".fs"
+	#define FRAGMENT_SHADER_TYPE__ ".frag"
 #endif // FRAGMENT_SHADER_TYPE__
 
 // For checking shader compile status (0 / 1)
