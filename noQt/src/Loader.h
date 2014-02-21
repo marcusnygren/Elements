@@ -9,8 +9,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include <QtGui/QOpenGLContext>
-
 #include "Shader.h"
 #include "Program.h"
 #include "Console.h"

@@ -2,7 +2,6 @@
 #define PROGRAM_H
 
 #include <string>
-#include <QtGui/QOpenGLContext>
 
 class Program
 {

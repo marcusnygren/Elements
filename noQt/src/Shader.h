@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include <QtGui/QOpenGLContext>
 
 class Shader
 {
