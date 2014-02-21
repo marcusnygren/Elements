@@ -1,4 +1,5 @@
 // Include standard headers
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,15 +13,48 @@ GLFWwindow* window;
 // Include GLM
 #include <glm/glm.hpp>
 
+#include "Debug.h"
+#include "Console.h"
+
+// For the linker
+Console* Console::theOnlyInstance = NULL;
+std::mutex Console::_instanceMutex;
+std::recursive_mutex Console::_commandItemsMutex;
+
+
 int main( void )
 {
-	// Initialise GLFW
+	bool isRunning = true;
+
+	/* Initialize Console
+	***************************************************************/
+	Debug* debug = new Debug();
+	Console* console = Console::getInstance();
+
+	console->addItem("exit", [&](std::string args)
+	{
+		isRunning = false;
+		debug->setIsRunning(false);
+		//exit(EXIT_SUCCESS);
+	}, "void", "Exits the program.");
+
+	console->addItem("stop",[&](std::string args)
+	{
+		debug->setIsRunning(false);
+	}, "void", "Stops the thread running the console.");
+
+
+	/* Initialize GLFW
+	***************************************************************/
 	if( !glfwInit() )
 	{
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		return -1;
 	}
 
+
+	/* Initialize OpenGL
+	***************************************************************/
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -35,7 +69,9 @@ int main( void )
 	}
 	glfwMakeContextCurrent(window);
 
-	// Initialize GLEW
+
+	/* Initialize GLEW
+	***************************************************************/
 	if (glewInit() != GLEW_OK) {
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		return -1;
@@ -47,19 +83,30 @@ int main( void )
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-	do{
-		// Draw nothing, see you in tutorial 2 !
-
+	/* Render Loop
+	***************************************************************/
+	while(isRunning && glfwWindowShouldClose(window) == 0)
+	{
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+	} 
 
-	} // Check if the ESC key was pressed or the window was closed
-	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0 );
 
+	/* Cleanup
+	***************************************************************/
 	// Close OpenGL window and terminate GLFW
+	std::cout << "Cleanup" << std::endl;
 	glfwTerminate();
+	
+	if(debug) 
+	{
+		debug->setIsRunning(false);
+		delete debug;
+	}
+
+	if(console)
+		console->release();
 
 	return 0;
 }
