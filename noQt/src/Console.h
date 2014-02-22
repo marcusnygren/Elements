@@ -17,7 +17,7 @@
 #include <typeinfo>
 #include <iomanip>
 
-#define NO_ARGUMENTS__ "void"
+#define NO_ARGUMENTS__ "Not defined."
 #define NO_DESCRIPTION__ "Not defined."
 #define COMMAND_LENGTH__ 10
 #define CONSOLE_LINE__ std::cout << "--------------------------" << std::endl;
@@ -203,7 +203,7 @@ public:
 
 
 	template<typename T>
-	inline void quickAdd(const std::string& name, T* t, void (T::*f)()
+	inline void quickAdd(const std::string& name, T* t, void (T::*f)(void)
 											, std::string arguments = NO_ARGUMENTS__
 											, std::string description = NO_DESCRIPTION__)
 	{
@@ -215,7 +215,7 @@ public:
 
 
 	template<typename T>
-	inline void quickAdd(const std::string& name, T* t, void (T::*f)() const
+	inline void quickAdd(const std::string& name, T* t, void (T::*f)(void) const
 											, std::string arguments = NO_ARGUMENTS__
 											, std::string description = NO_DESCRIPTION__)
 	{

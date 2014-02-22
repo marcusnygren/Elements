@@ -45,16 +45,15 @@ int main( void )
 		debug->setIsRunning(false);
 	}, "void", "Stops the thread running the console.");
 	
-	std::cout << "CONSOLE ADDED IN MAIN DONE" << std::endl;
 
 	/* Initialize GLFW
 	***************************************************************/
 	if( !glfwInit() )
 	{
-		fprintf( stderr, "Failed to initialize GLFW\n" );
+		std::cout << "Error (LINE: " << __LINE__ << ") failed to initialize GLFW" << std::endl;
 		return -1;
 	}
-	std::cout << "glfwInit IN MAIN DONE" << std::endl;
+
 
 	/* Initialize OpenGL
 	***************************************************************/
@@ -72,7 +71,7 @@ int main( void )
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	std::cout << "Initialize OpenGL IN MAIN DONE" << std::endl;
+
 
 	/* Initialize GLEW
 	***************************************************************/
@@ -81,8 +80,6 @@ int main( void )
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		return -1;
 	}
-		std::cout << "glewInit IN MAIN DONE" << std::endl;
-
 
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
@@ -90,24 +87,15 @@ int main( void )
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-
 	GLuint VertexArrayID;
-	std::cout << "BEFIRE IN MAIN DONE1" << std::endl;
 	glGenVertexArrays(1, &VertexArrayID);
-	std::cout << "BEFIRE IN MAIN DONE2" << std::endl;
 	glBindVertexArray(VertexArrayID);
-	std::cout << "BEFIRE IN MAIN DONE" << std::endl;
-
-
 
 	static const GLfloat g_vertex_buffer_data[] = { 
 		-1.0f, -1.0f, 0.0f,
 		 1.0f, -1.0f, 0.0f,
 		 0.0f,  1.0f, 0.0f,
 	};
-
-	
-
 
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
@@ -117,14 +105,12 @@ int main( void )
 
 
 	Simulation test(10,10,10,10);
-	/* Render Loop
-	***************************************************************/
-	std::cout << "Before loader" << std::endl;
 	Loader loader;
 	loader.loadPrograms("shaders/programs.txt");
-	// loader.printAvailableShaders();
- //  loader.printAvailablePrograms();
 
+
+	/* Render Loop
+	***************************************************************/
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
 		// Clear the screen
@@ -162,8 +148,8 @@ int main( void )
 	std::cout << "Cleanup" << std::endl;
 	glfwTerminate();
 
-	// glDeleteBuffers(1, &vertexbuffer);
-	// glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
 	
 	if(debug) 
 	{
