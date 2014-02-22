@@ -120,8 +120,8 @@ int main( void )
 	std::cout << "Before loader" << std::endl;
 	Loader loader;
 	loader.loadPrograms("shaders/programs.txt");
-	loader.printAvailableShaders();
-  loader.printAvailablePrograms();
+	// loader.printAvailableShaders();
+ //  loader.printAvailablePrograms();
 
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
@@ -160,8 +160,8 @@ int main( void )
 	std::cout << "Cleanup" << std::endl;
 	glfwTerminate();
 
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteVertexArrays(1, &VertexArrayID);
+	// glDeleteBuffers(1, &vertexbuffer);
+	// glDeleteVertexArrays(1, &VertexArrayID);
 	
 	if(debug) 
 	{
