@@ -1,1 +1,1 @@
-program1 SimpleVertexShader.frag SimpleVertexShader.vertex
+program1 SimpleFragmentShader.frag SimpleVertexShader.vertex
