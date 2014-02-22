@@ -3,8 +3,8 @@
 Loader::Loader()
 {
 	Console* console = Console::getInstance();
-	console->quickAdd("shaders", this, &Loader::printAvailableShaders);
-	console->quickAdd("programs", this, &Loader::printAvailablePrograms);
+	console->quickAdd("shaders", this, &Loader::printAvailableShaders, "void", "Prints available shaders.");
+	console->quickAdd("programs", this, &Loader::printAvailablePrograms, "void", "Prints available programs.");
 }
 
 
