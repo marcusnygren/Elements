@@ -88,6 +88,7 @@ int main( void )
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+
 	GLuint VertexArrayID;
 	std::cout << "BEFIRE IN MAIN DONE1" << std::endl;
 	glGenVertexArrays(1, &VertexArrayID);

@@ -203,6 +203,7 @@ void Loader::checkProgramCompileStatus(std::string name, const GLuint program) c
 
 void Loader::loadProgram(const std::string name, const std::string path, const std::string files)
 {
+	std::cout << "loadProgram(" << name << ", " << path << ", " << files << std::endl;
 	bool isAlreadyAdded = false;
 
 	for_each(_programs.begin(), _programs.end(), [&](Program* pProgram)
