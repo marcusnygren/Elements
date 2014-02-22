@@ -119,8 +119,6 @@ int main( void )
 	std::cout << "Before loader" << std::endl;
 	Loader loader;
 	loader.loadPrograms("shaders/programs.txt");
-	loader.printAvailableShaders();
-  loader.printAvailablePrograms();
 
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{

@@ -257,8 +257,6 @@ void Loader::loadPrograms(const std::string file)
 		path = "";
 	}
 
-	std::cout << "Path: " << path << std::endl;
-
 	std::ifstream input(file.c_str(), std::ifstream::in);
 
 	if(input.good()) 
