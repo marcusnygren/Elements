@@ -88,7 +88,7 @@ int main( void )
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-
+/*
 	GLuint VertexArrayID;
 	std::cout << "BEFIRE IN MAIN DONE1" << std::endl;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -113,7 +113,7 @@ int main( void )
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 
-
+*/
 
 	/* Render Loop
 	***************************************************************/
@@ -125,6 +125,7 @@ int main( void )
 
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
+/*
 		// Clear the screen
 		glClear( GL_COLOR_BUFFER_BIT );
 
@@ -151,6 +152,7 @@ int main( void )
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+*/
 	} 
 
 
@@ -160,8 +162,8 @@ int main( void )
 	std::cout << "Cleanup" << std::endl;
 	glfwTerminate();
 
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteVertexArrays(1, &VertexArrayID);
+//	glDeleteBuffers(1, &vertexbuffer);
+//	glDeleteVertexArrays(1, &VertexArrayID);
 	
 	if(debug) 
 	{
