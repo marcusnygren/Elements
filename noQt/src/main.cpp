@@ -16,6 +16,7 @@ GLFWwindow* window;
 #include "Debug.h"
 #include "Console.h"
 #include "Loader.h"
+#include "Simulation.h"
 
 // For the linker
 Console* Console::theOnlyInstance = NULL;
@@ -115,7 +116,7 @@ int main( void )
 
 
 
-
+	Simulation test(10,10,10,10);
 	/* Render Loop
 	***************************************************************/
 	std::cout << "Before loader" << std::endl;

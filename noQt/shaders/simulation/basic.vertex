@@ -1,0 +1,8 @@
+#version 330
+
+out int layer;
+
+void main()
+{
+  layer = gl_instanceID;  
+}

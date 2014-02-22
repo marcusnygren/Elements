@@ -3,12 +3,13 @@
 out vec4 value;
 
 layout (binding = 0) uniform sampler3D pressureTexture;
-layout (binding = 1) uniform sampler3D bTexture;
+layout (binding = 1) uniform sampler3D bTexture; // Divergence
 layout (binding = 2) uniform sampler3D obstacleTexture;  
 
-layout (location = 0) uniform int layer;
-layout (location = 1) uniform float alpha;
-layout (location = 2) uniform float beta;
+layout (location = 3) uniform float alpha;
+layout (location = 4) uniform float beta;
+
+in int layer;
 
 
 void main()

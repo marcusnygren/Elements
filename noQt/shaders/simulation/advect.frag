@@ -6,9 +6,10 @@ layout (binding = 0) uniform sampler3D sourceTexture;
 layout (binding = 1) uniform sampler3D velocityTexture;
 layout (binding = 2) uniform sampler3D obstacleTexture;
 
-layout (location = 0) uniform int layer;
-layout (location = 1) uniform float timeStep;
-layout (location = 2) uniform vec3 dxyz;
+layout (location = 3) uniform float timeStep;
+layout (location = 4) uniform vec3 dxyz;
+
+in int layer;
 
 void main(void)
 {

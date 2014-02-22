@@ -5,8 +5,9 @@ out float value;
 layout (binding = 0) uniform sampler3D velocityTexture;
 layout (binding = 1) uniform sampler3D obstacleTexture;
 
-layout (location = 0) uniform int layer;
-layout (location = 1) uniform float cellSize;
+layout (location = 2) uniform float cellSize;
+
+in int layer;
 
 
 void main()
