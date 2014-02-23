@@ -3,3 +3,4 @@ jacobi basic.vertex jacobi.frag
 divergence basic.vertex divergence.frag
 gradient basic.vertex subtractGradient.frag
 addSource basic.vertex source.frag
+initializeObstacles basic.vertex initializeObstacles.frag

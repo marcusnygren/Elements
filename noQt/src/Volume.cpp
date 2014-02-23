@@ -68,3 +68,10 @@ GLuint Volume::getTexture()
 {
   return _texture;
 }
+
+void Volume::clear(float value)
+{
+  glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+  glClearColor(value, value, value, value);
+  glClear(GL_COLOR_BUFFER_BIT);
+}

@@ -11,6 +11,7 @@ class Volume
 
     GLuint getFbo();
     GLuint getTexture();
+    void clear(float value);
   
   private:
     GLuint _fbo;

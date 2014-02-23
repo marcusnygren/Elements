@@ -23,11 +23,16 @@ class Simulation
     void computeDivergence(Volume* velocity, Volume* destination, Volume* obstacles);
     void subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacles);
     void addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius);
+    void initializeObstacles(Volume* obstacles);
+
+    void resetGlState();
 
     void setUniform(GLuint location, float value);
     void setUniform(GLuint location, glm::vec3 value);
     void setUniform(GLuint location, glm::vec4 value);
 
+
+    GLuint _vbo;
 
     Loader _shaderLoader;
 
