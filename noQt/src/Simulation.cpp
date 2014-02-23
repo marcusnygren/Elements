@@ -1,12 +1,14 @@
 #include "Simulation.h"
 
-Simulation::Simulation(int width, int height, int depth, float timeStep)
+Simulation::Simulation(int width, int height, int depth, float timeStep, float startTemperature)
 : _density(width, height, depth, 1),
   _velocity(width, height, depth, 3),
   _pressure(width, height, depth, 1),
   _divergence(width, height, depth, 3),
   _obstacles(width, height, depth, 3),
+  _temperature(width, height, depth, 1),
   _timeStep(timeStep),
+  _startTemperature(startTemperature),
   _gridScale(1/width, 1/height, 1/depth),
   _dimensions(width, height, depth)
 {
@@ -88,7 +90,7 @@ void Simulation::computeDivergence(Volume* velocity, Volume* destination, Volume
 
   setUniform(0, 0); // Bind velocity texture to unit 0
   setUniform(1, 1); // Bind obstacle texture to unit 1
-  setUniform(2, _dimensions.z); // borde vara den här eller ? kanske gridScale???
+  setUniform(2, _gridScale);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -99,9 +101,8 @@ void Simulation::computeDivergence(Volume* velocity, Volume* destination, Volume
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
 }
 
-void Simulation::subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacles)
+void Simulation::subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacle)
 {
-  
 }
 
 void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius)
@@ -113,5 +114,28 @@ void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 va
   setUniform(2, value);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
+}
+
+void Simulation::addBuoncy(Volume* velocity, Volume* temperature, Volume* density, Volume* destination)
+{
+  glUseProgram(_shaderLoader.accessProgram("buoyncy"));
+  setUniform(0, 0); // Bind velocity texture to unit 0
+  setUniform(1, 1); // Bind temperature texture to unit 1
+  setUniform(2, 2); // Bind density texture to unit 2
+  setUniform(3, _startTemperature); // Bind startTemperature to unit 3 
+  setUniform(4, _timeStep); // Bind timeStep to unit 4
+  setUniform(5, 0.5); // Bind alpha to unit 4 OBS! 0.5 is not the correct value!
+  setUniform(6, 0.5); // Bind beta    unit 5 OBS! 0.5 is not the correct value!
+
+
+  glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_3D, velocity->getTexture());
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_3D, temperature->getTexture());
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_3D, density->getTexture());
+
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
 }

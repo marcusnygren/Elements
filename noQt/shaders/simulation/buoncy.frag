@@ -34,7 +34,7 @@ void main(void)
 		FragColor = velocity;
 	}
 	
-	// Or:
+	// Calculate the newTemperature & newDensity
 	/*
 	
 	vec3 pos = vec3(gl_FragCoord.xy, layer);
@@ -64,15 +64,16 @@ void main(void)
 
 	float newTemperature = -(velocity.x * (xUpT - xDownT) + velocity.y * (yUpT - yDownT) + velocity.z * (zUpT - zDownT))*gridScale*timeStep;
 	float newDensity = -(velocity.x * (xUpD - xDownD) + velocity.y * (yUpD - yDownD) + velocity.z * (zUpD - zDownD))*gridScale*timeStep;
-	// End of: newTemperature & newDensity
+	// End of: Calculating newTemperature & newDensity
+
 	if(temperature > startTemperature)
 	{
 		// Add the buoncy force
-		FragColor = velocity + -alpha*density*yUp + beta*(temperature-startTemperature)*yUp;
+		FragColor = velocity + (-alpha*density*yUp) + beta*(temperature-startTemperature)*yUp;
 	}
 	else
 	{
-		FragColor = velocity;
+		FragColor = velocity + (-alpha*density*yUp);
 	}
 
 	

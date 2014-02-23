@@ -104,7 +104,7 @@ int main( void )
 
 
 
-	Simulation test(10,10,10,10);
+	Simulation test(10,10,10,10,50);
 	Loader loader;
 	loader.loadPrograms("shaders/programs.txt");
 

@@ -11,7 +11,7 @@
 class Simulation
 {
   public:
-    Simulation(int width, int height, int depth, float timeStep);
+    Simulation(int width, int height, int depth, float timeStep, float startTemperature);
     ~Simulation();
     
     void stepSimulation();
@@ -23,6 +23,7 @@ class Simulation
     void computeDivergence(Volume* velocity, Volume* destination, Volume* obstacles);
     void subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacles);
     void addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius);
+    void addBuoncy(Volume* velocity, Volume* temperature, Volume* density, Volume* destination);
 
     void setUniform(GLuint location, float value);
     void setUniform(GLuint location, glm::vec3 value);
@@ -31,14 +32,18 @@ class Simulation
 
     Loader _shaderLoader;
 
-    Container _density;
     Container _velocity;
     Container _pressure;
+    Container _temperature;
+    Container _density;
 
     Volume _obstacles;
     Volume _divergence;
 
     float _timeStep;
+    float _startTemperature;
+    float _startDensity;
+
     glm::vec3 _gridScale;
     glm::vec3 _dimensions;
 };
