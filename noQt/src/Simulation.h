@@ -21,10 +21,12 @@ class Simulation
     void computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles);
     void computeJacobi(Volume* pressure, Volume* divergence, Volume* destination, Volume* obstacles);
     void computeDivergence(Volume* velocity, Volume* destination, Volume* obstacles);
-    void subtractGradient();
+    void subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacles);
+    void addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius);
 
     void setUniform(GLuint location, float value);
     void setUniform(GLuint location, glm::vec3 value);
+    void setUniform(GLuint location, glm::vec4 value);
 
 
     Loader _shaderLoader;
