@@ -4,7 +4,7 @@ out vec4 value;
 
 layout (location = 0) uniform vec3 dimensions;
 
-in int layer;
+flat in int layer;
 
 void main()
 {

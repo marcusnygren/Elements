@@ -1,10 +1,10 @@
 #version 330
 
 layout (location = 0) vec4 vertexPosition;
-out int layer;
+flat out int layer;
 
 void main()
 {
   layer = gl_InstanceID; 
-  gl_Posistion = vertexPosition;
+  gl_Position = vertexPosition;
 }

@@ -6,11 +6,11 @@ layout (location = 0) uniform vec3 position;
 layout (location = 1) uniform float radius;
 layout (location = 2) uniform vec4 sourceValue;
 
-in int layer;
+flat in int layer;
 
 void main()
 {
-  vec3 currentPosition(gl_FragCoord.xy, layer);
+  vec3 currentPosition = vec3(gl_FragCoord.xy, layer);
   float distance = distance(position, currentPosition);
 
   if (distance < radius)

@@ -6,14 +6,15 @@ layout (binding = 0) uniform sampler3D velocityTexture;
 layout (binding = 1) uniform sampler3D pressureTexture;
 layout (binding = 2) uniform sampler3D obstacleTexture;
 
-layout (location = 0) uniform int layer;
-layout (location = 1) uniform float gridScale;
+layout (location = 3) uniform float gridScale;
+
+flat in int layer;
 
 void main()
 {
   ivec3 pos = ivec3(gl_FragCoord.xy, layer);
 
-  vec3 solid = texelFetch(obstacleTexture, pos, 0);
+  vec3 solid = texelFetch(obstacleTexture, pos, 0).xyz;
   if (solid.x > 0)
   {
     value = solid.yzx;
@@ -26,7 +27,7 @@ void main()
   float yDownP = texelFetchOffset(pressureTexture, pos, 0, ivec3(0, -1, 0)).x;
   float zUpP = texelFetchOffset(pressureTexture, pos, 0, ivec3(0, 0, 1)).x;
   float zDownP = texelFetchOffset(pressureTexture, pos, 0, ivec3(0, 0, 1)).x;
-  float centerP = texelFetch(pressureTexture, pos, 0);
+  float centerP = texelFetch(pressureTexture, pos, 0).x;
 
 
   vec3 xUpO = texelFetchOffset(obstacleTexture, pos, 0, ivec3(1, 0, 0)).xyz;
@@ -78,7 +79,7 @@ void main()
     mask.z = 0;
   }
 
-  vec3 velocity = texelFetch(velocityTexture, pos, 0);
+  vec3 velocity = texelFetch(velocityTexture, pos, 0).xyz;
   vec3 pressureGradient = vec3(xUpP - xDownP, yUpP - yDownP, zUpP - zDownP) * 0.5 * gridScale;
   vec3 subtractedVelocity = velocity - pressureGradient;
   value = (mask * subtractedVelocity) + obstacleVelocity;
