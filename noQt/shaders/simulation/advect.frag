@@ -9,7 +9,7 @@ layout (binding = 2) uniform sampler3D obstacleTexture;
 layout (location = 3) uniform float timeStep;
 layout (location = 4) uniform vec3 dxyz;
 
-in int layer;
+flat in int layer;
 
 void main(void)
 {

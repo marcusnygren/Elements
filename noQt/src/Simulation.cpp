@@ -22,16 +22,23 @@ Simulation::~Simulation()
 
 void Simulation::setUniform(GLuint location, float value)
 {
-  GLuint program;
-  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  // GLuint program;
+  // glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
   glUniform1f(location, value);
 }
 
 void Simulation::setUniform(GLuint location, glm::vec3 value)
 {
-  GLuint program;
-  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  // GLuint program;
+  // glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
   glUniform3f(location, value.x, value.y, value.z);
+}
+
+void Simulation::setUniform(GLuint location, glm::vec4 value)
+{
+  // GLuint program;
+  // glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
 void Simulation::computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles)
@@ -89,5 +96,22 @@ void Simulation::computeDivergence(Volume* velocity, Volume* destination, Volume
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_3D, obstacles->getTexture());
 
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
+}
+
+void Simulation::subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacles)
+{
+  
+}
+
+void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius)
+{
+  glUseProgram(_shaderLoader.accessProgram("addSource"));
+
+  setUniform(0, position);
+  setUniform(1, radius);
+  setUniform(2, value);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
 }

@@ -9,7 +9,7 @@ layout (binding = 2) uniform sampler3D obstacleTexture;
 layout (location = 3) uniform float alpha;
 layout (location = 4) uniform float beta;
 
-in int layer;
+flat in int layer;
 
 
 void main()
