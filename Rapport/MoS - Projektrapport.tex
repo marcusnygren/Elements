@@ -160,12 +160,12 @@ Marcus Nygren, marny568}
 		\Subsection{OpenGL}
 		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
 		
-		\Subsubsection{Qt}
+		\Subsection{Qt}
 		\emph{Varför valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
 		
 		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ?Signals \& Slots? och kan även hantera JavaScript-funktioner.
 		
-		\Subsubsection{GLFW}
+		\Subsection{GLFW}
 		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
 		
 		GLFW har inte stöd för att göra GUI, men är ett väldigt uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det inkluderar många hjälpfunktioner, som gör utvecklingen snabbare och plattformsoberoende. Det gick snabbare att komma igång med GLFW än Qt, men vi fick flytta GUI-delen vi byggt i Qt till att istället styras via konsolen.
