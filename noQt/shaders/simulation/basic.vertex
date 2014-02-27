@@ -1,6 +1,6 @@
 #version 330
 
-layout (location = 0) vec4 vertexPosition;
+layout (location = 0) in vec4 vertexPosition;
 flat out int layer;
 
 void main()

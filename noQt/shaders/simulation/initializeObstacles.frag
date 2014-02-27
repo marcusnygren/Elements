@@ -1,8 +1,10 @@
 #version 330
+#extension GL_ARB_explicit_attrib_location : enable
+#extension ARB_explicit_attrib_location : require
 
 out vec4 value;
 
-layout (location = 0) uniform vec3 dimensions;
+layout(location = 0) uniform vec3 dimensions;
 
 flat in int layer;
 
