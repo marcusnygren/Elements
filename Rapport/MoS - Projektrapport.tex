@@ -14,6 +14,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[swedish]{babel}
 \usepackage{amssymb, graphicx, fancyheadings}
+\usepackage{graphicx}
 \addtolength{\textheight}{20mm}
 \addtolength{\voffset}{-5mm}
 \renewcommand{\sectionmark}[1]{\markleft{#1}}
@@ -167,6 +168,13 @@ Marcus Nygren, marny568}
 		\emph{Varför valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
 		
 		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
+		
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=90mm]{fixed_dome1.jpg}
+			\caption{A simple caption}
+			\label{overflow}
+		\end{figure}
 		
 		\Subsection{GLFW}
 		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
