@@ -1,4 +1,7 @@
 #version 330
+#extension GL_ARB_explicit_attrib_location : enable
+#extension GL_ARB_explicit_uniform_location : enable
+#extension GL_ARB_shading_language_420pack : enable
 
 out vec4 color;
 
