@@ -37,7 +37,8 @@ void Simulation::stepSimulation()
 {
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-  glVertexAttribPointer(0, 2, GL_SHORT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
   glViewport(0, 0, _dimensions.x, _dimensions.y);
 
   // // Advect velocity.
@@ -67,6 +68,8 @@ void Simulation::stepSimulation()
   // _velocity.swapBuffers();
 
   render(_density.getBuffer2());
+
+  glDisableVertexAttribArray(0);
 }
 
 void Simulation::render(Volume* source)
@@ -74,26 +77,20 @@ void Simulation::render(Volume* source)
   // resetGlState();
   glViewport(0, 0, 1024, 768);
   glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-  glClear( GL_COLOR_BUFFER_BIT );
+  glClear( GL_COLOR_BUFFER_BIT ); 
 
   glUseProgram(_shaderLoader.accessProgram("viz2D"));
 
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-  
   setUniform(0, 0); 
   setUniform(1, 50);
   setUniform(2, _dimensions);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
-  // glBindTexture(GL_TEXTURE_3D, source->getTexture());
-  glBindTexture(GL_TEXTURE_3D, _obstacles.getTexture());
+  glBindTexture(GL_TEXTURE_3D, source->getTexture());
+  // glBindTexture(GL_TEXTURE_3D, _obstacles.getTexture());
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-  glDisableVertexAttribArray(0);
 }
 
 void Simulation::setUniform(GLuint location, float value)
