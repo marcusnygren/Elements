@@ -36,6 +36,8 @@ GLenum Loader::getType(const std::string name) const
 			type = GL_VERTEX_SHADER;
 		else if(ending == FRAGMENT_SHADER_TYPE__)
 			type = GL_FRAGMENT_SHADER;
+		else if(ending == GEOMETRY_SHADER_TYPE__)
+			type = GL_GEOMETRY_SHADER;
 		else
 			std::cout << "The type was not defined for: " << name << std::endl;
 	}

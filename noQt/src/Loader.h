@@ -23,6 +23,10 @@
 	#define VERTEX_SHADER_TYPE__ ".vertex"
 #endif // VERTEX_SHADER_TYPE__
 
+#ifndef GEOMETRY_SHADER_TYPE__
+	#define GEOMETRY_SHADER_TYPE__ ".geom"
+#endif // FRAGMENT_SHADER_TYPE__
+
 #ifndef FRAGMENT_SHADER_TYPE__
 	#define FRAGMENT_SHADER_TYPE__ ".frag"
 #endif // FRAGMENT_SHADER_TYPE__
@@ -36,6 +40,7 @@
 #ifndef PROGRAMS_CHECK_COMPILE_STATUS__
 	#define PROGRAMS_CHECK_COMPILE_STATUS__ 1
 #endif // PROGRAMS_CHECK_COMPILE_STATUS__
+
 
 
 class Loader 
