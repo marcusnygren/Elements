@@ -1,82 +1,375 @@
-\documentclass[a4paper,12pt,twoside,swedish]{report}
+%______________________________________________________
+%
+%   LaTeX-mall för nybörjare
+%
+%   Konstruerad av Marcus Bergner, bergner@cs.umu.se
+%
+%   Vid funderingar titta längst ned i denna fil,
+%   eller skicka ett mail
+%______________________________________________________
+%
 
-\usepackage{times}  
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{theorem}
-\usepackage[utf8]{inputenc}
-\usepackage{latexsym}
-\usepackage{url}
-\usepackage{babel}
+% lite inställningar
+\documentclass[10pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{amssymb, graphicx, fancyheadings}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
 
-\headsep          0.25in
-\headheight       12pt
-\setlength{\topmargin}{-\headsep}
-\addtolength{\topmargin}{-\headheight}
-\oddsidemargin      0in
-\evensidemargin     0in
-\setlength{\textwidth}{\paperwidth}
-\addtolength{\textwidth}{-2.0in}
-\setlength{\textheight}{\paperheight}
-\addtolength{\textheight}{-2.0in}
-\addtolength{\textheight}{-1\topskip}
-\divide\textheight  by \baselineskip
-\multiply\textheight  by \baselineskip
-\addtolength{\textheight}{\topskip}
-\setcounter{secnumdepth}{-2}
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
 
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}{
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{Datavetenskap}
+\def\typeofdoc{Laborationsrapport}
+\def\course{KURSNAMN 5p}
+\def\pretitle{Laboration 1}
+\def\title{LABORATIONSNAMN}
+\def\name{Adam Botovic}
+\def\username{c00abc}
+\def\email{\username{}@cs.umu.se}
+\def\path{edu/KURS/lab1}
+\def\graders{ALLA HANDLEDARNAS NAMN}
+
+
+% om du vill referera till katalogen där dina filer ligger kan du 
+% använda \fullpath som kommer att vara "~username/edu..." o.s.v.
+\def\fullpath{\raisebox{1pt}{$\scriptstyle \sim$}\username/\path}
+
+
+% Här börjar själva dokumentet
 \begin{document}
 
-\pagestyle{plain}
+	% skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					\textbf{E-mail} & \texttt{\email} \\
+					\textbf{Sökväg} & \texttt{\fullpath} \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
 
-\setcounter{page}{1}
 
-\chapter{Modellbygge och Simulering - Elements}
+	% fixar sidfot
+	\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
 
-\section{Sammanfattning}
-\textit{En kort sammanfattning om hela rapporten. Ca 100 - 150 tecken. Ska skrivas sist.}
+	% skapar innehållsförteckning.
+	% Tänk på att köra latex 2ggr för att uppdatera allt
+	\pagenumbering{roman}
+	\tableofcontents
+	
+	% och lägger in en sidbrytning
+	\newpage
 
-\section{InnehÃ¥llsfÃ¶rteckning}
-\textit{Rapportens innehÃ¥llsfÃ¶rteckning}
+	\pagenumbering{arabic}
 
-\section{Introduktion}
-\textit{Elements Ã¤r grÃ¤nssnitt fÃ¶r att visa olika partikelsystem i en mjukvara och lÃ¥ta anvÃ¤ndaren experimentera med Navier-stokes ekvationer. Syftet Ã¤r att anvÃ¤ndaren ska kunna se sambandet och fÃ¶rstÃ¥ kopplingen mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering pÃ¥ skÃ¤rmen. Simuleringarna kommer i form av: RÃ¶k, eld och vatten.}
+	% i Sverige har vi normalt inget indrag vid nytt stycke
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
 
-\section{Metod}
-\textit{Vad har vi anvÃ¤nt fÃ¶r metoder? Formler? BerÃ¤kningar? Programmering? Hela workflowen i kort sammanfattning: Research - Matlab - C++ - OpenGL - QT. Vilka delar skedde parallellt?}
+	% lägger in rubrik (finns \section, men då får man mycket spillutrymme)
+	\Section{Problemspecifikation}
+		% \emph innebär emphasize, d.v.s. betona eller framhåll -> kursiv stil
+		\emph{I detta avsnitt beskrivs laborationen, dels som en sammanfattning
+			över dess syfte, men även en koppling till orginalspecifikationen
+			tas upp.}
 
-\subsection{Research}
-\textit{Vad gjorde vi fÃ¶r research innan vi bÃ¶rjade hacka. Ekvationer? FÃ¶renklingar?}
+		% lägg in en underrubrik (\subsection -> spillutrymme)
+		\Subsection{Problemsammanfattning}
 
-\subsection{Matlab}
-\textit{Allt vi gjort i Matlab och vad vi kom fram till med hjÃ¤lp av detta. VarfÃ¶r anvÃ¤nde vi Matlab? Fanns det andra metoder att gÃ¥ tillvÃ¤ga? Hur fick vi Ã¶ver ekvationerna till Matlab?}
+		\Subsection{Orginalspecifikation}
+			Specifikationen i sin helhet finns ...
 
-\subsection{C++}
-\textit{VarfÃ¶r vi valde just C++? Hur gick vi tillvÃ¤ga med C++? Hur gick vi Ã¶ver ekvationerna till C++?}
+			% nytt stycke skapas när du har en, eller flera, tomma rader
+			någonstans i föregående stycke
 
-\subsection{OpenGL}
-\textit{VarfÃ¶r valde vi OpenGL? Hur fick vi fram renderingen pÃ¥ skÃ¤rmen?}
+	\Section{Åtkomst och användarhandledning}
+		\emph{I detta avsnitt beskrivs de filer, med tillhörande sökvägar,
+			som ingår i lösningen, samt korta beskrivningar om syftet med
+			varje fil. Dessutom beskrivs hur man ska handskas med den
+			implementerade lösningen till problemet, i form av instruktioner
+			för hur körning och kompilering av lösningen sker.}
+	
+		\Subsection{Filer som ingår i lösningen}
+			I katalogen \texttt{\fullpath} ...
+			
+		\Subsection{Kompilering och körning}
+			
 
-\subsection{Qt}
-\textit{VarfÃ¶r valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
+	\Section{Systembeskrivning}
+		\emph{I detta avsnitt beskrivs systemet i sin helhet mer i detalj.
+			Datastrukturer och annan intern representation som är central
+			för uppgiftens lösning behandlas. Dessutom beskrivs de olika
+			komponenternas relationer till varandra.}
 
-\subsection{GLFW}
-\textit{VarfÃ¶r valde vi QT? Hur kommunicerar QT med resten av projektet? C++ - QT? GUI?}
+		%Dessa rubriker behöver inte finnas med, men något i denna stil
+		%bör det kanske vara
+		\Subsection{Systemöversikt}
 
-\section{Diskussion}
-\textit{Vilka saker gick snett? Vilka saker gick strÃ¥lande? VarfÃ¶r?}
+		\Subsection{Exekveringsflöde}
+			
+		\Subsection{Övriga systemdetaljer}
 
-\section{Resultat}
-\textit{Projektets resultat. Om man fÃ¶ljer hela workflowen i metod-delen vart hamnar man dÃ¥? Vad kom vi fram till?}
+	\Section{Algoritmbeskrivning}
+		\emph{I detta avsnitt beskrivs de algoritmer som anses som
+			icke-triviala i uppgiften.}
+		
+		\Subsection{Algoritm 1}
+			
+		\Subsection{Algoritm 2}	
+	
+	\Section{Lösningens begränsningar}
+		\emph{I detta avsnitt beskrivs alla begränsningar som lösningen av
+			uppgiften innehåller. Detta innefattar även funna begränsningar
+			som strider mot specifikationen.}
+		
+		SKRIV TEXT HÄR...
 
-\section{Referenser}
-\textit{En lista pÃ¥ alla vÃ¥ra referenser i ordning dÃ¤r de anvÃ¤nds fÃ¶rst i texten. Exempelvis: Papers pÃ¥ internet, bÃ¶cker och andra externa informationskÃ¤llor.}
+	\Section{Problem och reflektioner}
+		\emph{Här presenteras egna tankar kring uppgiften som sådan samt de
+			problem som uppstått under arbetets gång.}
+		
+		OCH HÄR..
 
-\section{Bilaga A}
-\textit{HÃ¤r kan man lÃ¤gga fÃ¶rsta bilagan om det behÃ¶vs.}
+	\Section{Testkörningar}
+		\emph{I detta avsnitt visas ett antal tester som utförts med programmet.
+			Samtliga tester är kommenterade.}
+		
+		GLÖM INTE ATT KOMMENTERA TESTER!
+		
+		\begin{footnotesize}
+			\begin{verbatim}
+				Utdata kan lämpligtvis återges så här, men tänk på att
+				        kommentera dina tester. Lägg märke till att rad-
+				brytningarna och mellanslagen bevaras!
+			\end{verbatim}
+		\end{footnotesize}
+		
 
-\section{Bilaga B}
-\textit{HÃ¤r kan man lÃ¤gga andra bilagan om det behÃ¶vs. Fler bilagor blir bara nÃ¤sta bokstav i alfabetet.}
+	% här börjar alla bilagor. Denna måste finnas med även om bara
+	% bilagor anges i \begin{appendices} ... \end{appendices}
+	\appendix
+
+	\Section{Bilaga 1}
+	\ldots{}ligger direkt i dokumentet
+
+	% bilagor, t.ex. källkod. En tom extrasida kommer att skrivas ut för
+	% att få alla sidnummer att stämma
+	\begin{appendices}
+		\appitem{Källkod}{0}
+		\appsubitem{\texttt{minfil.c}}{2}
+		\appsubitem{\texttt{minfil.h}}{1}
+		\appitem{En bilaga på 3 sidor}{3}
+	\end{appendices}
 
 \end{document}
+
+
+% Lite information om hur man arbetar med LaTeX
+%-----------------------------------------------
+%
+% LaTeX-koden kan skrivas med en godtycklig editor.
+% För att "kompilera" dokumentet används kommandot latex:
+%    bergner@peppar:~/edu/sysprog/lab1> latex rapportmall.tex
+% Resultatet blir ett antal filer, bl.a. en som heter rapportmall.dvi.
+% Denna fil kan användas för att titta hur dokumentet egentligen ser
+% ut med hjälp av programmet xdvi:
+%    bergner@peppar:~/edu/sysprog/lab1> xdvi rapportmall.dvi &
+% Du får då upp ett fönster som visar ditt dokument. Detta fönster
+% kommer automatiskt att uppdateras då du ändrar och kompilerar om din
+% LaTeX-kod. 
+% När du anser att din rapport är färdig att skrivas ut använder man
+% lämpligtvis kommandona dvips och lpr:
+%    bergner@peppar:~/edu/sysprog/lab1> dvips -P ma436ps rapportmall.dvi
+% Om man vill ha kvar PostScript-filen som dvips genererar kan man göra:
+%    bergner@peppar:~/edu/sysprog/lab1> dvips -o rapport.ps rapportmall.dvi
+%    bergner@peppar:~/edu/sysprog/lab1> lpr -P ma436ps rapport.ps
+% OBS!!! För att innehållsförteckningen och eventuella referenser till
+% tabeller och figurer garanterat ska stämma måste man köra latex 2ggr
+% på sitt dokument efter att man har ändrat något.
+%
+%
+% Lite information om saker man kan tänkas behöva i sitt arbete med LaTeX
+%-------------------------------------------------------------------------
+%
+% FORMATTERA TEXT
+%
+% För att formattera text på lite olika sätt kan man använda följande LaTeX-
+% kommandon:
+%    \textbf{denna text kommer att vara i fetstil}
+%    \emph{denna text är viktig (kursiv stil)}
+%    \texttt{i denna text blir alla tecken lika breda, som med en skrivmaskin}
+%    \textsf{denna text visas med ett typsnitt utan serifer}
+%
+%
+% MATEMATISKA FORMLER
+%
+% För att typsätta matematiska formler kan man använda:
+%    $f(x) = x^2 - 3$, vilket lägger in formeln i texten, eller
+%    \begin{displaymath}
+%        g(x) = \frac{\sin x}{x}
+%    \end{displaymath}, vilket låter formeln visas centrerat på en egen rad
+% Om du vill att en formel ska numreras byter du ut displaymath mot equation.
+% Det finns massor med matematiska symboler, vilket gör att man behöver
+% någon liten manual att titta i om man ska konstruera avancerade formler.
+% Se slutet på filen för lite råd om var du kan hitta sådana.
+%
+%
+% INFOGA FIGURER
+%
+% För att infoga en figur kan man göra på följande sätt:
+%    \begin{figure}[htb]
+%        \includegraphics[scale=0.5, angle=90]{exec_flow.eps}
+%        \caption{Detta är bildtexten}
+%        \label{EXECFLOW}
+%    \end{figure}
+% Om man vill referera till denna bild i texten skulle man då skriva enligt:
+%    ...i figur \ref{EXECFLOW} kan man se att...
+% Några små förklaringar till figurer:
+%    [htb] = talar om hur latex ska försöka placera bilden (Here, Top, Bottom)
+%            Om du använder [!h], innebär det Here!!!
+%    scale = kan skala om bilden, om den är skalbar
+%    angle = kan rotera bilden
+%    exec_flow.eps = filnamnet på bilden. Notera att formatet .EPS används
+% För att skapa figurer används lämpligtvis programmet xfig:
+%    bergner@peppar:~/edu/sysprog/lab1> xfig &
+% Rita (och spara ofta) tills du är klar. Välj sedan "Export" och exportera
+% din figur till EPS-format.
+% Om man vill kan man använda endast \includegraphics, men det är inte ofta
+% man gör det.
+%
+%
+% INFOGA TABELLER
+%
+% Om man vill skapa en tabell gör man på följande sätt:
+%    \begin{table}[htb]
+%        \begin{tabular}{|rlp{10cm}|}
+%            \hline
+%            13 & $17.26$ & En kommentar som kan sträcka sig över flera rader \\
+%            \hline
+%        \end{tabular}
+%        \caption{Tabelltexten...}
+%        \label{TBL:MINTABELL}
+%    \end{table}
+% Om man vill kan man endast använda raderna 2-6, dvs få en tabell utan text
+% och nummer. Om man gör på detta vis kommer tabellen alltid att läggas på
+% det ställe den skrivs i koden, dvs ungefär samma sak som [!h] -> Here!!!
+% Några förklaringar:
+%    l, r, c = vänsterjustera, högerjustera eller centrera kolumn
+%    p{bredd} = skapa en vänsterjusterad kolumn med en viss bredd
+%               kan innehålla flera rader text
+%    | = en vertikal linje i tabellen
+%    \hline = en horisontell linje i tabellen
+%    & = kolumnseparator
+%    \\ = radseparator
+% Tänk på att tabeller oftast ser bättre ut med ganska få linjer.
+%
+%
+% INFOGA KÄLLKOD ELLER UTDATA FRÅN TESTKÖRNINGAR
+%
+% Om man vill infoga källkod eller något annat liknande, t.ex. utdata från
+% en testkörning är det bra om LaTeX återger utdatan korrekt, dvs en radbrytning
+% betyder en radbrytning och 8 mellanslag på rad betyder 8 mellanslag på rad.
+% För att åstadkomma detta används:
+%    \begin{verbatim}
+%        allt som skrivs här återges exakt, med skrivmaskinstypsnitt
+%    \end{verbatim}
+% Oftast finns det dock bättre verktyg för att skriva ut källkod. Exempel på
+% sådana är a2ps, enscript och atp.
+%
+%
+% ÄNDRA STORLEK PÅ TEXT
+%
+% Om du vill ändra storleken på ett stycke, t.ex. på din nyss infogade
+% testkörning omger du stycket med \begin{STORLEK} \end{STORLEK}, där
+% STORLEK är någon av:
+%    tiny, scriptsize, footnotesize, small, normalsize, large, Large,
+%    LARGE, huge, Huge
+% Tänk på att inte mixtra för mycket med storlekar bara.
+%
+%
+% SKAPA LISTOR AV OLIKA SLAG
+%
+% Det är ganska vanligt att man vill rada upp saker på något sätt. För att
+% skapa punktlistor används:
+%    \begin{itemize}
+%        \item Detta är första punkten
+%        \item Detta är andra punkten
+%    \end{itemize}
+% Om man istället vill ha en numrerad lista kan man använda enumerate istället
+% för itemize. Listor kan användas i flera nivåer
+%
+%
+% MER INFORMATION OM LaTeX
+%
+% Lite blandad information om LaTeX, länkar och annat hittar du på
+% http://www.cs.umu.se/~bergner/latex.htm
+% En del information om rapportskrivning hittar du på
+% http://www.cs.umu.se/~bergner/rapport/
+% Det finns massor med information om LaTeX på Internet. Ett litet urval:
+% http://www.giss.nasa.gov/latex/
+%     är en mycket välfylld sida om LaTeX
+% http://wwwinfo.cern.ch/asdoc/WWW/essential/essential.html
+%     är en manual som genererats utifrån ett LaTeX-dokument mha latex2html
+% http://tex.loria.fr/english/
+%     är ett fylligt arkiv av länkar till LaTeX-dokument på Internet
+%
+% Min personliga favorit är dock manualen "The Not So Short Introduction to
+% LaTeX2e", som finns i DVI-format på ~bergner/LaTeX/lshort2e.dvi
+% Där står i princip allt man behöver veta. Det är bara att använda xdvi och
+% titta efter det du söker, vilket oftast finns där.
+% Om du, precis som jag, vill kunna leka med många kommandon i LaTeX finns en
+% "LaTeX Command Summary" på ~bergner/LaTeX/latexcmds.ps
