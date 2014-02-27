@@ -15,7 +15,11 @@ void main()
 
   if (distance < radius)
   {
-    color = sourceValue;
+    float a = (radius - distance) * 0.5;
+    a = min(a, 1.0);
+    color = vec4(sourceValue.xyz, a);
+        
+    // color = sourceValue;
   }
   else 
     color = vec4(0);
