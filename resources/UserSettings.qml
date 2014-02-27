@@ -226,7 +226,7 @@ Column{
             id: containerBackground
             width: parent.width*(19/20)
             height: parent.height*(3/4)
-            color: container.color
+            color: Qt.rgba(0.2, 0.2, 0.2, 0)
 
             Row{
                 id: columnContainer
