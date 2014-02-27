@@ -15,7 +15,7 @@ class Simulation
     ~Simulation();
     
     void stepSimulation();
-    void render();
+    void render(Volume* source);
 
   private:
     void computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles);

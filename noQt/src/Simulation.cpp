@@ -12,6 +12,7 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
 {
 
   _shaderLoader.loadPrograms("shaders/simulation/calculationPrograms.prog");
+  _shaderLoader.loadPrograms("shaders/visualization/viz2D.prog");
 
   GLfloat vertecies[] =
     {
@@ -34,35 +35,65 @@ Simulation::~Simulation()
 
 void Simulation::stepSimulation()
 {
+  glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glVertexAttribPointer(0, 2, GL_SHORT, GL_FALSE, 2 * sizeof(GLfloat), 0);
   glViewport(0, 0, _dimensions.x, _dimensions.y);
 
-  // Advect velocity.
-  computeAdvection(_velocity.getBuffer1(), _velocity.getBuffer1(),  _velocity.getBuffer2(), &_obstacles);
-  _velocity.swapBuffers();
+  // // Advect velocity.
+  // computeAdvection(_velocity.getBuffer1(), _velocity.getBuffer1(),  _velocity.getBuffer2(), &_obstacles);
+  // _velocity.swapBuffers();
 
-  // Advect density.
-  computeAdvection(_velocity.getBuffer1(), _density.getBuffer1(), _density.getBuffer2(), &_obstacles);
-  _density.swapBuffers();
+  // // Advect density.
+  // computeAdvection(_velocity.getBuffer1(), _density.getBuffer1(), _density.getBuffer2(), &_obstacles);
+  // _density.swapBuffers();
 
   // Add source.
-  addSource(_density.getBuffer2(), glm::vec3(50,50,50), glm::vec4(10), 10);
+  addSource(_density.getBuffer2(), glm::vec3(50,50,50), glm::vec4(0.5), 50);
 
-  // Compute divergence. Stores result in temporary _devergence volume. No need for swap.
-  computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
+  // // Compute divergence. Stores result in temporary _devergence volume. No need for swap.
+  // computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
 
-  // Reset the pressure texture and loop Jacobi iterations
-  _pressure.getBuffer1()->clear(0);
-  for (int i = 0; i < 40; ++i)
-  {
-    computeJacobi(_pressure.getBuffer1(), &_divergence, _pressure.getBuffer2(), &_obstacles);
-    _pressure.swapBuffers();
-  }
+  // // Reset the pressure texture and loop Jacobi iterations
+  // _pressure.getBuffer1()->clear(0);
+  // for (int i = 0; i < 40; ++i)
+  // {
+  //   computeJacobi(_pressure.getBuffer1(), &_divergence, _pressure.getBuffer2(), &_obstacles);
+  //   _pressure.swapBuffers();
+  // }
   
-  // Subtract gradient
-  subtractGradient(_velocity.getBuffer1(), _pressure.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
-  _velocity.swapBuffers();
+  // // Subtract gradient
+  // subtractGradient(_velocity.getBuffer1(), _pressure.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
+  // _velocity.swapBuffers();
+
+  render(_density.getBuffer2());
+}
+
+void Simulation::render(Volume* source)
+{
+  // resetGlState();
+  glViewport(0, 0, 1024, 768);
+  glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+  glClear( GL_COLOR_BUFFER_BIT );
+
+  glUseProgram(_shaderLoader.accessProgram("viz2D"));
+
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+  
+  setUniform(0, 0); 
+  setUniform(1, 50);
+  setUniform(2, _dimensions);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glActiveTexture(GL_TEXTURE0);
+  // glBindTexture(GL_TEXTURE_3D, source->getTexture());
+  glBindTexture(GL_TEXTURE_3D, _obstacles.getTexture());
+
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+  glDisableVertexAttribArray(0);
 }
 
 void Simulation::setUniform(GLuint location, float value)
@@ -186,7 +217,7 @@ void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 va
   setUniform(2, value);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
-
+  glEnable(GL_BLEND);
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
   resetGlState();
 }

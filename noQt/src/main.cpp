@@ -91,19 +91,20 @@ int main( void )
 	Simulation test(100,100,100,0.1);
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
-		if (showFps)
-		{
-			nrOfFrames++;
-			if (glfwGetTime() - _time >= 1)
-			{
-				std::cout << "FPS: " << 1000.f / (float) nrOfFrames << std::endl;
-				nrOfFrames = 0;
-				_time += 1;
-			}
-		}
-		
+		// if (showFps)
+		// {
+		// 	nrOfFrames++;
+		// 	if (glfwGetTime() - _time >= 1)
+		// 	{
+		// 		std::cout << "FPS: " << 1000.f / (float) nrOfFrames << std::endl;
+		// 		nrOfFrames = 0;
+		// 		_time += 1;
+		// 	}
+		// }
 		
 		test.stepSimulation();
+		// test.render();
+		glfwSwapBuffers(window);
 
 		glfwPollEvents();
 
@@ -132,8 +133,8 @@ int main( void )
 	// loader.loadPrograms("shaders/programs.txt");
 
 
-	// /* Render Loop
-	// ***************************************************************/
+	/* Render Loop
+	***************************************************************/
 	// while(isRunning && glfwWindowShouldClose(window) == 0)
 	// {
 	// 	// Clear the screen
