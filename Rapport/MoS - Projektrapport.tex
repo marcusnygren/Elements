@@ -129,9 +129,7 @@ Marcus Nygren, marny568}
 	% men däremot lite mellanrum
 	\setlength{\parskip}{10pt}
 
-	% lägger in rubrik (finns \section, men då får man mycket spillutrymme)
 	\Section{Introduktion}
-		% \emph innebär emphasize, d.v.s. betona eller framhåll -> kursiv stil
 		Elements är ett gränssnitt för att visa olika partikelsystem i en mjukvara och låta användaren experimentera med Navier-Stokes ekvationer. Syftet är att användaren ska kunna se sambandet mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering. Simuleringarna kommer i form av rök, eld och vatten.
 		
 		Vi ville ha ett projekt som var tekniskt utmanande, som blandade medieteknik och datateknik, och vi ville väldigt gärna modellera fluider. Resultatet skulle vara till nytta för andra studenter, och då passade projektet ovan oss väldigt bra inom kursens ramar.
@@ -147,7 +145,11 @@ Marcus Nygren, marny568}
 		\Subsection{Modellering}
 		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
 		
-		\frac{du}{dt}=-(u\cdot \nabla) \cdot - \frac{1}{\rho} \nabla \rho + v \nabla^{2}u + F	
+		Modell för inkompressibel homogen fluid:
+		
+		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
+		
+		$ \nabla \cdot u = 0 $
 
 	\Section{Numerisk implementation}
 		\emph{Var noga med att ha med era numeriska värden från Matlab. Vilka parametrar användes? Ha med allting som är relevant.}
@@ -164,7 +166,7 @@ Marcus Nygren, marny568}
 		\Subsection{Qt}
 		\emph{Varför valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
 		
-		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ?Signals \& Slots? och kan även hantera JavaScript-funktioner.
+		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 		
 		\Subsection{GLFW}
 		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
@@ -185,17 +187,6 @@ Marcus Nygren, marny568}
 	\Section{Referenser}
 		\emph{En lista på alla våra referenser i ordning där de används först i texten. Exempelvis: Papers på internet, böcker och andra externa informationskällor.}
 		
-		\begin{footnotesize}
-			\begin{verbatim}
-				Utdata kan lämpligtvis återges så här, men tänk på att
-				        kommentera dina tester. Lägg märke till att rad-
-				brytningarna och mellanslagen bevaras!
-			\end{verbatim}
-		\end{footnotesize}
-		
-
-	% här börjar alla bilagor. Denna måste finnas med även om bara
-	% bilagor anges i \begin{appendices} ... \end{appendices}
 	\newpage
 	\appendix
 
