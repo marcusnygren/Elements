@@ -45,16 +45,20 @@
 }
 
 % Ändra de rader som behöver ändras
-\def\inst{Datavetenskap}
-\def\typeofdoc{Laborationsrapport}
-\def\course{KURSNAMN 5p}
-\def\pretitle{Laboration 1}
-\def\title{LABORATIONSNAMN}
-\def\name{Adam Botovic}
+\def\inst{teknik och naturvetenskap}
+\def\typeofdoc{Projektrapport}
+\def\course{Modelleringsprojekt}
+%\def\pretitle{Laboration 1}
+\def\title{Elements}
+\def\name{\\ Niklas Andersson, nikan278 \\
+Gabriel Baravdish, gabba873 \\
+Joakim Deborg, joade361 \\
+Kristofer Janukiewicz, krija286 \\
+Marcus Nygren, marny568}
 \def\username{c00abc}
-\def\email{\username{}@cs.umu.se}
-\def\path{edu/KURS/lab1}
-\def\graders{ALLA HANDLEDARNAS NAMN}
+%\def\email{\username{}@cs.umu.se}
+%\def\path{edu/KURS/lab1}
+\def\graders{Anna Lombardi, Ulf Sannemo}
 
 
 % om du vill referera till katalogen där dina filer ligger kan du 
@@ -70,14 +74,14 @@
 		\thispagestyle{empty}
 		\begin{large}
 			\begin{tabular}{@{}p{\textwidth}@{}}
-				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{LINKÖPINGS UNIVERSITET \hfill \today} \\
 				\textbf{Institutionen för \inst} \\
 				\textbf{\typeofdoc} \\
 			\end{tabular}
 		\end{large}
 		\vspace{10mm}
 		\begin{center}
-			\LARGE{\pretitle} \\
+			%\LARGE{\pretitle} \\
 			\huge{\textbf{\course}}\\
 			\vspace{10mm}
 			\LARGE{\title} \\
@@ -85,8 +89,8 @@
 			\begin{large}
 				\begin{tabular}{ll}
 					\textbf{Namn} & \name \\
-					\textbf{E-mail} & \texttt{\email} \\
-					\textbf{Sökväg} & \texttt{\fullpath} \\
+					%\textbf{E-mail} & \texttt{\email} \\
+					%\textbf{Sökväg} & \texttt{\fullpath} \\
 				\end{tabular}
 			\end{large}
 			\vfill
@@ -97,7 +101,7 @@
 
 
 	% fixar sidfot
-	\lfoot{\footnotesize{\name, \email}}
+	%\lfoot{\footnotesize{\name, \email}}
 	\rfoot{\footnotesize{\today}}
 	\lhead{\sc\footnotesize\title}
 	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
@@ -105,6 +109,11 @@
 	\renewcommand{\headrulewidth}{0.2pt}
 	\renewcommand{\footrulewidth}{0.2pt}
 
+	%Skapa sammanfattning
+	\begin{abstract}
+	This is the paper's abstract. This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract. This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.
+	\end{abstract}
+	
 	% skapar innehållsförteckning.
 	% Tänk på att köra latex 2ggr för att uppdatera allt
 	\pagenumbering{roman}
@@ -121,74 +130,59 @@
 	\setlength{\parskip}{10pt}
 
 	% lägger in rubrik (finns \section, men då får man mycket spillutrymme)
-	\Section{Problemspecifikation}
+	\Section{Introduktion}
 		% \emph innebär emphasize, d.v.s. betona eller framhåll -> kursiv stil
-		\emph{I detta avsnitt beskrivs laborationen, dels som en sammanfattning
-			över dess syfte, men även en koppling till orginalspecifikationen
-			tas upp.}
-
-		% lägg in en underrubrik (\subsection -> spillutrymme)
-		\Subsection{Problemsammanfattning}
-
-		\Subsection{Orginalspecifikation}
-			Specifikationen i sin helhet finns ...
-
-			% nytt stycke skapas när du har en, eller flera, tomma rader
-			någonstans i föregående stycke
-
-	\Section{Åtkomst och användarhandledning}
-		\emph{I detta avsnitt beskrivs de filer, med tillhörande sökvägar,
-			som ingår i lösningen, samt korta beskrivningar om syftet med
-			varje fil. Dessutom beskrivs hur man ska handskas med den
-			implementerade lösningen till problemet, i form av instruktioner
-			för hur körning och kompilering av lösningen sker.}
-	
-		\Subsection{Filer som ingår i lösningen}
-			I katalogen \texttt{\fullpath} ...
-			
-		\Subsection{Kompilering och körning}
-			
-
-	\Section{Systembeskrivning}
-		\emph{I detta avsnitt beskrivs systemet i sin helhet mer i detalj.
-			Datastrukturer och annan intern representation som är central
-			för uppgiftens lösning behandlas. Dessutom beskrivs de olika
-			komponenternas relationer till varandra.}
-
-		%Dessa rubriker behöver inte finnas med, men något i denna stil
-		%bör det kanske vara
-		\Subsection{Systemöversikt}
-
-		\Subsection{Exekveringsflöde}
-			
-		\Subsection{Övriga systemdetaljer}
-
-	\Section{Algoritmbeskrivning}
-		\emph{I detta avsnitt beskrivs de algoritmer som anses som
-			icke-triviala i uppgiften.}
+		Elements är ett gränssnitt för att visa olika partikelsystem i en mjukvara och låta användaren experimentera med Navier-Stokes ekvationer. Syftet är att användaren ska kunna se sambandet mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering. Simuleringarna kommer i form av rök, eld och vatten.
 		
-		\Subsection{Algoritm 1}
-			
-		\Subsection{Algoritm 2}	
+		Vi ville ha ett projekt som var tekniskt utmanande, som blandade medieteknik och datateknik, och vi ville väldigt gärna modellera fluider. Resultatet skulle vara till nytta för andra studenter, och då passade projektet ovan oss väldigt bra inom kursens ramar.
+
+	\Section{Fysikalisk beskrivning}
+		\emph{Övergripande beskrivning kring den fysikaliska implementationen i vårt projekt.}
 	
-	\Section{Lösningens begränsningar}
-		\emph{I detta avsnitt beskrivs alla begränsningar som lösningen av
-			uppgiften innehåller. Detta innefattar även funna begränsningar
-			som strider mot specifikationen.}
+		\Subsection{Förstudier}
+		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
+		
+		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen.
+			
+		\Subsection{Modellering}
+		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
+			
+
+	\Section{Numerisk implementation}
+		\emph{Var noga med att ha med era numeriska värden från Matlab. Vilka parametrar användes? Ha med allting som är relevant.}
+
+		\Subsection{Matlab}
+		\emph{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}	
+
+	\Section{Grafisk implementation}
+		\emph{Vad har vi använt för metoder? Formler? Beräkningar? Programmering? Hela workflowen i kort sammanfattning: Research - Matlab - C++ - OpenGL - QT. Vilka delar skedde parallellt?}
+			
+		\Subsection{OpenGL}
+		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
+		
+		\Subsubsection{Qt}
+		\emph{Varför valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
+		
+		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ?Signals \& Slots? och kan även hantera JavaScript-funktioner.
+		
+		\Subsubsection{GLFW}
+		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
+		
+		GLFW har inte stöd för att göra GUI, men är ett väldigt uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det inkluderar många hjälpfunktioner, som gör utvecklingen snabbare och plattformsoberoende. Det gick snabbare att komma igång med GLFW än Qt, men vi fick flytta GUI-delen vi byggt i Qt till att istället styras via konsolen.
+	
+	\Section{Diskussion}
+		\emph{Vilka saker gick snett? Vilka saker gick strålande? Varför?}
 		
 		SKRIV TEXT HÄR...
 
-	\Section{Problem och reflektioner}
-		\emph{Här presenteras egna tankar kring uppgiften som sådan samt de
-			problem som uppstått under arbetets gång.}
+	\Section{Resultat}
+		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
 		
 		OCH HÄR..
 
-	\Section{Testkörningar}
-		\emph{I detta avsnitt visas ett antal tester som utförts med programmet.
-			Samtliga tester är kommenterade.}
-		
-		GLÖM INTE ATT KOMMENTERA TESTER!
+	\newpage
+	\Section{Referenser}
+		\emph{En lista på alla våra referenser i ordning där de används först i texten. Exempelvis: Papers på internet, böcker och andra externa informationskällor.}
 		
 		\begin{footnotesize}
 			\begin{verbatim}
@@ -201,18 +195,23 @@
 
 	% här börjar alla bilagor. Denna måste finnas med även om bara
 	% bilagor anges i \begin{appendices} ... \end{appendices}
+	\newpage
 	\appendix
 
-	\Section{Bilaga 1}
-	\ldots{}ligger direkt i dokumentet
+	\Section{Bilaga}
+	\ldots{}här kan man lägga till bilagor
+	
+	\newpage
+	\Section{Bilaga}
+	\ldots{}här kan man lägga till bilagor
 
 	% bilagor, t.ex. källkod. En tom extrasida kommer att skrivas ut för
 	% att få alla sidnummer att stämma
 	\begin{appendices}
-		\appitem{Källkod}{0}
-		\appsubitem{\texttt{minfil.c}}{2}
-		\appsubitem{\texttt{minfil.h}}{1}
-		\appitem{En bilaga på 3 sidor}{3}
+		%\appitem{Källkod}{0}
+		%\appsubitem{\texttt{minfil.c}}{2}
+		%\appsubitem{\texttt{minfil.h}}{1}
+		%\appitem{En bilaga på 3 sidor}{3}
 	\end{appendices}
 
 \end{document}
