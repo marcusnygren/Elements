@@ -7,7 +7,7 @@ out vec4 value;
 
 layout(location = 0) uniform vec3 dimensions;
 
-flat in int layer;
+flat in float layer;
 
 void main()
 {
@@ -17,13 +17,22 @@ void main()
       position.y < 10 ||
       position.y > dimensions.y - 10 ||
       position.z < 10 ||
-      position.z > dimensions.z - 10)
+      position.z > dimensions.z - 10 )
   {
-    value = vec4(1);
+    value = vec4(1,0,0,1);
   }
   else
   {
-    value = vec4(0);
+    value = vec4(0,0,0,1);
   }
+
+  // if (layer > 0 && layer < 70)
+  //   value = vec4(0,1,0,1);
+  // else
+  //   value =  vec4(1,0,0,1);
+
+ // value =  vec4(1,0,0,1);
+
+  // value = vec4(gl_FragCoord.x / 100,gl_FragCoord.y / 100,0,1);
 
 }

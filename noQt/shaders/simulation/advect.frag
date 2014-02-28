@@ -12,7 +12,7 @@ layout (binding = 2) uniform sampler3D obstacleTexture;
 layout (location = 3) uniform float timeStep;
 layout (location = 4) uniform vec3 dxyz;
 
-flat in int layer;
+flat in float layer;
 
 void main(void)
 {

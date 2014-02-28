@@ -20,7 +20,7 @@ Volume::Volume(int width, int height, int depth, int nrOfComponents)
   switch(nrOfComponents)
   {
     case 1:
-      glTexImage3D(GL_TEXTURE_3D, 0, GL_R16F, width, height, depth, 0, GL_RED, GL_HALF_FLOAT, 0);
+      glTexImage3D(GL_TEXTURE_3D, 0, GL_R16F, width, height, depth, 0, GL_R, GL_HALF_FLOAT, 0);
     break;
 
     case 2:
@@ -43,8 +43,19 @@ Volume::Volume(int width, int height, int depth, int nrOfComponents)
   // Attach render buffer to frambuffer.
   glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _texture, 0);
 
+  GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+  glDrawBuffers(1, DrawBuffers);
+
+  if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+  {
+    std::cout << "Failed to create framebuffer!: width = " << width << " height = " << height << " depth = " << depth << " nrOfComponents = " << nrOfComponents << std::endl;
+  }else 
+  {
+    std::cout << "Successfully created framebuffer!: width = " << width << " height = " << height << " depth = " << depth << " nrOfComponents = " << nrOfComponents << std::endl;
+  }
+
   // Reset state.
-  glClearColor(0, 0, 0, 0);
+  glClearColor(1, 0, 0, 0);
   glClear(GL_COLOR_BUFFER_BIT);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

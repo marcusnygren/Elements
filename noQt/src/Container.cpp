@@ -23,7 +23,7 @@ Volume* Container::getBuffer1()
 {
   return _buffer1;
 }
-// 
+
 Volume* Container::getBuffer2()
 {
   return _buffer2;

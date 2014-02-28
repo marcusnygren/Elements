@@ -89,6 +89,7 @@ int main( void )
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	Simulation test(100,100,100,0.1);
+	 glEnable(GL_TEXTURE_3D);
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
 		// if (showFps)

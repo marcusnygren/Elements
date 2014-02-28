@@ -1,9 +1,9 @@
 #include "Simulation.h"
 
 Simulation::Simulation(int width, int height, int depth, float timeStep)
-: _density(width, height, depth, 1),
+: _density(width, height, depth, 3),
   _velocity(width, height, depth, 3),
-  _pressure(width, height, depth, 1),
+  _pressure(width, height, depth, 2),
   _divergence(width, height, depth, 3),
   _obstacles(width, height, depth, 3),
   _timeStep(timeStep),
@@ -25,7 +25,7 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_STATIC_DRAW);
 
-  initializeObstacles(&_obstacles);
+  
 }
 
 Simulation::~Simulation()
@@ -34,12 +34,30 @@ Simulation::~Simulation()
 }
 
 void Simulation::stepSimulation()
-{
+{ 
+
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-  glViewport(0, 0, _dimensions.x, _dimensions.y);
+  glViewport(0, 0, 100, 100);
+  // glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  // glClear( GL_COLOR_BUFFER_BIT );
+
+ 
+  initializeObstacles(&_obstacles);
+  addSource(_density.getBuffer2(), glm::vec3(50,50,50), glm::vec4(1, 0, 0, 1), 50);
+
+
+  render(_density.getBuffer2(), 50);
+
+
+
+
+  // resetGlState();
+
+  // addSource(_density.getBuffer1(), glm::vec3(1,0,0), glm::vec4(0,1,0,1), 0.1);
+  // initializeObstacles(&_obstacles);
 
   // // Advect velocity.
   // computeAdvection(_velocity.getBuffer1(), _velocity.getBuffer1(),  _velocity.getBuffer2(), &_obstacles);
@@ -50,7 +68,7 @@ void Simulation::stepSimulation()
   // _density.swapBuffers();
 
   // Add source.
-  addSource(_density.getBuffer2(), glm::vec3(50,50,50), glm::vec4(0.5), 50);
+  // addSource(_density.getBuffer2(), glm::vec3(50,50,50), glm::vec4(0.5), 50);
 
   // // Compute divergence. Stores result in temporary _devergence volume. No need for swap.
   // computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
@@ -67,28 +85,36 @@ void Simulation::stepSimulation()
   // subtractGradient(_velocity.getBuffer1(), _pressure.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
   // _velocity.swapBuffers();
 
-  render(_density.getBuffer2());
+  // render(_density.getBuffer1());
 
   glDisableVertexAttribArray(0);
 }
 
-void Simulation::render(Volume* source)
+void Simulation::render(Volume* source, float renderLayer)
 {
   // resetGlState();
   glViewport(0, 0, 1024, 768);
-  glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+  // glViewport(0, 0, 100, 100);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClear( GL_COLOR_BUFFER_BIT ); 
 
   glUseProgram(_shaderLoader.accessProgram("viz2D"));
 
-  setUniform(0, 0); 
-  setUniform(1, 50);
+  // setUniform(0, 0); 
+  GLuint program;
+  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  GLint location = glGetUniformLocation(program, "tex");
+  glUniform1i(location, 0);
+
+  setUniform(1, renderLayer);
+  // GLint locations = glGetUniformLocation(program, "layer");
+  // glUniform1i(locations, renderLayer);
+
   setUniform(2, _dimensions);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_3D, source->getTexture());
-  // glBindTexture(GL_TEXTURE_3D, _obstacles.getTexture());
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
@@ -214,9 +240,23 @@ void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 va
   setUniform(2, value);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
-  glEnable(GL_BLEND);
+  // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  // glEnable(GL_BLEND);
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
   resetGlState();
+
+
+  // glUseProgram(_shaderLoader.accessProgram("addSource"));
+
+  // setUniform(0, glm::vec3(50,50,0));
+  // setUniform(1, 20);
+  // setUniform(2, glm::vec4(1,0,0,0));
+
+  // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  // // glEnable(GL_BLEND);
+  // glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
+
+
 }
 
 void Simulation::initializeObstacles(Volume* obstacles)
@@ -226,6 +266,7 @@ void Simulation::initializeObstacles(Volume* obstacles)
   setUniform(0, _dimensions);
 
   glBindFramebuffer(GL_FRAMEBUFFER, obstacles->getFbo());
+  // glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
   resetGlState();

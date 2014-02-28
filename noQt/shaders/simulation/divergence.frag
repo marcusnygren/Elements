@@ -10,7 +10,7 @@ layout(binding = 1) uniform sampler3D obstacleTexture;
 
 layout(location = 2) uniform float cellSize;
 
-flat in int layer;
+flat in float layer;
 
 void main()
 {

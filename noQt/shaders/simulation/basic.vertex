@@ -4,10 +4,10 @@
 #extension GL_ARB_shading_language_420pack : enable
 
 layout (location = 0) in vec4 vertexPosition;
-flat out int layer;
+flat out int layerInstance;
 
 void main()
 {
-  layer = gl_InstanceID; 
+  layerInstance = gl_InstanceID; 
   gl_Position = vertexPosition;
 }

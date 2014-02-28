@@ -1,6 +1,6 @@
-advect basic.vertex advect.frag
-jacobi basic.vertex jacobi.frag
-divergence basic.vertex divergence.frag
-gradient basic.vertex subtractGradient.frag
-addSource basic.vertex source.frag
-initializeObstacles basic.vertex initializeObstacles.frag
+advect basic.vertex selectLayer.geom advect.frag
+jacobi basic.vertex selectLayer.geom jacobi.frag
+divergence basic.vertex selectLayer.geom divergence.frag
+gradient basic.vertex selectLayer.geom subtractGradient.frag
+addSource basic.vertex selectLayer.geom source.frag
+initializeObstacles basic.vertex selectLayer.geom initializeObstacles.frag
