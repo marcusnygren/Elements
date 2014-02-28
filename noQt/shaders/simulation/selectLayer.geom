@@ -7,12 +7,13 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
  
 flat in int layerInstance[3];
-flat out float layer;
+out float layer;
  
 void main()
 {
     gl_Layer = layerInstance[0];
-    layer = gl_Layer;
+    layer = float(gl_Layer) + 0.5; // Drift in z. Kanske ?? ta bort eller?
+
     gl_Position = gl_in[0].gl_Position;
     EmitVertex();
     gl_Position = gl_in[1].gl_Position;
@@ -20,4 +21,6 @@ void main()
     gl_Position = gl_in[2].gl_Position;
     EmitVertex();
     EndPrimitive();
+
+    // Approved
 }

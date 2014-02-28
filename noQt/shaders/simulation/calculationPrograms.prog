@@ -4,3 +4,4 @@ divergence basic.vertex selectLayer.geom divergence.frag
 gradient basic.vertex selectLayer.geom subtractGradient.frag
 addSource basic.vertex selectLayer.geom source.frag
 initializeObstacles basic.vertex selectLayer.geom initializeObstacles.frag
+buoyancy basic.vertex selectLayer.geom buoyancy.frag

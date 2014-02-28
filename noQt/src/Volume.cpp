@@ -55,7 +55,7 @@ Volume::Volume(int width, int height, int depth, int nrOfComponents)
   }
 
   // Reset state.
-  glClearColor(1, 0, 0, 0);
+  glClearColor(0, 0, 0, 0);
   glClear(GL_COLOR_BUFFER_BIT);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

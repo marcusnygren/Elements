@@ -12,19 +12,22 @@ layout (binding = 2) uniform sampler3D obstacleTexture;
 layout (location = 3) uniform float timeStep;
 layout (location = 4) uniform vec3 dxyz;
 
-flat in float layer;
+in float layer;
 
 void main(void)
 {
   vec3 fragPos = vec3(gl_FragCoord.xy, layer);
-  float inObstacle = texture(obstacleTexture, fragPos * dxyz).x;
+  float inObstacle = texture(obstacleTexture, fragPos / 100).x;
   if (inObstacle > 0)
   {
     value = vec4(0);
     return;
   }
+  // value = vec4(0,1,0,1);
+  vec3 velocity = texture(velocityTexture, fragPos / 100).xyz;
+  vec3 pos = (fragPos - velocity * timeStep);
+  value = texture(sourceTexture, pos / 100);
 
-  vec3 velocity = texture(velocityTexture, fragPos * dxyz).xyz;
-  vec3 pos = dxyz * (fragPos - velocity * timeStep);
-  value = texture(sourceTexture, pos);
+
+  // Approved
 }

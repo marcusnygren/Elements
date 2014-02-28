@@ -10,4 +10,6 @@ void main()
 {
   layerInstance = gl_InstanceID; 
   gl_Position = vertexPosition;
+
+  // Approved
 }

@@ -3,11 +3,11 @@
 #extension GL_ARB_explicit_uniform_location : enable
 #extension GL_ARB_shading_language_420pack : enable
 
-out vec4 value;
+out vec3 value;
 
 layout(location = 0) uniform vec3 dimensions;
 
-flat in float layer;
+in float layer;
 
 void main()
 {
@@ -19,11 +19,11 @@ void main()
       position.z < 10 ||
       position.z > dimensions.z - 10 )
   {
-    value = vec4(1,0,0,1);
+    value = vec3(1,1,1);
   }
   else
   {
-    value = vec4(0,0,0,1);
+    value = vec3(0,0,0);
   }
 
   // if (layer > 0 && layer < 70)

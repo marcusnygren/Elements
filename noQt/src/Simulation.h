@@ -22,12 +22,15 @@ class Simulation
     void computeJacobi(Volume* pressure, Volume* divergence, Volume* destination, Volume* obstacles);
     void computeDivergence(Volume* velocity, Volume* destination, Volume* obstacles);
     void subtractGradient(Volume* velocity, Volume* pressure, Volume* destination, Volume* obstacles);
+    void computeBuoyancy(Volume* velocity, Volume* temperature, Volume* density, Volume* destination);
     void addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius);
     void initializeObstacles(Volume* obstacles);
 
     void resetGlState();
+    void setTextureValue(Volume* texture, float value);
 
     void setUniform(GLuint location, float value);
+    void setUniform(GLuint location, int value);
     void setUniform(GLuint location, glm::vec3 value);
     void setUniform(GLuint location, glm::vec4 value);
 
@@ -39,6 +42,7 @@ class Simulation
     Container _density;
     Container _velocity;
     Container _pressure;
+    Container _temperature;
 
     Volume _obstacles;
     Volume _divergence;
@@ -46,6 +50,11 @@ class Simulation
     float _timeStep;
     glm::vec3 _gridScale;
     glm::vec3 _dimensions;
+
+
+    float _ambientTemperature;
+    float _smokeBuoyancy = 1.0f;
+    float _smokeWeight = 0.0125f;
 };
 
 #endif

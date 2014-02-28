@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sstream>
 
 // Include GLEW
 #include <GL/glew.h>
@@ -92,16 +93,18 @@ int main( void )
 	 glEnable(GL_TEXTURE_3D);
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
-		// if (showFps)
-		// {
-		// 	nrOfFrames++;
-		// 	if (glfwGetTime() - _time >= 1)
-		// 	{
-		// 		std::cout << "FPS: " << 1000.f / (float) nrOfFrames << std::endl;
-		// 		nrOfFrames = 0;
-		// 		_time += 1;
-		// 	}
-		// }
+		if (showFps)
+		{
+			nrOfFrames++;
+			if (glfwGetTime() - _time >= 1)
+			{
+				std::stringstream ss;
+				ss << "FPS: " << (int) (1000.f / (float) nrOfFrames);
+				glfwSetWindowTitle(window, ss.str().c_str());
+				nrOfFrames = 0;
+				_time += 1;
+			}
+		}
 		
 		test.stepSimulation();
 		// test.render();

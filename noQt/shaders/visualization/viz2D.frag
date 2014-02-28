@@ -5,7 +5,7 @@
 
 out vec3 color;
 
-uniform sampler3D tex;
+layout (binding = 0) uniform sampler3D tex;
 
 layout (location = 1) uniform float layer;
 layout (location = 2) uniform vec3 dimensions;
