@@ -14,6 +14,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[swedish]{babel}
 \usepackage{amssymb, graphicx, fancyheadings}
+\usepackage{graphicx}
 \addtolength{\textheight}{20mm}
 \addtolength{\voffset}{-5mm}
 \renewcommand{\sectionmark}[1]{\markleft{#1}}
@@ -137,19 +138,25 @@ Marcus Nygren, marny568}
 	\Section{Fysikalisk beskrivning}
 		\emph{Övergripande beskrivning kring den fysikaliska implementationen i vårt projekt.}
 	
-		\Subsection{Förstudier}
+		\Subsection{Förstudie}
 		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
 		
-		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen.
+		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
+		
+		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
+		
+		Med villkoret:
+				
+		$ \nabla \cdot u = 0 $ 
+		
+		Vi löser ut hastigheten:
+		%du/dt = -(u_dot_grad(u)) - 1/rho * grad(p) +f
+		Ur du/dt fås u(t+dt) som är den sökta hastigheten (?hastigheten i nästa frame?). Ekvationen kan brytas ned komponentvis enligt Helmholtz-Hodge Decomposition. Vi uppdaterar därför hastigheten stegvis, med följande komponenter: Advection, extern kraft och tryck.
 			
 		\Subsection{Modellering}
 		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
 		
-		Modell för inkompressibel homogen fluid:
-		
-		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
-		
-		$ \nabla \cdot u = 0 $
+		Modell för inkompressibel homogen fluid:		
 
 	\Section{Numerisk implementation}
 		\emph{Var noga med att ha med era numeriska värden från Matlab. Vilka parametrar användes? Ha med allting som är relevant.}
@@ -168,6 +175,13 @@ Marcus Nygren, marny568}
 		
 		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 		
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[width=90mm]{QtGui}
+			\caption{Användargränsnittet skapat i Qt som inte kom med till slutresultatet}
+			\label{QtGui}
+		\end{figure}
+		
 		\Subsection{GLFW}
 		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
 		
@@ -176,16 +190,19 @@ Marcus Nygren, marny568}
 	\Section{Diskussion}
 		\emph{Vilka saker gick snett? Vilka saker gick strålande? Varför?}
 		
-		SKRIV TEXT HÄR...
+		Projektet Elements började som en idé för ett pedagodiskt verktyg för att lära sig Navier-Stokes ekvationer. För att uppnå denna kvalité på användargränsnittet beslutades det tidigt i projektet att använda C++ biblioteket Qt. Mycket tid lades ner för att få en Qt implemention tillsammans med OpenGL. Men skrotades långt in i projektarbetetsgång, då denna form av implementation var för avancerad. GLFW blev istället det självklara valet för att hinna klart Elements så långt in i projektets gång.
 
 	\Section{Resultat}
 		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
 		
-		OCH HÄR..
+		TEXT..
 
 	\newpage
-	\Section{Referenser}
-		\emph{En lista på alla våra referenser i ordning där de används först i texten. Exempelvis: Papers på internet, böcker och andra externa informationskällor.}
+	\begin{thebibliography}{9}
+		\bibitem{pfleeger10softwareengineering}
+			%Exempelreferens
+		  	Shari Lawrence Pfleeger och Joanne M. Atlee, \emph{Software Engineering, Fourth Edition, International Edition}, Pearson 2010  
+	\end{thebibliography}
 		
 	\newpage
 	\appendix
