@@ -138,19 +138,25 @@ Marcus Nygren, marny568}
 	\Section{Fysikalisk beskrivning}
 		\emph{Övergripande beskrivning kring den fysikaliska implementationen i vårt projekt.}
 	
-		\Subsection{Förstudier}
+		\Subsection{Förstudie}
 		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
 		
-		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen.
+		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
+		
+		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
+		
+		Med villkoret:
+				
+		$ \nabla \cdot u = 0 $ 
+		
+		Vi löser ut hastigheten:
+		%du/dt = -(u_dot_grad(u)) - 1/rho * grad(p) +f
+		Ur du/dt fås u(t+dt) som är den sökta hastigheten (?hastigheten i nästa frame?). Ekvationen kan brytas ned komponentvis enligt Helmholtz-Hodge Decomposition. Vi uppdaterar därför hastigheten stegvis, med följande komponenter: Advection, extern kraft och tryck.
 			
 		\Subsection{Modellering}
 		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
 		
-		Modell för inkompressibel homogen fluid:
-		
-		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
-		
-		$ \nabla \cdot u = 0 $
+		Modell för inkompressibel homogen fluid:		
 
 	\Section{Numerisk implementation}
 		\emph{Var noga med att ha med era numeriska värden från Matlab. Vilka parametrar användes? Ha med allting som är relevant.}
