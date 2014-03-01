@@ -1,18 +1,15 @@
 #version 330
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_explicit_uniform_location : enable
-#extension GL_ARB_shading_language_420pack : enable
 
 out vec3 value;
 
-layout (binding = 0) uniform sampler3D velocityTexture;
-layout (binding = 1) uniform sampler3D temperatureTexture;
-layout (binding = 2) uniform sampler3D densityTexture;
+uniform sampler3D velocityTexture;
+uniform sampler3D temperatureTexture;
+uniform sampler3D densityTexture;
 
-layout (location = 3) uniform float ambientTemperature;
-layout (location = 4) uniform float timeStep;
-layout (location = 5) uniform float alpha;
-layout (location = 6) uniform float beta;
+uniform float ambientTemperature;
+uniform float timeStep;
+uniform float alpha;
+uniform float beta;
 
 in float layer;
 

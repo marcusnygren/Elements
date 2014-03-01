@@ -1,14 +1,11 @@
 #version 330
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_explicit_uniform_location : enable
-#extension GL_ARB_shading_language_420pack : enable
 
 out float value;
 
-layout(binding = 0) uniform sampler3D velocityTexture;
-layout(binding = 1) uniform sampler3D obstacleTexture;
+uniform sampler3D velocityTexture;
+uniform sampler3D obstacleTexture;
 
-layout(location = 2) uniform float cellSize;
+uniform float cellSize;
 
 in float layer;
 

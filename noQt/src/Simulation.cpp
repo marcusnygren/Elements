@@ -119,9 +119,9 @@ void Simulation::renderLayer(Volume* source, float renderLayer)
 
   glUseProgram(_shaderLoader.accessProgram("viz2D"));
 
-  setUniform(0, 0); 
-  setUniform(1, renderLayer);
-  setUniform(2, _dimensions);
+  setUniform("tex", 0); 
+  setUniform("layer", renderLayer);
+  setUniform("dimensions", _dimensions);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
@@ -133,11 +133,11 @@ void Simulation::renderLayer(Volume* source, float renderLayer)
 void Simulation::computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles)
 {
   glUseProgram(_shaderLoader.accessProgram("advect"));
-  setUniform(0, 0); // Bind source texture to unit 0
-  setUniform(1, 1); // Bind velocity texture to unit 1
-  setUniform(2, 2); // Bind obstacle texture to unit 2
-  setUniform(3, _timeStep);
-  setUniform(4, _gridScale);
+  setUniform("sourceTexture", 0); // Bind source texture to unit 0
+  setUniform("velocityTexture", 1); // Bind velocity texture to unit 1
+  setUniform("obstacleTexture", 2); // Bind obstacle texture to unit 2
+  setUniform("timeStep", _timeStep);
+  setUniform("dxyz", _gridScale);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -155,11 +155,11 @@ void Simulation::computeJacobi(Volume* pressure, Volume* divergence, Volume* des
 {
   glUseProgram(_shaderLoader.accessProgram("jacobi"));
 
-  setUniform(0, 0); // Bind pressure texture to unit 0
-  setUniform(1, 1); // Bind divergence texture to unit 1
-  setUniform(2, 2); // Bind obstacle texture to unit 2
-  setUniform(3, - _dimensions.z * _dimensions.z);
-  setUniform(4, 6);
+  setUniform("pressureTexture", 0); // Bind pressure texture to unit 0
+  setUniform("bTexture", 1); // Bind divergence texture to unit 1
+  setUniform("obstacleTexture", 2); // Bind obstacle texture to unit 2
+  setUniform("alpha", - _dimensions.z * _dimensions.z);
+  setUniform("beta", 6);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -177,9 +177,9 @@ void Simulation::computeDivergence(Volume* velocity, Volume* destination, Volume
 {
   glUseProgram(_shaderLoader.accessProgram("divergence"));
 
-  setUniform(0, 0); // Bind velocity texture to unit 0
-  setUniform(1, 1); // Bind obstacle texture to unit 1
-  setUniform(2, _dimensions.z); // borde vara den här eller ? kanske gridScale???
+  setUniform("velocityTexture", 0); // Bind velocity texture to unit 0
+  setUniform("obstacleTexture", 1); // Bind obstacle texture to unit 1
+  setUniform("cellSize", _dimensions.z); // borde vara den här eller ? kanske gridScale???
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -195,14 +195,14 @@ void Simulation::computeBuoyancy(Volume* velocity, Volume* temperature, Volume* 
 {
   glUseProgram(_shaderLoader.accessProgram("buoyancy"));
 
-  setUniform(0,0); // velocity Texture
-  setUniform(1,1); // temprature texture
-  setUniform(2,2); // density texture
+  setUniform("velocityTexture",0); // velocity Texture
+  setUniform("temperatureTexture",1); // temprature texture
+  setUniform("densityTexture",2); // density texture
 
-  setUniform(3, _ambientTemperature); // ambientTemperature
-  setUniform(4, _timeStep); // timeStep
-  setUniform(5, _smokeWeight); // alpha
-  setUniform(6, _smokeBuoyancy); // beta
+  setUniform("ambientTemperature", _ambientTemperature); // ambientTemperature
+  setUniform("timeStep", _timeStep); // timeStep
+  setUniform("alpha", _smokeWeight); // alpha
+  setUniform("beta", _smokeBuoyancy); // beta
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -220,10 +220,10 @@ void Simulation::subtractGradient(Volume* velocity, Volume* pressure, Volume* de
 {
   glUseProgram(_shaderLoader.accessProgram("gradient"));
 
-  setUniform(0, 0); // Bind velocity texture to unit 0 
-  setUniform(1, 1); // Bind pressure texture to unit 1
-  setUniform(2, 2); // Bind obstacle texture to unit 2
-  setUniform(3, _gridScale.x);
+  setUniform("velocityTexture", 0); // Bind velocity texture to unit 0 
+  setUniform("pressureTexture", 1); // Bind pressure texture to unit 1
+  setUniform("obstacleTexture", 2); // Bind obstacle texture to unit 2
+  setUniform("gridScale", _gridScale.x);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -241,9 +241,9 @@ void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 va
 {
   glUseProgram(_shaderLoader.accessProgram("addSource"));
 
-  setUniform(0, position);
-  setUniform(1, radius);
-  setUniform(2, value);
+  setUniform("position", position);
+  setUniform("radius", radius);
+  setUniform("sourceValue", value);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   // glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -256,7 +256,7 @@ void Simulation::initializeObstacles(Volume* obstacles)
 {
   glUseProgram(_shaderLoader.accessProgram("initializeObstacles"));
 
-  setUniform(0, _dimensions);
+  setUniform("dimensions", _dimensions);
 
   glBindFramebuffer(GL_FRAMEBUFFER, obstacles->getFbo());
   // glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -276,8 +276,6 @@ void Simulation::initializeVelocity(Volume* velocity)
 
 void Simulation::setUniform(GLuint location, float value)
 {
-  // GLuint program;
-  // glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
   glUniform1f(location, value);
 }
 
@@ -288,15 +286,43 @@ void Simulation::setUniform(GLuint location, int value)
 
 void Simulation::setUniform(GLuint location, glm::vec3 value)
 {
-  // GLuint program;
-  // glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
   glUniform3f(location, value.x, value.y, value.z);
 }
 
 void Simulation::setUniform(GLuint location, glm::vec4 value)
 {
-  // GLuint program;
-  // glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  glUniform4f(location, value.x, value.y, value.z, value.w);
+}
+
+void Simulation::setUniform(std::string name, float value)
+{
+  GLuint program;
+  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  GLint location = glGetUniformLocation(program, name.c_str());
+  glUniform1f(location, value);
+}
+
+void Simulation::setUniform(std::string name, int value)
+{
+  GLuint program;
+  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  GLint location = glGetUniformLocation(program, name.c_str());
+  glUniform1i(location, value);
+}
+
+void Simulation::setUniform(std::string name, glm::vec3 value)
+{
+  GLuint program;
+  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  GLint location = glGetUniformLocation(program, name.c_str());
+  glUniform3f(location, value.x, value.y, value.z);
+}
+
+void Simulation::setUniform(std::string name, glm::vec4 value)
+{
+  GLuint program;
+  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  GLint location = glGetUniformLocation(program, name.c_str());
   glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 

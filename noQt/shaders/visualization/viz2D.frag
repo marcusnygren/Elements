@@ -1,14 +1,11 @@
 #version 330
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_explicit_uniform_location : enable
-#extension GL_ARB_shading_language_420pack : enable
 
 out vec3 color;
 
-layout (binding = 0) uniform sampler3D tex;
+uniform sampler3D tex;
 
-layout (location = 1) uniform float layer;
-layout (location = 2) uniform vec3 dimensions;
+uniform float layer;
+uniform vec3 dimensions;
 
 void main()
 {

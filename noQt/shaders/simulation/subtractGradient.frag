@@ -1,15 +1,12 @@
 #version 330
-#extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_explicit_uniform_location : enable
-#extension GL_ARB_shading_language_420pack : enable
 
 out vec3 value;
 
-layout (binding = 0) uniform sampler3D velocityTexture;
-layout (binding = 1) uniform sampler3D pressureTexture;
-layout (binding = 2) uniform sampler3D obstacleTexture;
+uniform sampler3D velocityTexture;
+uniform sampler3D pressureTexture;
+uniform sampler3D obstacleTexture;
 
-layout (location = 3) uniform float gridScale;
+uniform float gridScale;
 
 in float layer;
 

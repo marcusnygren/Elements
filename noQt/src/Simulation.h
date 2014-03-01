@@ -1,6 +1,8 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H 
 
+#include <string>
+
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 
@@ -37,6 +39,11 @@ class Simulation
     void setUniform(GLuint location, int value);
     void setUniform(GLuint location, glm::vec3 value);
     void setUniform(GLuint location, glm::vec4 value);
+
+    void setUniform(std::string name, float value);
+    void setUniform(std::string name, int value);
+    void setUniform(std::string name, glm::vec3 value);
+    void setUniform(std::string name, glm::vec4 value);
 
 
     GLuint _vbo;
