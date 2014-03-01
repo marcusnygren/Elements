@@ -1,3 +1,4 @@
+#include "Define.h"
 #include "Simulation.h"
 
 #include <iostream>
@@ -11,7 +12,9 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   _timeStep(timeStep),
   _gridScale(1.0f/(float)width, 1.0f/ (float)height, 1.0f/(float) depth),
   _dimensions(width, height, depth),
-  _sourcePosition(50, 50, 50)
+  _sourcePosition(width/2, height/2, depth/2),
+  _obstaclePosition(width/2, height/2, depth/2),
+  _temperaturePosition(width/2, height/2, depth/2)
 { 
 
   _shaderLoader.loadPrograms("shaders/simulation/calculationPrograms.prog");
@@ -35,26 +38,13 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-  glViewport(0, 0, 100, 100);
+  glViewport(0, 0, _dimensions.x, _dimensions.y);
 
   initializeObstacles(&_obstacles);
 
   _ambientTemperature = 0.0f;
   setTextureValue(_temperature.getBuffer1(), _ambientTemperature);
   setTextureValue(_temperature.getBuffer2(), _ambientTemperature);
-
-
-  // initializeVelocity(_velocity.getBuffer1());
-  // initializeVelocity(_velocity.getBuffer2());
-  // setTextureValue(_velocity.getBuffer1(), -0.75,0.5,1,1);
-  // setTextureValue(_velocity.getBuffer2(), -0.75,0.5,1,1);
-
-  // setTextureValue(_velocity.getBuffer1(), -0.91,0.1,0.0,1);
-  // setTextureValue(_velocity.getBuffer2(), -0.91,0.1,0.0,1);
-
-  // initializeObstacles(_velocity.getBuffer1());
-
-  // initializeObstacles(_velocity.getBuffer2());
 }
 
 Simulation::~Simulation()
@@ -68,11 +58,7 @@ void Simulation::stepSimulation()
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-  glViewport(0, 0, 100, 100);
-
-
-  // initializeVelocity(_velocity.getBuffer1());
-  // initializeVelocity(_velocity.getBuffer2());
+  glViewport(0, 0, _dimensions.x, _dimensions.y);
 
   computeAdvection(_velocity.getBuffer1(), _velocity.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
   _velocity.swapBuffers();
@@ -86,9 +72,11 @@ void Simulation::stepSimulation()
   computeBuoyancy(_velocity.getBuffer1(), _temperature.getBuffer1(), _density.getBuffer1(), _velocity.getBuffer2());
   _velocity.swapBuffers();
 
-  addSource(_temperature.getBuffer1(), glm::vec3(50, 50, 50), glm::vec4(20), 20);
+  addSource(_temperature.getBuffer1(), _temperaturePosition, glm::vec4(20), 20);
 
   addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(1,0.2,1,0), 5);
+
+  // addSource(&_obstacles, _obstaclePosition, glm::vec4(1,0,0,0), 10);
 
   computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
 
@@ -103,7 +91,7 @@ void Simulation::stepSimulation()
   subtractGradient(_velocity.getBuffer1(), _pressure.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
   _velocity.swapBuffers();
 
-  renderLayer(_density.getBuffer1(), 50);
+  renderLayer(_density.getBuffer1(), _dimensions.z / 2);
 
   glDisableVertexAttribArray(0);
 
@@ -111,9 +99,12 @@ void Simulation::stepSimulation()
 
 void Simulation::renderLayer(Volume* source, float renderLayer)
 {
-  // resetGlState();
-  glViewport(0, 0, 300, 300);
-  // glViewport(0, 0, 100, 100);
+  #if FULLSCREEN == 1
+    glViewport(0, 0, FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT);
+  #else
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+  #endif
+
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClear( GL_COLOR_BUFFER_BIT ); 
 
@@ -122,6 +113,12 @@ void Simulation::renderLayer(Volume* source, float renderLayer)
   setUniform("tex", 0); 
   setUniform("layer", renderLayer);
   setUniform("dimensions", _dimensions);
+
+  #if FULLSCREEN == 1
+    setUniform("windowSize", glm::vec2(FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT));
+  #else
+    setUniform("windowSize", glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT));
+  #endif
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glActiveTexture(GL_TEXTURE0);
@@ -159,7 +156,7 @@ void Simulation::computeJacobi(Volume* pressure, Volume* divergence, Volume* des
   setUniform("bTexture", 1); // Bind divergence texture to unit 1
   setUniform("obstacleTexture", 2); // Bind obstacle texture to unit 2
   setUniform("alpha", - _dimensions.z * _dimensions.z);
-  setUniform("beta", 6);
+  setUniform("beta", 1/_dimensions.z);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
@@ -284,6 +281,11 @@ void Simulation::setUniform(GLuint location, int value)
   glUniform1i(location, value);
 }
 
+void Simulation::setUniform(GLuint location, glm::vec2 value)
+{
+  glUniform2f(location, value.x, value.y);
+}
+
 void Simulation::setUniform(GLuint location, glm::vec3 value)
 {
   glUniform3f(location, value.x, value.y, value.z);
@@ -308,6 +310,14 @@ void Simulation::setUniform(std::string name, int value)
   glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
   GLint location = glGetUniformLocation(program, name.c_str());
   glUniform1i(location, value);
+}
+
+void Simulation::setUniform(std::string name, glm::vec2 value)
+{
+  GLuint program;
+  glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*) &program);
+  GLint location = glGetUniformLocation(program, name.c_str());
+  glUniform2f(location, value.x, value.y);
 }
 
 void Simulation::setUniform(std::string name, glm::vec3 value)
@@ -352,4 +362,9 @@ void Simulation::setTextureValue(Volume* texture, float value1, float value2, fl
 void Simulation::addToSourcePosition(glm::vec3 pos)
 {
   _sourcePosition += pos;
+}
+
+void Simulation::addToObstaclePosition(glm::vec3 pos)
+{
+  _obstaclePosition += pos;
 }

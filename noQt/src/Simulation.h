@@ -20,6 +20,7 @@ class Simulation
     void renderLayer(Volume* source, float renderLayer);
 
     void addToSourcePosition(glm::vec3 pos);
+    void addToObstaclePosition(glm::vec3 pos);
 
   private:
     void computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles);
@@ -37,11 +38,13 @@ class Simulation
 
     void setUniform(GLuint location, float value);
     void setUniform(GLuint location, int value);
+    void setUniform(GLuint location, glm::vec2 value);
     void setUniform(GLuint location, glm::vec3 value);
     void setUniform(GLuint location, glm::vec4 value);
 
     void setUniform(std::string name, float value);
     void setUniform(std::string name, int value);
+    void setUniform(std::string name, glm::vec2 value);
     void setUniform(std::string name, glm::vec3 value);
     void setUniform(std::string name, glm::vec4 value);
 
@@ -67,6 +70,8 @@ class Simulation
     float _smokeBuoyancy = 1.0f;
     float _smokeWeight = 0.0125f;
     glm::vec3 _sourcePosition;
+    glm::vec3 _obstaclePosition;
+    glm::vec3 _temperaturePosition;
 };
 
 #endif
