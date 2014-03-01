@@ -10,16 +10,17 @@ layout(location = 0) uniform vec3 dimensions;
 in float layer;
 
 void main()
-{
+{ 
+  int size = 1;
   vec3 position = vec3(gl_FragCoord.xy, layer);
-  if (position.x < 10 ||
-      position.x > dimensions.x - 10 ||
-      position.y < 10 ||
-      position.y > dimensions.y - 10 ||
-      position.z < 10 ||
-      position.z > dimensions.z - 10 )
+  if (position.x < size ||
+      position.x > dimensions.x - size ||
+      position.y < size ||
+      position.y > dimensions.y - size ||
+      position.z < size ||
+      position.z > dimensions.z - size )
   {
-    value = vec3(1,1,1);
+    value = vec3(1,0,0);
   }
   else
   {

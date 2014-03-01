@@ -9,8 +9,9 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   _obstacles(width, height, depth, 3),
   _temperature(width, height, depth, 2),
   _timeStep(timeStep),
-  _gridScale(1/width, 1/height, 1/depth),
-  _dimensions(width, height, depth)
+  _gridScale(1.0f/(float)width, 1.0f/ (float)height, 1.0f/(float) depth),
+  _dimensions(width, height, depth),
+  _sourcePosition(50, 50, 50)
 { 
 
   _shaderLoader.loadPrograms("shaders/simulation/calculationPrograms.prog");
@@ -38,13 +39,22 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
 
   initializeObstacles(&_obstacles);
 
-  _ambientTemperature = 10.0f;
+  _ambientTemperature = 0.0f;
   setTextureValue(_temperature.getBuffer1(), _ambientTemperature);
   setTextureValue(_temperature.getBuffer2(), _ambientTemperature);
 
-  setTextureValue(_velocity.getBuffer1(), 1);
-  setTextureValue(_velocity.getBuffer2(), 1);
 
+  // initializeVelocity(_velocity.getBuffer1());
+  // initializeVelocity(_velocity.getBuffer2());
+  // setTextureValue(_velocity.getBuffer1(), -0.75,0.5,1,1);
+  // setTextureValue(_velocity.getBuffer2(), -0.75,0.5,1,1);
+
+  // setTextureValue(_velocity.getBuffer1(), -0.91,0.1,0.0,1);
+  // setTextureValue(_velocity.getBuffer2(), -0.91,0.1,0.0,1);
+
+  // initializeObstacles(_velocity.getBuffer1());
+
+  // initializeObstacles(_velocity.getBuffer2());
 }
 
 Simulation::~Simulation()
@@ -60,6 +70,10 @@ void Simulation::stepSimulation()
 
   glViewport(0, 0, 100, 100);
 
+
+  // initializeVelocity(_velocity.getBuffer1());
+  // initializeVelocity(_velocity.getBuffer2());
+
   computeAdvection(_velocity.getBuffer1(), _velocity.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
   _velocity.swapBuffers();
 
@@ -74,7 +88,7 @@ void Simulation::stepSimulation()
 
   addSource(_temperature.getBuffer1(), glm::vec3(50, 50, 50), glm::vec4(20), 20);
 
-  addSource(_density.getBuffer1(), glm::vec3(50, 50, 50), glm::vec4(1,1,1,1), 5);
+  addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(1,0.2,1,0), 5);
 
   computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
 
@@ -89,16 +103,16 @@ void Simulation::stepSimulation()
   subtractGradient(_velocity.getBuffer1(), _pressure.getBuffer1(), _velocity.getBuffer2(), &_obstacles);
   _velocity.swapBuffers();
 
-  render(_density.getBuffer1(), 50);
+  renderLayer(_density.getBuffer1(), 50);
 
   glDisableVertexAttribArray(0);
 
 }
 
-void Simulation::render(Volume* source, float renderLayer)
+void Simulation::renderLayer(Volume* source, float renderLayer)
 {
   // resetGlState();
-  glViewport(0, 0, 1024, 768);
+  glViewport(0, 0, 300, 300);
   // glViewport(0, 0, 100, 100);
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClear( GL_COLOR_BUFFER_BIT ); 
@@ -251,6 +265,15 @@ void Simulation::initializeObstacles(Volume* obstacles)
   resetGlState();
 }
 
+void Simulation::initializeVelocity(Volume* velocity)
+{
+  glUseProgram(_shaderLoader.accessProgram("initializeVelocity"));
+  glBindFramebuffer(GL_FRAMEBUFFER, velocity->getFbo());
+
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
+  resetGlState();
+}
+
 void Simulation::setUniform(GLuint location, float value)
 {
   // GLuint program;
@@ -291,4 +314,16 @@ void Simulation::setTextureValue(Volume* texture, float value)
   glBindFramebuffer(GL_FRAMEBUFFER, texture->getFbo());
   glClearColor(value, value, value, value);
   glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Simulation::setTextureValue(Volume* texture, float value1, float value2, float value3, float value4)
+{
+  glBindFramebuffer(GL_FRAMEBUFFER, texture->getFbo());
+  glClearColor(value1, value2, value3, value4);
+  glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Simulation::addToSourcePosition(glm::vec3 pos)
+{
+  _sourcePosition += pos;
 }

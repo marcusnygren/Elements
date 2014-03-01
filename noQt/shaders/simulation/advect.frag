@@ -17,16 +17,16 @@ in float layer;
 void main(void)
 {
   vec3 fragPos = vec3(gl_FragCoord.xy, layer);
-  float inObstacle = texture(obstacleTexture, fragPos / 100).x;
+  float inObstacle = texture(obstacleTexture, fragPos * dxyz).x;
   if (inObstacle > 0)
   {
     value = vec4(0);
     return;
   }
   // value = vec4(0,1,0,1);
-  vec3 velocity = texture(velocityTexture, fragPos / 100).xyz;
+  vec3 velocity = texture(velocityTexture, fragPos * dxyz).xyz;
   vec3 pos = (fragPos - velocity * timeStep);
-  value = texture(sourceTexture, pos / 100);
+  value = texture(sourceTexture, pos * dxyz);
 
 
   // Approved

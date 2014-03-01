@@ -15,7 +15,9 @@ class Simulation
     ~Simulation();
     
     void stepSimulation();
-    void render(Volume* source, float renderLayer);
+    void renderLayer(Volume* source, float renderLayer);
+
+    void addToSourcePosition(glm::vec3 pos);
 
   private:
     void computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles);
@@ -25,9 +27,11 @@ class Simulation
     void computeBuoyancy(Volume* velocity, Volume* temperature, Volume* density, Volume* destination);
     void addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius);
     void initializeObstacles(Volume* obstacles);
+    void initializeVelocity(Volume* velocity);
 
     void resetGlState();
     void setTextureValue(Volume* texture, float value);
+    void setTextureValue(Volume* texture, float value1, float value2, float value3, float value4);
 
     void setUniform(GLuint location, float value);
     void setUniform(GLuint location, int value);
@@ -55,6 +59,7 @@ class Simulation
     float _ambientTemperature;
     float _smokeBuoyancy = 1.0f;
     float _smokeWeight = 0.0125f;
+    glm::vec3 _sourcePosition;
 };
 
 #endif

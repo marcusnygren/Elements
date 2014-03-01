@@ -67,7 +67,7 @@ int main( void )
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow( 1024, 768, "Elements", NULL, NULL);
+	window = glfwCreateWindow( 300, 300, "Elements", NULL, NULL);
 	if( window == NULL ){
 		fprintf( stderr, "Failed to open GLFW window.\n" );
 		glfwTerminate();
@@ -86,7 +86,7 @@ int main( void )
 
 	double _time = glfwGetTime();
 	int nrOfFrames = 0;
-
+	float speed = 3;
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	Simulation test(100,100,100,0.1);
@@ -105,7 +105,27 @@ int main( void )
 				_time += 1;
 			}
 		}
-		
+
+		if(glfwGetKey(window, 'A') == GLFW_PRESS)
+		{
+			test.addToSourcePosition(glm::vec3(-1,0,0) * speed);
+		}
+
+		if(glfwGetKey(window, 'S') == GLFW_PRESS)
+		{
+			test.addToSourcePosition(glm::vec3(0,-1,0) * speed);
+		}
+
+		if(glfwGetKey(window, 'D') == GLFW_PRESS)
+		{
+			test.addToSourcePosition(glm::vec3(1,0,0) * speed);
+		}
+
+		if(glfwGetKey(window, 'W') == GLFW_PRESS)
+		{
+			test.addToSourcePosition(glm::vec3(0,1,0) * speed);
+		}
+
 		test.stepSimulation();
 		// test.render();
 		glfwSwapBuffers(window);
