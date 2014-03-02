@@ -9,6 +9,7 @@
 #include "Loader.h"
 #include "Container.h"
 #include "Volume.h"
+#include "Surface.h"
 
 class Simulation
 {
@@ -18,6 +19,7 @@ class Simulation
     
     void stepSimulation();
     void renderLayer(Volume* source, float renderLayer);
+    void renderVolume(Volume* volume);
 
     void addToSourcePosition(glm::vec3 pos);
     void addToObstaclePosition(glm::vec3 pos);
@@ -50,6 +52,7 @@ class Simulation
 
 
     GLuint _vbo;
+    GLuint _volumeVbo;
 
     Loader _shaderLoader;
 
@@ -60,6 +63,9 @@ class Simulation
 
     Volume _obstacles;
     Volume _divergence;
+
+    Surface _cubeFront;
+    Surface _cubeBack;
 
     float _timeStep;
     glm::vec3 _gridScale;

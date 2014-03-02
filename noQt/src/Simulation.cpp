@@ -14,12 +14,20 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   _dimensions(width, height, depth),
   _sourcePosition(width/2, height/2, depth/2),
   _obstaclePosition(width/2, height/2, depth/2),
-  _temperaturePosition(width/2, height/2, depth/2)
+  _temperaturePosition(width/2, height/2, depth/2),
+  #if FULLSCREEN == 1
+    _cubeFront(FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT, 3),
+    _cubeBack(FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT, 3)
+  #else
+    _cubeFront(WINDOW_WIDTH, WINDOW_HEIGHT, 3),
+    _cubeBack(WINDOW_WIDTH, WINDOW_HEIGHT, 3)
+  #endif
 { 
 
   _shaderLoader.loadPrograms("shaders/simulation/calculationPrograms.prog");
-  _shaderLoader.loadPrograms("shaders/visualization/viz2D.prog");
+  _shaderLoader.loadPrograms("shaders/visualization/viz.prog");
 
+  // Create vbo for fullscreen quad
   GLfloat vertecies[] =
     {
       -1, -1,
@@ -30,6 +38,50 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   glGenBuffers(1, &_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_STATIC_DRAW);
+
+  // Create vbo for determining volume intersection
+  GLfloat volumeVertecies[] = 
+  {
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f, 
+    1.0f, 1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f
+  };
+  glGenBuffers(1, &_volumeVbo);
+  glBindBuffer(GL_ARRAY_BUFFER, _volumeVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(volumeVertecies), volumeVertecies, GL_STATIC_DRAW);
 
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -74,9 +126,13 @@ void Simulation::stepSimulation()
 
   addSource(_temperature.getBuffer1(), _temperaturePosition, glm::vec4(20), 20);
 
-  addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(1,0.2,1,0), 5);
+  addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(1,0.5,0.75,0), 5);
+  addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2+80, _dimensions.y/2, _dimensions.z/2), glm::vec4(4,3,5,0), 5);
+  addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2-80, _dimensions.y/2, _dimensions.z/2), glm::vec4(9,15,12,0), 5);
 
-  // addSource(&_obstacles, _obstaclePosition, glm::vec4(1,0,0,0), 10);
+  addSource(&_obstacles, glm::vec3(_dimensions.x/2-75, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  addSource(&_obstacles, glm::vec3(_dimensions.x/2+75, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  addSource(&_obstacles, glm::vec3(_dimensions.x/2, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
 
   computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
 
@@ -94,6 +150,8 @@ void Simulation::stepSimulation()
   renderLayer(_density.getBuffer1(), _dimensions.z / 2);
 
   glDisableVertexAttribArray(0);
+
+  // renderVolume(_velocity.getBuffer1());
 
 }
 
@@ -125,6 +183,39 @@ void Simulation::renderLayer(Volume* source, float renderLayer)
   glBindTexture(GL_TEXTURE_3D, source->getTexture());
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+void Simulation::renderVolume(Volume* volume)
+{ 
+  #if FULLSCREEN == 1
+    glViewport(0, 0, FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT);
+  #else
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+  #endif
+
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, _volumeVbo);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  glClear( GL_COLOR_BUFFER_BIT ); 
+  glUseProgram(_shaderLoader.accessProgram("renderCube"));
+
+  glEnable(GL_DEPTH_TEST);
+
+  // Render front
+  glCullFace(GL_BACK);
+  glBindFramebuffer(GL_FRAMEBUFFER, _cubeFront.getFbo());
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 36);
+
+  // Render back
+  glCullFace(GL_FRONT);
+  glBindFramebuffer(GL_FRAMEBUFFER, _cubeBack.getFbo());
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 36);
+
+  glDisableVertexAttribArray(0);
+  resetGlState();
 }
 
 void Simulation::computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles)
@@ -343,6 +434,7 @@ void Simulation::resetGlState()
     glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_3D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
 }
 
 void Simulation::setTextureValue(Volume* texture, float value)
