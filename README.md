@@ -21,6 +21,7 @@ That being said, we do have images and videos of the app running real-time. For 
 * http://prideout.net/blog/?p=66
 * http://http.developer.nvidia.com/GPUGems/gpugems_ch38.html
 * http://http.developer.nvidia.com/GPUGems3/gpugems3_ch30.html
+
 We really appreciate these resources being available online from "The Little Grasshopper" and NVIDIA. Thanks!
 
 Group members
