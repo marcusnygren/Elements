@@ -5,7 +5,7 @@ Project in the course TNG022 Modelling and Simulation at Linköping University.
 
 Aim for the project
 -------------------------
-A fluid simulation that can morph between different elements by modifying the Navier-Stokes coefficients and rendering technique in real-time. 
+Using the Navier-Stokes equations to develop a system for visualizing different fluids, e.g. smoke. In the application you should be able to modify the parameter values to see how changing the equation affects the simulation in real-time.
 
 Group members
 -------------------------
