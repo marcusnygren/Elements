@@ -9,6 +9,7 @@
 #include "Loader.h"
 #include "Container.h"
 #include "Volume.h"
+#include "Surface.h"
 
 class Simulation
 {
@@ -18,8 +19,10 @@ class Simulation
     
     void stepSimulation();
     void renderLayer(Volume* source, float renderLayer);
+    void renderVolume(Volume* volume);
 
     void addToSourcePosition(glm::vec3 pos);
+    void addToObstaclePosition(glm::vec3 pos);
 
   private:
     void computeAdvection(Volume* velocity, Volume* source, Volume* destination, Volume* obstacles);
@@ -37,16 +40,19 @@ class Simulation
 
     void setUniform(GLuint location, float value);
     void setUniform(GLuint location, int value);
+    void setUniform(GLuint location, glm::vec2 value);
     void setUniform(GLuint location, glm::vec3 value);
     void setUniform(GLuint location, glm::vec4 value);
 
     void setUniform(std::string name, float value);
     void setUniform(std::string name, int value);
+    void setUniform(std::string name, glm::vec2 value);
     void setUniform(std::string name, glm::vec3 value);
     void setUniform(std::string name, glm::vec4 value);
 
 
     GLuint _vbo;
+    GLuint _volumeVbo;
 
     Loader _shaderLoader;
 
@@ -58,6 +64,9 @@ class Simulation
     Volume _obstacles;
     Volume _divergence;
 
+    Surface _cubeFront;
+    Surface _cubeBack;
+
     float _timeStep;
     glm::vec3 _gridScale;
     glm::vec3 _dimensions;
@@ -67,6 +76,8 @@ class Simulation
     float _smokeBuoyancy = 1.0f;
     float _smokeWeight = 0.0125f;
     glm::vec3 _sourcePosition;
+    glm::vec3 _obstaclePosition;
+    glm::vec3 _temperaturePosition;
 };
 
 #endif

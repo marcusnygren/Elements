@@ -40,42 +40,43 @@ void main()
   vec3 obstacleVelocity = vec3(0);
   vec3 mask = vec3(1);
 
+  float obsVelocity = 0;
   if (xUpO.x > 0)
   {
     xUpP = centerP;
-    obstacleVelocity.x = 0;
+    obstacleVelocity.x = obsVelocity;
     mask.x = 0;
   }
   if (xDownO.x > 0)
   {
     xDownP = centerP;
-    obstacleVelocity.x = 0;
+    obstacleVelocity.x = obsVelocity;
     mask.x = 0;
   }
 
   if (yUpO.x > 0)
   {
     yUpP = centerP;
-    obstacleVelocity.y = 0;
+    obstacleVelocity.y = obsVelocity;
     mask.y = 0;
   }
   if (yDownO.x > 0)
   {
     yDownP = centerP;
-    obstacleVelocity.y = 0;
+    obstacleVelocity.y = obsVelocity;
     mask.y = 0;
   }
 
   if (zUpO.x > 0)
   {
     zUpP = centerP;
-    obstacleVelocity.z = 0;
+    obstacleVelocity.z = obsVelocity;
     mask.z = 0;
   }
   if (zDownO.x > 0)
   {
     zDownP = centerP;
-    obstacleVelocity.z = 0;
+    obstacleVelocity.z = obsVelocity;
     mask.z = 0;
   }
 

@@ -13,7 +13,7 @@ in float layer;
 
 void main()
 {
-  ivec3 pos = ivec3(gl_FragCoord.xy, layer); // dela med 100??
+  ivec3 pos = ivec3(gl_FragCoord.xy, layer);
 
   vec4 xUpP = texelFetchOffset(pressureTexture, pos, 0, ivec3(1, 0, 0));
   vec4 xDownP = texelFetchOffset(pressureTexture, pos, 0, ivec3(-1, 0, 0));
@@ -48,7 +48,5 @@ void main()
 
   vec4 bc = texelFetch(bTexture, pos, 0);
 
-  value = (xUpP + xDownP + yUpP + yDownP + zUpP + zDownP + alpha * bc) * 0.01f;
-
-  // Kanske approved!
+  value = (xUpP + xDownP + yUpP + yDownP + zUpP + zDownP + alpha * bc) * beta;
 }
