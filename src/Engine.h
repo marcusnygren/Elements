@@ -27,6 +27,7 @@
 #include <QtGui/QOpenGLFunctions_3_3_Core>
 #include <QtGui/QOpenGLVersionFunctions>
 #include <QOpenGLFunctions_3_3_Compatibility>
+// #include <QAbstractOpenGLFunctions>
 
 #include "Parameters.h"
 #include "DataHandler.h"
@@ -36,7 +37,7 @@
 #endif // ELEMENTS_DEBUG__
 
 
-class Engine : public QQuickItem //, protected QOpenGLFunctions_3_3_Compatibility
+class Engine : public QQuickItem //, protected QOpenGLFunctions_3_3_Core
 {
 Q_OBJECT
 	
