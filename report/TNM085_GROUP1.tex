@@ -139,13 +139,13 @@ Marcus Nygren, marny568}
 	\Section{Fysikalisk beskrivning}
 	
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig rymd, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $. RTT säger att summan av en fysisk egenskap, $ \psi  $, definerad på $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor.
+		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $. RTT säger att summan av en fysisk egenskap, $ \psi  $, definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
-			\bold \varrho \left ( \frac{\mathrm{d} }{\mathrm{d} t} \bold u + \bold u \cdot \nabla \bold u \right ) 
+			\bold \varrho \left ( \frac{\partial }{\partial t} \bold u + \bold u \cdot \nabla \bold u \right ) 
 			= 
-			- \nabla \bold \varrho 
+			- \nabla p
 			+ \nabla \cdot \bold \Gamma + \bold f
 		\end{equation}	
 		
@@ -154,32 +154,30 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 
-
-
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem}
-			\frac{\mathrm{d} }{\mathrm{d} t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
 			= 
 			- \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
-			- \int_{\Omega}^{ } \sigma \ \mathrm{d}V
+			- \int_{\Omega}^{ } \chi \ \mathrm{d}V
 		\end{equation}
 	\end{center}
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem 2}
-			\frac{\mathrm{d} }{\mathrm{d} t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
 			= 
 			- \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
-			- \int_{\Omega}^{ } \sigma  \ \mathrm{d} V
+			- \int_{\Omega}^{ } \chi   \ \mathrm{d} V
 		\end{equation}
 	\end{center}
 	
 	Leibniz lag säger att vi kan flytta in derivatan.
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem 3}
-			\int_{\Omega}^{ } \frac{\mathrm{d} }{\mathrm{d} t} \psi\ \mathrm{d}V
+			\int_{\Omega}^{ } \frac{\partial }{\partial t} \psi\ \mathrm{d}V
 			+ \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
-			+ \int_{\Omega}^{ } \sigma  \ \mathrm{d} V
+			+ \int_{\Omega}^{ } \chi   \ \mathrm{d} V
 			=
 			0
 		\end{equation}
@@ -187,21 +185,21 @@ Marcus Nygren, marny568}
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz}
-			\int_{\Omega}^{ } \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \psi\ 
+			\int_{\Omega}^{ } \left ( \frac{  \partial }{\partial t} \psi\ 
 			+ \nabla \cdot \left (  \psi \bold u \right ) 
-			+ \sigma \right ) \mathrm{d}V
+			+ \chi  \right ) \mathrm{d}V
 			= 
 			0
 		\end{equation}
 	\end{center}
 	
-	Eftersom integralen i $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla rymder $ \Omega $ erhålls $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
-			\frac{  \mathrm{d} }{\mathrm{d} t} \psi\ 
+			\frac{  \partial }{\partial t} \psi\ 
 			+ \nabla \cdot \left (  \psi \bold u \right ) 
-			+ \sigma
+			+ \chi 
 			= 
 			0
 		\end{equation}
@@ -209,39 +207,39 @@ Marcus Nygren, marny568}
 	
 	
 	\Subsection{Konservering av massa}
-	Här är $ \psi = \varrho $ och då det inte finns några källor eller sänkor av massa blir $ \sigma $ lika med noll, detta i enlighet med $ \ref{eq:Konservering av massa 1} $.
+	Här är $ \psi = \varrho $ och då det inte finns några källor eller sänkor av massa blir $ \chi  $ lika med noll, detta i enlighet med ekvation $ \ref{eq:Konservering av massa 1} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av massa 1}
-			\frac{  \mathrm{d} }{\mathrm{d} t} \varrho \ 
+			\frac{  \partial }{\partial t} \varrho \ 
 			+ \nabla \cdot \left (  \varrho \bold u \right ) 
 			= 
 			0
 		\end{equation}
 	\end{center}
 	
-	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \mathrm{d} }{\mathrm{d} t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
+	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
 	
 	
 	\Subsection{Konservering av rörelsemängd}
-	Från rörelsemängd, $ p = m\bold u $, fås att $ \psi = \varrho \bold u $, vilket ger $ \ref{eq:Konservering av rörelsemängd} $.
+	Från rörelsemängd, $ p = m\bold u $, fås att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd}
-			\frac{  \mathrm{d} }{\mathrm{d} t} \varrho \bold u \ 
+			\frac{  \partial }{\partial t} \varrho \bold u \ 
 			+ \nabla \cdot \left ( \varrho \bold u  \bold u \right ) 
-			+ \sigma
+			+ \chi 
 			= 
 			0
 		\end{equation}
 	\end{center}
 	
-	Utveckling av $ \ref{eq:Konservering av rörelsemängd} $ ger $ \ref{eq:Konservering av rörelsemängd 2} $, där $ \bold b $ representerar en källa eller sänka. 
+	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd} $ ger ekvation $ \ref{eq:Konservering av rörelsemängd 2} $, där $ \bold b $ representerar en källa eller sänka. 
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 2}
-			\bold u \frac{  \mathrm{d} }{\mathrm{d} t} \varrho \ 
-			+ \varrho \frac{  \mathrm{d} }{\mathrm{d} t} \bold u \ 
+			\bold u \frac{  \partial }{\partial t} \varrho \ 
+			+ \varrho \frac{  \partial }{\partial t} \bold u \ 
 			+ \bold u  \bold u \  \cdot \nabla \varrho
 			+ \varrho \bold u \cdot \nabla \bold u
 			+ \varrho \bold u \nabla \cdot \bold u
@@ -249,31 +247,56 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 		
-	Ytterliggare omskrivning ger $ \ref{eq:Konservering av rörelsemängd} $ ger $ \ref{eq:Konservering av rörelsemängd 3} $.
+	Ytterliggare omskrivning av ekvation $ \ref{eq:Konservering av rörelsemängd 2} $ ger ekvation $ \ref{eq:Konservering av rörelsemängd 3} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 3}
-			\bold u \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \varrho + \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u \right ) 
-			+ \varrho \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \bold u 
+			\bold u \left ( \frac{  \partial }{\partial t} \varrho + \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u \right ) 
+			+ \varrho \left ( \frac{  \partial }{\partial t} \bold u 
 			+ \bold u \cdot \nabla \bold u \right )
 			= \bold b
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering om massa, $ \ref{eq:Konservering av massa 1} $, då
+	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
 	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
-	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna termen måste vara lika med noll, vilket innebär att kvar blir $ \ref{eq:Konservering av rörelsemängd 4} $
+	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna term måste vara lika med noll, vilket innebär att kvar blir ekvation $ \ref{eq:Konservering av rörelsemängd 4} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 4}
-			 \varrho \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \bold u 
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
 			+ \bold u \cdot \nabla \bold u \right )
 			= \bold b
 		\end{equation}
 	\end{center}
 	
+	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. $ \sigma $ är Cauchys spänningstensor och kan förenklas till $ \sigma = -\pi I +  \bold \Gamma $.
 	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
+			\varrho \left ( 
+			\frac{\partial \bold u }{\partial t}
+			+  u _{x} \frac{\partial u _{x}} {\partial x} 
+			+  u _{y} \frac{\partial u _{y}} {\partial y} 
+			+  u _{z} \frac{\partial u _{z}} {\partial z} 
+			\right )
+			=
+			\bold b
+		\end{equation}
+	\end{center}
 
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 6}
+			\varrho \
+			\frac{\partial }{\partial t} 
+			\bold u(x,y,z,t)
+			=
+			\bold b
+		\end{equation}
+	\end{center}
+	
+	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer: en som härstammar från tryck, $ \nabla \cdot \sigma $ av rank två, och en, $ \bold f $, som härstammar från yttre krafter som exempelvis gravitationen. 
+		
 		
 	\Subsection{Konservering av energi}
 	
@@ -352,13 +375,13 @@ Marcus Nygren, marny568}
 		
 		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 		
-		
-		%\begin{figure}[ht!]
-		%	\centering
-		%	\includegraphics[width=90mm]{QtGui}
-		%	\caption{Användargränsnittet skapat i Qt som inte kom med 			%	till slutresultatet}
-		%	\label{QtGui}
-		%\end{figure}
+
+%		\begin{figure}[ht!]
+%			\centering
+%			\includegraphics[width=90mm]{QtGui}
+%			\caption{Användargränsnittet skapat i Qt som inte kom med till slutresultatet}
+%			\label{QtGui}
+%		\end{figure}
 		
 		\Subsection{GLFW}
 		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
