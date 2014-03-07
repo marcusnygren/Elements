@@ -134,9 +134,156 @@ Marcus Nygren, marny568}
 		Elements är ett gränssnitt för att visa olika partikelsystem i en mjukvara och låta användaren experimentera med Navier-Stokes ekvationer. Syftet är att användaren ska kunna se sambandet mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering. Simuleringarna kommer i form av rök, eld och vatten.
 		
 		Vi ville ha ett projekt som var tekniskt utmanande, som blandade medieteknik och datateknik, och vi ville väldigt gärna modellera fluider. Resultatet skulle vara till nytta för andra studenter, och då passade projektet ovan oss väldigt bra inom kursens ramar.
-
+	
+		
 	\Section{Fysikalisk beskrivning}
-		\emph{Övergripande beskrivning kring den fysikaliska implementationen i vårt projekt.}
+	
+	\Subsection{Förklaring av Navier-Stokes ekvationer}
+		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig rymd, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $. RTT säger att summan av en fysisk egenskap, $ \psi  $, definerad på $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Navier-Stokes}
+			\bold \varrho \left ( \frac{\mathrm{d} }{\mathrm{d} t} \bold u + \bold u \cdot \nabla \bold u \right ) 
+			= 
+			- \nabla \bold \varrho 
+			+ \nabla \cdot \bold \Gamma + \bold f
+		\end{equation}	
+		
+		\begin{equation}\label{eq:Konservering av massa}
+		 	\nabla \cdot \bold u = 0 
+		\end{equation}
+	\end{center}
+
+
+
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem}
+			\frac{\mathrm{d} }{\mathrm{d} t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+			= 
+			- \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
+			- \int_{\Omega}^{ } \sigma \ \mathrm{d}V
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem 2}
+			\frac{\mathrm{d} }{\mathrm{d} t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+			= 
+			- \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
+			- \int_{\Omega}^{ } \sigma  \ \mathrm{d} V
+		\end{equation}
+	\end{center}
+	
+	Leibniz lag säger att vi kan flytta in derivatan.
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem 3}
+			\int_{\Omega}^{ } \frac{\mathrm{d} }{\mathrm{d} t} \psi\ \mathrm{d}V
+			+ \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
+			+ \int_{\Omega}^{ } \sigma  \ \mathrm{d} V
+			=
+			0
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz}
+			\int_{\Omega}^{ } \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \psi\ 
+			+ \nabla \cdot \left (  \psi \bold u \right ) 
+			+ \sigma \right ) \mathrm{d}V
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	Eftersom integralen i $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla rymder $ \Omega $ erhålls $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
+			\frac{  \mathrm{d} }{\mathrm{d} t} \psi\ 
+			+ \nabla \cdot \left (  \psi \bold u \right ) 
+			+ \sigma
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	
+	\Subsection{Konservering av massa}
+	Här är $ \psi = \varrho $ och då det inte finns några källor eller sänkor av massa blir $ \sigma $ lika med noll, detta i enlighet med $ \ref{eq:Konservering av massa 1} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av massa 1}
+			\frac{  \mathrm{d} }{\mathrm{d} t} \varrho \ 
+			+ \nabla \cdot \left (  \varrho \bold u \right ) 
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \mathrm{d} }{\mathrm{d} t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
+	
+	
+	\Subsection{Konservering av rörelsemängd}
+	Från rörelsemängd, $ p = m\bold u $, fås att $ \psi = \varrho \bold u $, vilket ger $ \ref{eq:Konservering av rörelsemängd} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd}
+			\frac{  \mathrm{d} }{\mathrm{d} t} \varrho \bold u \ 
+			+ \nabla \cdot \left ( \varrho \bold u  \bold u \right ) 
+			+ \sigma
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	Utveckling av $ \ref{eq:Konservering av rörelsemängd} $ ger $ \ref{eq:Konservering av rörelsemängd 2} $, där $ \bold b $ representerar en källa eller sänka. 
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 2}
+			\bold u \frac{  \mathrm{d} }{\mathrm{d} t} \varrho \ 
+			+ \varrho \frac{  \mathrm{d} }{\mathrm{d} t} \bold u \ 
+			+ \bold u  \bold u \  \cdot \nabla \varrho
+			+ \varrho \bold u \cdot \nabla \bold u
+			+ \varrho \bold u \nabla \cdot \bold u
+			= \bold b
+		\end{equation}
+	\end{center}
+		
+	Ytterliggare omskrivning ger $ \ref{eq:Konservering av rörelsemängd} $ ger $ \ref{eq:Konservering av rörelsemängd 3} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 3}
+			\bold u \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \varrho + \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u \right ) 
+			+ \varrho \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= \bold b
+		\end{equation}
+	\end{center}
+	
+	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering om massa, $ \ref{eq:Konservering av massa 1} $, då
+	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
+	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna termen måste vara lika med noll, vilket innebär att kvar blir $ \ref{eq:Konservering av rörelsemängd 4} $
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 4}
+			 \varrho \left ( \frac{  \mathrm{d} }{\mathrm{d} t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= \bold b
+		\end{equation}
+	\end{center}
+	
+	
+
+		
+	\Subsection{Konservering av energi}
+	
+	\Subsection{Val av beräkningsmetod}
+	
+	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+	
+	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+	
+		
 	
 		\Subsection{Förstudie}
 		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
