@@ -308,10 +308,16 @@ Marcus Nygren, marny568}
 
 	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 	
-	\begin{center}
-	----------- Här börjar implementationen // definiera variabler-----------
-	\end{center}
-	För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+		\Subsection{Modellering}
+		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
+		
+		Modell för inkompressibel homogen fluid:		
+
+	\Section{Numerisk implementation}
+
+		
+		\Subsection{Implementation av Navier-stokes ekvationer}
+		För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
 	\begin{center}
 		\begin{equation}\label{eq:Navier-stokes simple}
@@ -340,29 +346,24 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet, $ \ref{eq:Poisson ekvation} $, Poissons ekvation
+	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
 	
+	\begin{center}
+		\begin{equation}\label{eq:Poissons ekvation}
+			\nabla ^2 p = \nabla \bold w 
+		\end{equation}
+	\end{center}
 	
-	
-	
-	
-	
-	
-	
-		\Subsection{Modellering}
-		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut i dem tidigare komponenterna av ekvationen, alltså inte den hastighet som är divergenslös i villkoret $ \ref{eq:villkor} $ 		
 		
-		Modell för inkompressibel homogen fluid:		
-
-	\Section{Numerisk implementation}
-
 		\Subsection{Matlab}
 		\emph{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}
 
 		\Subsection{OpenGL/GLSL}
 		\Subsubsection{Introduktion}
 		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
-		Metod
+		
+		\Subsubsection{Metod}
 		
 		För GPU-implementeringen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
@@ -384,8 +385,7 @@ Marcus Nygren, marny568}
 		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
 		
 		\Subsection{Qt}
-		
-		För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad “Signals & Slots” och kan även hantera JavaScript-funktioner.
+För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad “Signals \& Slots” och kan även hantera JavaScript-funktioner.
 
 		Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
 
@@ -409,6 +409,7 @@ Marcus Nygren, marny568}
 
 		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela viewporten. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns nedan:
 
+\begin{verbatim}
 		out vec3 color;
 		uniform sampler3D tex;
 		uniform float layer;
@@ -417,8 +418,11 @@ Marcus Nygren, marny568}
 
 		void main()
 		{
-		 color = texture(tex, vec3(gl_FragCoord.x / windowSize.x ,gl_FragCoord.y / windowSize.y, layer/ dimensions.z)).xyz;
+		  color = texture(tex, vec3(gl_FragCoord.x / windowSize.x ,
+		  gl_FragCoord.y / windowSize.y, layer/dimensions.z)).xyz;
 		}
+\end{verbatim}
+
 
 		\Subsection{Diskussion}
 		Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
