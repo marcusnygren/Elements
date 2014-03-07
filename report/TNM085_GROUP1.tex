@@ -131,9 +131,9 @@ Marcus Nygren, marny568}
 	\setlength{\parskip}{10pt}
 
 	\Section{Introduktion}
-		Elements är ett gränssnitt för att visa olika partikelsystem i en mjukvara och låta användaren experimentera med Navier-Stokes ekvationer. Syftet är att användaren ska kunna se sambandet mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering. Simuleringarna kommer i form av rök, eld och vatten.
-		
-		Vi ville ha ett projekt som var tekniskt utmanande, som blandade medieteknik och datateknik, och vi ville väldigt gärna modellera fluider. Resultatet skulle vara till nytta för andra studenter, och då passade projektet ovan oss väldigt bra inom kursens ramar.
+		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men systemet är utformat för att i framtiden kunna byggas ut med eld och vatten samt ökad funktionalitet. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer med hjälp av att experimentera med olika interaktiva realtidssimuleringar.
+
+		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
 		
 	\Section{Fysikalisk beskrivning}
@@ -302,16 +302,10 @@ Marcus Nygren, marny568}
 	
 	\Subsection{Val av beräkningsmetod}
 	
-	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
-	
+	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Till skillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger inte det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet, temperatur, beräknas i varje given punkt.
+
 	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 	
-		
-	
-		\Subsection{Förstudie}
-		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
-		
-		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
 	\begin{center}
 	----------- Här börjar implementationen // definiera variabler-----------
 	\end{center}
@@ -359,22 +353,42 @@ Marcus Nygren, marny568}
 		Modell för inkompressibel homogen fluid:		
 
 	\Section{Numerisk implementation}
-		\emph{Var noga med att ha med era numeriska värden från Matlab. Vilka parametrar användes? Ha med allting som är relevant.}
 
 		\Subsection{Matlab}
-		\emph{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}	
+		\emph{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}
 
+		\Subsection{OpenGL/GLSL}
+		\Subsubsection{Introduktion}
+		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
+		Metod
+		
+		För GPU-implementeringen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
+
+		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. Utöver hastigheten behövde också 3d-texturer för andra storheter skapas. Nedan visas de storheter som användes och hur många komponenter som behövdes för varje voxel.
+
+		<Lägg till tabell från Google Drive här.>
+
+		Av praktiska skäl lades det till en extra komponent på de texturer som egentligen bara skulle behöva en. Detta beror på att vissa maskiner visade sig ha problem med att nyttja texturer som bara har en komponent. I implementationen gör detta ingen skillnad då enbart första komponenten används. Ytligare en detalj i tillämpningen är att det för de flesta storheterna behövdes två texturer. Detta berodde på att när en storhet ska uppdateras behövdes en textur att skriva till samt en att läsa ifrån.
+
+		Som tidigare beskrivits delades Navier-Stokes ekvationer upp i mindre delar som kan lösas sekventiellt.  Varje del implementerades som ett shader-program i GLSL .
+
+		Det krävs två gränssnitt (programmeringsspråk) för att implementera beräkningar på GPU. Det första ligger på applikationsnivå och 
+
+		Nackdelen blir att minnesåtgången dubblas för de berörda texturerna dock kommer minneslagring inte att vara en flaskhals för programmet.
+		
 	\Section{Grafisk implementation}
-		\emph{Vad har vi använt för metoder? Formler? Beräkningar? Programmering? Hela workflowen i kort sammanfattning: Research - Matlab - C++ - OpenGL - QT. Vilka delar skedde parallellt?}
-			
+
 		\Subsection{OpenGL}
 		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
 		
 		\Subsection{Qt}
-		\emph{Varför valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
 		
-		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
-		
+		För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad “Signals & Slots” och kan även hantera JavaScript-funktioner.
+
+		Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
+
+		Inom projektet utvecklades fortfarande ett fungerande GUI som visade på funktionaliteten att användaren via interaktion med till exempel knappar kan kommunicera med C++-lagret. Tyvärr används inte denna implementation alls i resultatet av projektet, då vårt slutgiltiga bibliotek GLFW och Qt inte är kompatibla med varandra. Det skulle vara möjligt att använda Qt, förutsatt att man i början av projektet lägger mycket tid på att abstrahera C++-applikationen och Qt-gränssnittet, och anpassar sig efter de förutsättningar som finns.
+				
 
 %		\begin{figure}[ht!]
 %			\centering
@@ -384,19 +398,59 @@ Marcus Nygren, marny568}
 %		\end{figure}
 		
 		\Subsection{GLFW}
-		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
 		
-		GLFW har inte stöd för att göra GUI, men är ett väldigt uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det inkluderar många hjälpfunktioner, som gör utvecklingen snabbare och plattformsoberoende. Det gick snabbare att komma igång med GLFW än Qt, men vi fick flytta GUI-delen vi byggt i Qt till att istället styras via konsolen.
+		\Subsection{Introduktion}
+		GLFW är ett plattformsoberoende fönsterhanterings-ramverk utan onödiga finesser. GLFW har inte något inbyggt stöd för att göra GUI, men är ett mycket uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det som GLFW kan sköta är fönsterhantering och inmatning från bland annat mus och tangentbord.
+		
+		\Subsection{Metod}
+		När GLFW används vid utveckling av en OpenGL-applikationer behövs först ett annat ramverk för att ladda de OpenGL-funktioner som finns tillgängliga på systemet. För detta ändamål användes GLEW. I den här rapporten kommer inte GLEW att beskrivas i detalj. Det finns många bibliotek med samma funktionalitet och valet mellan dessa spelar inte någon större roll.
+
+		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela viewporten. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns nedan:
+
+		out vec3 color;
+		uniform sampler3D tex;
+		uniform float layer;
+		uniform vec3 dimensions;
+		uniform vec2 windowSize;
+
+		void main()
+		{
+		 color = texture(tex, vec3(gl_FragCoord.x / windowSize.x ,gl_FragCoord.y / windowSize.y, layer/ dimensions.z)).xyz;
+		}
+
+		\Subsection{Diskussion}
+		Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
+		Resultat
+		
+		Nedan visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
+
+		\Subsection{Resultat}
+		I figur 1 visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
+
+		<Lägg in resultat-bild här>
 	
 	\Section{Diskussion}
-		\emph{Vilka saker gick snett? Vilka saker gick strålande? Varför?}
 		
-		Projektet Elements började som en idé för ett pedagodiskt verktyg för att lära sig Navier-Stokes ekvationer. För att uppnå denna kvalité på användargränsnittet beslutades det tidigt i projektet att använda C++ biblioteket Qt. Mycket tid lades ner för att få en Qt implemention tillsammans med OpenGL. Men skrotades långt in i projektarbetetsgång, då denna form av implementation var för avancerad. GLFW blev istället det självklara valet för att hinna klart Elements så långt in i projektets gång.
+		Från början gick projektet ut på att utveckla ett gränssnitt i Qt där användaren grafiskt fick modifiera parametrarna och dess värden i Navier-Stokes, med syftet att ge användaren en väldigt pedagogisk koppling mellan ekvationerna och dess visuella representation.
+
+		Om vi hade gjort om projektet hade vi utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete varit förgäves.
+
+		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargräsnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både i Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen - som flera olika fluider, större användarkontroll, 3d-representation, fler externa krafter representerade, etcetera. Resultatet bedöms ändå som framgångsrikt, då de kunskapsmässiga målen för kursen överträffats.
+
+		Vi är väldigt nöjda med valet att göra applikationen GPU-baserad. Simuleringen kör i realtid, så det går att interagera med den via piltangenterna, vilket inte hade varit möjligt annars. 
 
 	\Section{Resultat}
 		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
 		
 		TEXT..
+
+	\Section{Slutsats}
+		
+		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier Stokes ekvationer är –fortfarande 2014– ett av de olösta matematiska millenieproblemen.
+
+		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes har vi främst använt <Nvidia-länk> som referens, för rök-implementation av Navier-Stokes har vi främst använt <Grasshopper-länk> och <Visual Simulation of Smoke-länk>.
+
+		Förutom referenserna på nästa sida vill vi även tacka vår kurshandledare Anna Lombardi.
 
 	\newpage
 	\begin{thebibliography}{9}
