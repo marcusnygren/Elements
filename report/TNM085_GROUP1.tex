@@ -308,10 +308,7 @@ Marcus Nygren, marny568}
 	
 		
 	
-		\Subsection{Förstudie}
-		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
-		
-		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
+
 	\begin{center}
 	----------- Här börjar implementationen // definiera variabler-----------
 	\end{center}
@@ -344,9 +341,15 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet, $ \ref{eq:Poisson ekvation} $, Poissons ekvation
+	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
 	
+	\begin{center}
+		\begin{equation}\label{eq:Poissons ekvation}
+			\nabla ^2 p = \nabla \bold w 
+		\end{equation}
+	\end{center}
 	
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut i dem tidigare komponenterna av ekvationen, alltså inte den hastighet som är divergenslös i villkoret $ \ref{eq:villkor} $ 
 	
 	
 	
