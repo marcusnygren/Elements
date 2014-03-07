@@ -312,17 +312,47 @@ Marcus Nygren, marny568}
 		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
 		
 		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
-		
-		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
-		
-		Med villkoret:
-				
-		$ \nabla \cdot u = 0 $ 
-		
-		Vi löser ut hastigheten:
-		%du/dt = -(u_dot_grad(u)) - 1/rho * grad(p) +f
-		Ur du/dt fås u(t+dt) som är den sökta hastigheten (?hastigheten i nästa frame?). Ekvationen kan brytas ned komponentvis enligt Helmholtz-Hodge Decomposition. Vi uppdaterar därför hastigheten stegvis, med följande komponenter: Advection, extern kraft och tryck.
-			
+	\begin{center}
+	----------- Här börjar implementationen // definiera variabler-----------
+	\end{center}
+	För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+	ekvation $ \ref{eq:Navier-stokes simple} $
+	\begin{center}
+		\begin{equation}\label{eq:Navier-stokes simple}
+			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
+		\end{equation}
+	\end{center}
+	
+	Tillsammans med villkoret:
+	\begin{center}
+		\begin{equation}\label{eq:villkor}
+			\nabla \cdot \bold u = 0
+		\end{equation}
+	\end{center}
+	
+	
+	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
+ 	$ \bold u \cdot \nabla \bold u $ beskriver 	förflyttningen av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
+	
+	Den första komponenten som beräknas är förflyttningen. Förlyttning av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Förflyttningen sker genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+
+
+	När förflyttning har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
+	\begin{center}
+		\begin{equation}\label{eq:vektor w}
+			\bold w = \bold u + \nabla p
+		\end{equation}
+	\end{center}
+	
+	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet, $ \ref{eq:Poisson ekvation} $, Poissons ekvation
+	
+	
+	
+	
+	
+	
+	
+	
 		\Subsection{Modellering}
 		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
 		
@@ -345,6 +375,7 @@ Marcus Nygren, marny568}
 		
 		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 		
+
 %		\begin{figure}[ht!]
 %			\centering
 %			\includegraphics[width=90mm]{QtGui}
