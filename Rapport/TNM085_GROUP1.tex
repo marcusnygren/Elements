@@ -1,0 +1,592 @@
+%______________________________________________________
+%
+%   LaTeX-mall för nybörjare
+%
+%   Konstruerad av Marcus Bergner, bergner@cs.umu.se
+%
+%   Vid funderingar titta längst ned i denna fil,
+%   eller skicka ett mail
+%______________________________________________________
+%
+
+% lite inställningar
+\documentclass[10pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{amssymb, graphicx, fancyheadings}
+\usepackage{graphicx}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
+
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
+
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}{
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{teknik och naturvetenskap}
+\def\typeofdoc{Projektrapport}
+\def\course{Modelleringsprojekt}
+%\def\pretitle{Laboration 1}
+\def\title{Elements}
+\def\name{\\ Niklas Andersson, nikan278 \\
+Gabriel Baravdish, gabba873 \\
+Joakim Deborg, joade361 \\
+Kristofer Janukiewicz, krija286 \\
+Marcus Nygren, marny568}
+\def\username{c00abc}
+%\def\email{\username{}@cs.umu.se}
+%\def\path{edu/KURS/lab1}
+\def\graders{Anna Lombardi, Ulf Sannemo}
+
+
+% om du vill referera till katalogen där dina filer ligger kan du 
+% använda \fullpath som kommer att vara "~username/edu..." o.s.v.
+\def\fullpath{\raisebox{1pt}{$\scriptstyle \sim$}\username/\path}
+
+
+% Här börjar själva dokumentet
+\begin{document}
+
+	% skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{LINKÖPINGS UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			%\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					%\textbf{E-mail} & \texttt{\email} \\
+					%\textbf{Sökväg} & \texttt{\fullpath} \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
+
+
+	% fixar sidfot
+	%\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
+
+	%Skapa sammanfattning
+	\begin{abstract}
+	This is the paper's abstract. This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract. This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.
+	\end{abstract}
+	
+	% skapar innehållsförteckning.
+	% Tänk på att köra latex 2ggr för att uppdatera allt
+	\pagenumbering{roman}
+	\tableofcontents
+	
+	% och lägger in en sidbrytning
+	\newpage
+
+	\pagenumbering{arabic}
+
+	% i Sverige har vi normalt inget indrag vid nytt stycke
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
+
+	\Section{Introduktion}
+		Elements är ett gränssnitt för att visa olika partikelsystem i en mjukvara och låta användaren experimentera med Navier-Stokes ekvationer. Syftet är att användaren ska kunna se sambandet mellan dessa fysikaliska ekvationer med en realtidsrenderad fluidsimulering. Simuleringarna kommer i form av rök, eld och vatten.
+		
+		Vi ville ha ett projekt som var tekniskt utmanande, som blandade medieteknik och datateknik, och vi ville väldigt gärna modellera fluider. Resultatet skulle vara till nytta för andra studenter, och då passade projektet ovan oss väldigt bra inom kursens ramar.
+	
+		
+	\Section{Fysikalisk beskrivning}
+	
+	\Subsection{Förklaring av Navier-Stokes ekvationer}
+		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
+		
+	\begin{center}
+		\begin{equation}\label{eq:Navier-Stokes}
+			\bold \varrho \left ( \frac{\partial }{\partial t} \bold u + \bold u \cdot \nabla \bold u \right ) 
+			= 
+			- \nabla p
+			+ \nabla \cdot \bold \Gamma + \bold f
+		\end{equation}	
+		
+		\begin{equation}\label{eq:Konservering av massa}
+		 	\nabla \cdot \bold u = 0 
+		\end{equation}
+	\end{center}
+			
+	\Subsection{Konservering av energi}
+		 RTT säger att summan av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $ för att bevara energin.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Orginal}
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V  
+			+ \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
+			+ \int_{\Omega}^{ } \chi \ \mathrm{d}V
+			=
+			0
+		\end{equation}
+	\end{center}
+
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem}
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+			= 
+			- \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
+			- \int_{\Omega}^{ } \chi \ \mathrm{d}V
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem 2}
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+			= 
+			- \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
+			- \int_{\Omega}^{ } \chi   \ \mathrm{d} V
+		\end{equation}
+	\end{center}
+	
+	Leibniz lag säger att vi kan flytta in derivatan.
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem 3}
+			\int_{\Omega}^{ } \frac{\partial }{\partial t} \psi\ \mathrm{d}V
+			+ \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
+			+ \int_{\Omega}^{ } \chi   \ \mathrm{d} V
+			=
+			0
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz}
+			\int_{\Omega}^{ } \left ( \frac{  \partial }{\partial t} \psi\ 
+			+ \nabla \cdot \left (  \psi \bold u \right ) 
+			+ \chi  \right ) \mathrm{d}V
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
+			\frac{  \partial }{\partial t} \psi\ 
+			+ \nabla \cdot \left (  \psi \bold u \right ) 
+			+ \chi 
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	
+	\Subsection{Konservering av massa}
+	Här är $ \psi = \varrho $ och då det inte finns några källor eller sänkor av massa blir $ \chi  $ lika med noll, detta i enlighet med ekvation $ \ref{eq:Konservering av massa 1} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av massa 1}
+			\frac{  \partial }{\partial t} \varrho \ 
+			+ \nabla \cdot \left (  \varrho \bold u \right ) 
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
+	
+	
+	\Subsection{Konservering av rörelsemängd}
+	Från rörelsemängd, $ p = m\bold u $, fås att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd}
+			\frac{  \partial }{\partial t} \varrho \bold u \ 
+			+ \nabla \cdot \left ( \varrho \bold u  \bold u \right ) 
+			+ \chi 
+			= 
+			0
+		\end{equation}
+	\end{center}
+	
+	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd} $ ger ekvation $ \ref{eq:Konservering av rörelsemängd 2} $, där $ \bold b $ representerar en källa eller sänka. 
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 2}
+			\bold u \frac{  \partial }{\partial t} \varrho \ 
+			+ \varrho \frac{  \partial }{\partial t} \bold u \ 
+			+ \bold u  \bold u \  \cdot \nabla \varrho
+			+ \varrho \bold u \cdot \nabla \bold u
+			+ \varrho \bold u \nabla \cdot \bold u
+			= \bold b
+		\end{equation}
+	\end{center}
+		
+	Ytterliggare omskrivning av ekvation $ \ref{eq:Konservering av rörelsemängd 2} $ ger ekvation $ \ref{eq:Konservering av rörelsemängd 3} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 3}
+			\bold u \left ( \frac{  \partial }{\partial t} \varrho + \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u \right ) 
+			+ \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= \bold b
+		\end{equation}
+	\end{center}
+	
+	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
+	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
+	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna term måste vara lika med noll, vilket innebär att kvar blir ekvation $ \ref{eq:Konservering av rörelsemängd 4} $.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 4}
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= \bold b
+		\end{equation}
+	\end{center}
+	
+	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. 
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
+			\varrho \left ( 
+			\frac{\partial \bold u }{\partial t}
+			+  u _{x} \frac{\partial u _{x}} {\partial x} 
+			+  u _{y} \frac{\partial u _{y}} {\partial y} 
+			+  u _{z} \frac{\partial u _{z}} {\partial z} 
+			\right )
+			=
+			\bold b
+		\end{equation}
+	\end{center}
+
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 6}
+			\varrho \
+			\frac{\partial }{\partial t} 
+			\bold u(x,y,z,t)
+			=
+			\bold b
+		\end{equation}
+	\end{center}
+	
+	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är minus medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitesmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes ekvation.
+		
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 7}
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \sigma + \bold f
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 8}
+		 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \left ( -pI +  \bold \Gamma \right ) + \bold f
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 9}
+	 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			- \nabla p + \nabla \cdot \bold \Gamma  + \bold f
+		\end{equation}
+	\end{center}
+	
+
+	
+	\Subsection{Val av beräkningsmetod}
+	
+	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+	
+	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+	
+		
+	
+		\Subsection{Förstudie}
+		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
+		
+		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
+		
+		$ \frac{du}{dt}=-(u  \cdot \nabla ) \cdot - \frac{1}{ \rho } \nabla \rho + v \nabla ^{2}u + F $
+		
+		Med villkoret:
+				
+		$ \nabla \cdot u = 0 $ 
+		
+		Vi löser ut hastigheten:
+		%du/dt = -(u_dot_grad(u)) - 1/rho * grad(p) +f
+		Ur du/dt fås u(t+dt) som är den sökta hastigheten (?hastigheten i nästa frame?). Ekvationen kan brytas ned komponentvis enligt Helmholtz-Hodge Decomposition. Vi uppdaterar därför hastigheten stegvis, med följande komponenter: Advection, extern kraft och tryck.
+			
+		\Subsection{Modellering}
+		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
+		
+		Modell för inkompressibel homogen fluid:		
+
+	\Section{Numerisk implementation}
+		\emph{Var noga med att ha med era numeriska värden från Matlab. Vilka parametrar användes? Ha med allting som är relevant.}
+
+		\Subsection{Matlab}
+		\emph{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}	
+
+	\Section{Grafisk implementation}
+		\emph{Vad har vi använt för metoder? Formler? Beräkningar? Programmering? Hela workflowen i kort sammanfattning: Research - Matlab - C++ - OpenGL - QT. Vilka delar skedde parallellt?}
+			
+		\Subsection{OpenGL}
+		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
+		
+		\Subsection{Qt}
+		\emph{Varför valde vi Qt? Hur kommunicerar Qt med resten av projektet? C++ - Qt? GUI?}
+		
+		För att utveckla och skapa ett användagränssnitt som var både enkelt och grafiskt tilltalande valdes till en början Qt. Qt är ett populärt multiplattformsbibliotek för att utveckla GUI:n i C++ med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
+		
+%		\begin{figure}[ht!]
+%			\centering
+%			\includegraphics[width=90mm]{QtGui}
+%			\caption{Användargränsnittet skapat i Qt som inte kom med till slutresultatet}
+%			\label{QtGui}
+%		\end{figure}
+		
+		\Subsection{GLFW}
+		\emph{Varför gick vi över från Qt till GLFW? Hur blev det enklare/svårare?}
+		
+		GLFW har inte stöd för att göra GUI, men är ett väldigt uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det inkluderar många hjälpfunktioner, som gör utvecklingen snabbare och plattformsoberoende. Det gick snabbare att komma igång med GLFW än Qt, men vi fick flytta GUI-delen vi byggt i Qt till att istället styras via konsolen.
+	
+	\Section{Diskussion}
+		\emph{Vilka saker gick snett? Vilka saker gick strålande? Varför?}
+		
+		Projektet Elements började som en idé för ett pedagodiskt verktyg för att lära sig Navier-Stokes ekvationer. För att uppnå denna kvalité på användargränsnittet beslutades det tidigt i projektet att använda C++ biblioteket Qt. Mycket tid lades ner för att få en Qt implemention tillsammans med OpenGL. Men skrotades långt in i projektarbetetsgång, då denna form av implementation var för avancerad. GLFW blev istället det självklara valet för att hinna klart Elements så långt in i projektets gång.
+
+	\Section{Resultat}
+		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
+		
+		TEXT..
+
+	\newpage
+	\begin{thebibliography}{9}
+		\bibitem{pfleeger10softwareengineering}
+			%Exempelreferens
+		  	Shari Lawrence Pfleeger och Joanne M. Atlee, \emph{Software Engineering, Fourth Edition, International Edition}, Pearson 2010  
+	\end{thebibliography}
+		
+	\newpage
+	\appendix
+
+	\Section{Bilaga}
+	\ldots{}här kan man lägga till bilagor
+	
+	\newpage
+	\Section{Bilaga}
+	\ldots{}här kan man lägga till bilagor
+
+	% bilagor, t.ex. källkod. En tom extrasida kommer att skrivas ut för
+	% att få alla sidnummer att stämma
+	\begin{appendices}
+		%\appitem{Källkod}{0}
+		%\appsubitem{\texttt{minfil.c}}{2}
+		%\appsubitem{\texttt{minfil.h}}{1}
+		%\appitem{En bilaga på 3 sidor}{3}
+	\end{appendices}
+
+\end{document}
+
+
+% Lite information om hur man arbetar med LaTeX
+%-----------------------------------------------
+%
+% LaTeX-koden kan skrivas med en godtycklig editor.
+% För att "kompilera" dokumentet används kommandot latex:
+%    bergner@peppar:~/edu/sysprog/lab1> latex rapportmall.tex
+% Resultatet blir ett antal filer, bl.a. en som heter rapportmall.dvi.
+% Denna fil kan användas för att titta hur dokumentet egentligen ser
+% ut med hjälp av programmet xdvi:
+%    bergner@peppar:~/edu/sysprog/lab1> xdvi rapportmall.dvi &
+% Du får då upp ett fönster som visar ditt dokument. Detta fönster
+% kommer automatiskt att uppdateras då du ändrar och kompilerar om din
+% LaTeX-kod. 
+% När du anser att din rapport är färdig att skrivas ut använder man
+% lämpligtvis kommandona dvips och lpr:
+%    bergner@peppar:~/edu/sysprog/lab1> dvips -P ma436ps rapportmall.dvi
+% Om man vill ha kvar PostScript-filen som dvips genererar kan man göra:
+%    bergner@peppar:~/edu/sysprog/lab1> dvips -o rapport.ps rapportmall.dvi
+%    bergner@peppar:~/edu/sysprog/lab1> lpr -P ma436ps rapport.ps
+% OBS!!! För att innehållsförteckningen och eventuella referenser till
+% tabeller och figurer garanterat ska stämma måste man köra latex 2ggr
+% på sitt dokument efter att man har ändrat något.
+%
+%
+% Lite information om saker man kan tänkas behöva i sitt arbete med LaTeX
+%-------------------------------------------------------------------------
+%
+% FORMATTERA TEXT
+%
+% För att formattera text på lite olika sätt kan man använda följande LaTeX-
+% kommandon:
+%    \textbf{denna text kommer att vara i fetstil}
+%    \emph{denna text är viktig (kursiv stil)}
+%    \texttt{i denna text blir alla tecken lika breda, som med en skrivmaskin}
+%    \textsf{denna text visas med ett typsnitt utan serifer}
+%
+%
+% MATEMATISKA FORMLER
+%
+% För att typsätta matematiska formler kan man använda:
+%    $f(x) = x^2 - 3$, vilket lägger in formeln i texten, eller
+%    \begin{displaymath}
+%        g(x) = \frac{\sin x}{x}
+%    \end{displaymath}, vilket låter formeln visas centrerat på en egen rad
+% Om du vill att en formel ska numreras byter du ut displaymath mot equation.
+% Det finns massor med matematiska symboler, vilket gör att man behöver
+% någon liten manual att titta i om man ska konstruera avancerade formler.
+% Se slutet på filen för lite råd om var du kan hitta sådana.
+%
+%
+% INFOGA FIGURER
+%
+% För att infoga en figur kan man göra på följande sätt:
+%    \begin{figure}[htb]
+%        \includegraphics[scale=0.5, angle=90]{exec_flow.eps}
+%        \caption{Detta är bildtexten}
+%        \label{EXECFLOW}
+%    \end{figure}
+% Om man vill referera till denna bild i texten skulle man då skriva enligt:
+%    ...i figur \ref{EXECFLOW} kan man se att...
+% Några små förklaringar till figurer:
+%    [htb] = talar om hur latex ska försöka placera bilden (Here, Top, Bottom)
+%            Om du använder [!h], innebär det Here!!!
+%    scale = kan skala om bilden, om den är skalbar
+%    angle = kan rotera bilden
+%    exec_flow.eps = filnamnet på bilden. Notera att formatet .EPS används
+% För att skapa figurer används lämpligtvis programmet xfig:
+%    bergner@peppar:~/edu/sysprog/lab1> xfig &
+% Rita (och spara ofta) tills du är klar. Välj sedan "Export" och exportera
+% din figur till EPS-format.
+% Om man vill kan man använda endast \includegraphics, men det är inte ofta
+% man gör det.
+%
+%
+% INFOGA TABELLER
+%
+% Om man vill skapa en tabell gör man på följande sätt:
+%    \begin{table}[htb]
+%        \begin{tabular}{|rlp{10cm}|}
+%            \hline
+%            13 & $17.26$ & En kommentar som kan sträcka sig över flera rader \\
+%            \hline
+%        \end{tabular}
+%        \caption{Tabelltexten...}
+%        \label{TBL:MINTABELL}
+%    \end{table}
+% Om man vill kan man endast använda raderna 2-6, dvs få en tabell utan text
+% och nummer. Om man gör på detta vis kommer tabellen alltid att läggas på
+% det ställe den skrivs i koden, dvs ungefär samma sak som [!h] -> Here!!!
+% Några förklaringar:
+%    l, r, c = vänsterjustera, högerjustera eller centrera kolumn
+%    p{bredd} = skapa en vänsterjusterad kolumn med en viss bredd
+%               kan innehålla flera rader text
+%    | = en vertikal linje i tabellen
+%    \hline = en horisontell linje i tabellen
+%    & = kolumnseparator
+%    \\ = radseparator
+% Tänk på att tabeller oftast ser bättre ut med ganska få linjer.
+%
+%
+% INFOGA KÄLLKOD ELLER UTDATA FRÅN TESTKÖRNINGAR
+%
+% Om man vill infoga källkod eller något annat liknande, t.ex. utdata från
+% en testkörning är det bra om LaTeX återger utdatan korrekt, dvs en radbrytning
+% betyder en radbrytning och 8 mellanslag på rad betyder 8 mellanslag på rad.
+% För att åstadkomma detta används:
+%    \begin{verbatim}
+%        allt som skrivs här återges exakt, med skrivmaskinstypsnitt
+%    \end{verbatim}
+% Oftast finns det dock bättre verktyg för att skriva ut källkod. Exempel på
+% sådana är a2ps, enscript och atp.
+%
+%
+% ÄNDRA STORLEK PÅ TEXT
+%
+% Om du vill ändra storleken på ett stycke, t.ex. på din nyss infogade
+% testkörning omger du stycket med \begin{STORLEK} \end{STORLEK}, där
+% STORLEK är någon av:
+%    tiny, scriptsize, footnotesize, small, normalsize, large, Large,
+%    LARGE, huge, Huge
+% Tänk på att inte mixtra för mycket med storlekar bara.
+%
+%
+% SKAPA LISTOR AV OLIKA SLAG
+%
+% Det är ganska vanligt att man vill rada upp saker på något sätt. För att
+% skapa punktlistor används:
+%    \begin{itemize}
+%        \item Detta är första punkten
+%        \item Detta är andra punkten
+%    \end{itemize}
+% Om man istället vill ha en numrerad lista kan man använda enumerate istället
+% för itemize. Listor kan användas i flera nivåer
+%
+%
+% MER INFORMATION OM LaTeX
+%
+% Lite blandad information om LaTeX, länkar och annat hittar du på
+% http://www.cs.umu.se/~bergner/latex.htm
+% En del information om rapportskrivning hittar du på
+% http://www.cs.umu.se/~bergner/rapport/
+% Det finns massor med information om LaTeX på Internet. Ett litet urval:
+% http://www.giss.nasa.gov/latex/
+%     är en mycket välfylld sida om LaTeX
+% http://wwwinfo.cern.ch/asdoc/WWW/essential/essential.html
+%     är en manual som genererats utifrån ett LaTeX-dokument mha latex2html
+% http://tex.loria.fr/english/
+%     är ett fylligt arkiv av länkar till LaTeX-dokument på Internet
+%
+% Min personliga favorit är dock manualen "The Not So Short Introduction to
+% LaTeX2e", som finns i DVI-format på ~bergner/LaTeX/lshort2e.dvi
+% Där står i princip allt man behöver veta. Det är bara att använda xdvi och
+% titta efter det du söker, vilket oftast finns där.
+% Om du, precis som jag, vill kunna leka med många kommandon i LaTeX finns en
+% "LaTeX Command Summary" på ~bergner/LaTeX/latexcmds.ps
