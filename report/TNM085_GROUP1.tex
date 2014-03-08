@@ -16,6 +16,7 @@
 \usepackage{amssymb, graphicx, fancyheadings}
 \usepackage{graphicx}
 \usepackage{listings}
+% Ursäkta lite bloat men det behövs för att få highlighting på GLSL
 \lstdefinelanguage{GLSL}
 {
 sensitive=true,
@@ -452,19 +453,36 @@ Marcus Nygren, marny568}
 		
 		\Subsubsection{Metod}
 		
-		För GPU-implementeringen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
+		För GPU-implementationen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för att styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
-		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. Utöver hastigheten behövde också 3d-texturer för andra storheter skapas. Nedan visas de storheter som användes och hur många komponenter som behövdes för varje voxel.
+		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen: 
+\begin{lstlisting}[language=C++]
+void glTexImage3D(GLenum target,
+ 	GLint level,
+ 	GLint internalFormat,
+ 	GLsizei width,
+ 	GLsizei height,
+ 	GLsizei depth,
+ 	GLint border,
+ 	GLenum format,
+ 	GLenum type,
+ 	const GLvoid * data);
+\end{lstlisting}
+De parametrar som kontrollerar antalet komponenter är internalFormat och format. Nedan visas en tabell över de texturer som användes, hur många komponenter de hade och vilka värden som användes på de ovan nämnda parametrarna.
 
-		<Lägg till tabell från Google Drive här.>
+\begin{center}
+	 \begin{tabular}{| l | l | l | l |}
+	 \hline
+		Storhet & Komponenter & internalFormat & format \\ \hline
+		Hastighet & 3 & GL\_RGB16F & GL\_RGB \\ \hline
+		Densitet & 3 & GL\_RGB16F & GL\_RGB \\ \hline
+		Tryck & 1 & GL\_R16F & GL\_RED \\ \hline
+		Divergens & 3 & GL\_RGB16F & GL\_RGB \\ \hline
+		Temperatur & 1 & GL\_R16F & GL\_RED \\ \hline
+	\end{tabular}
+\end{center}
+För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}. \\
 
-		Av praktiska skäl lades det till en extra komponent på de texturer som egentligen bara skulle behöva en. Detta beror på att vissa maskiner visade sig ha problem med att nyttja texturer som bara har en komponent. I implementationen gör detta ingen skillnad då enbart första komponenten används. Ytligare en detalj i tillämpningen är att det för de flesta storheterna behövdes två texturer. Detta berodde på att när en storhet ska uppdateras behövdes en textur att skriva till samt en att läsa ifrån.
-
-		Som tidigare beskrivits delades Navier-Stokes ekvationer upp i mindre delar som kan lösas sekventiellt.  Varje del implementerades som ett shader-program i GLSL .
-
-		Det krävs två gränssnitt (programmeringsspråk) för att implementera beräkningar på GPU. Det första ligger på applikationsnivå och 
-
-		Nackdelen blir att minnesåtgången dubblas för de berörda texturerna dock kommer minneslagring inte att vara en flaskhals för programmet.
 		
 	\Section{Grafisk implementation}
 
@@ -547,9 +565,14 @@ void main()
 
 	\newpage
 	\begin{thebibliography}{9}
-		\bibitem{pfleeger10softwareengineering}
-			%Exempelreferens
-		  	Shari Lawrence Pfleeger och Joanne M. Atlee, \emph{Software Engineering, Fourth Edition, International Edition}, Pearson 2010  
+		\bibitem{OpenGLSuperBible}
+		Graham Sellers, Richard S. Wright, Jr. och Nicholas Haemel, \emph{OpenGL Super Bible, Sixth Edition}, Addison-Wesley 2013
+		\bibitem{GPUGems1}
+		Mark J. Harris \emph{Fast Fluid Dynamics Simulation on the GPU, GPU Gems, sida 637, Chapter 38}, NVIDIA och Addison-Wesley 2004
+	   \bibitem{GPUGems3}
+	   Keenan Crane, Ignacio Llamas och Sarah Tariq \emph{Real-Time Simulation and Rendering of 3D Fluids, GPU Gems 3, Chapter 30, http://http.developer.nvidia.com/GPUGems3/gpugems3\_ch30.html}, NVIDIA 2007
+	   \bibitem{Grasshopper}
+	   Philip Rideout \emph{Simple Fluid Simulation, http://prideout.net/blog/?p=58}, The Little Grasshopper 2010
 	\end{thebibliography}
 		
 	\newpage
