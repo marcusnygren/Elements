@@ -405,8 +405,12 @@ Marcus Nygren, marny568}
 
 		
 		\Subsection{Implementation av Navier-stokes ekvationer}
-		För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
+	\\
+	\\
+		Mer teori och bakgrund finns hämta  i <Nvidia referens>.
+
 	\begin{center}
 		\begin{equation}\label{eq:Navier-stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
@@ -419,6 +423,7 @@ Marcus Nygren, marny568}
 			\nabla \cdot \bold u = 0
 		\end{equation}
 	\end{center}
+	
 	
 	
 	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
@@ -442,7 +447,27 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold Ax = b $, där $\bold A $ 
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Det innebär att metoden först kräver en gissad lösning och för att den sedan ska kunna iterera en förbättrad lösning för varje steg som tas. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
+
+Slutligen uppdateras hastigheten med externa krafter. Det finns olika externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. Temperatur- och densitetsförändringen ges av ekvationerna $ \ref{eq:Temperatur} $ respektive $ \ref{eq:Densitet} $
+
+	\begin{center}
+		\begin{equation}\label{eq:Temperatur}
+			\frac{\partial T}{\partial t} = -(\bold u \cdot \nabla)T,			
+		\end{equation}
+	\end{center}
+	\begin{center}
+		\begin{equation}\label{eq:Densitet}
+			\frac{\partial \rho}{\partial t} = -(\bold u \cdot \nabla)\rho.	 
+		\end{equation}
+	\end{center}
+
+	Från ekvation $\ref{eq:Navier-stokes simple}$ kan den externa kraften, $ \bold f$, beräknas genom ekvation $\ref{eq:Buoyancy}$.
+	\begin{center}
+		\begin{equation}\label{eq:Buoyancy}
+			\bold f_{buoy} = - \alpha\rho\bold z + \beta(T-T_{amb})\bold z	 
+		\end{equation}
+	\end{center}
 
 
 
