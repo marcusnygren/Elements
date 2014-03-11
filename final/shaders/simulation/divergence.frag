@@ -27,37 +27,20 @@ void main()
   vec3 zUpO = texelFetchOffset(obstacleTexture, pos, 0, ivec3(0, 0, 1)).xyz;
   vec3 zDownO = texelFetchOffset(obstacleTexture, pos, 0, ivec3(0, 0, -1)).xyz;
 
-  // float obsVelocity = -1;
-
   if (xUpO.x > 0)
-    xUpV = -xUpV;
+    xUpV = 0;
   if (xDownO.x > 0)
-    xDownV = -xDownV;
+    xDownV = 0;
 
   if (yUpO.x > 0)
-    yUpV = -yUpV;
+    yUpV = 0;
   if (yDownO.x > 0)
-    yDownV = -yDownV;
+    yDownV = 0;
 
   if (zUpO.x > 0)
-    zUpV = -zUpV;
+    zUpV = 0;
   if (xDownO.z > 0)
-    zDownV = -zDownV;
-
-  // if (xUpO.x > 0)
-  //   xUpV = obsVelocity;
-  // if (xDownO.x > 0)
-  //   xDownV = obsVelocity;
-
-  // if (yUpO.x > 0)
-  //   yUpV = obsVelocity;
-  // if (yDownO.x > 0)
-  //   yDownV = obsVelocity;
-
-  // if (zUpO.x > 0)
-  //   zUpV = obsVelocity;
-  // if (xDownO.z > 0)
-  //   zDownV = obsVelocity;
+    zDownV = 0;
 
     value = (xUpV.x - xDownV.x + yUpV.y - yDownV.y + zUpV.z - zDownV.z) / (2 * cellSize);
 }

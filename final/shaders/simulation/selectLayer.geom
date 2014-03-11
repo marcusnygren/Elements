@@ -9,7 +9,7 @@ out float layer;
 void main()
 {
     gl_Layer = layerInstance[0];
-    layer = float(gl_Layer) + 0.5; // Drift in z. Kanske ?? ta bort eller?
+    layer = float(gl_Layer) + 0.5; // Fixning drift in z
 
     gl_Position = gl_in[0].gl_Position;
     EmitVertex();
@@ -18,6 +18,4 @@ void main()
     gl_Position = gl_in[2].gl_Position;
     EmitVertex();
     EndPrimitive();
-
-    // Approved
 }
