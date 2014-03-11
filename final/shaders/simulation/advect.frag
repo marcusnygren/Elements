@@ -20,11 +20,8 @@ void main(void)
     value = vec4(0);
     return;
   }
-  // value = vec4(0,1,0,1);
+
   vec3 velocity = texture(velocityTexture, fragPos * dxyz).xyz;
   vec3 pos = (fragPos - velocity * timeStep);
   value = texture(sourceTexture, pos * dxyz);
-
-
-  // Approved
 }

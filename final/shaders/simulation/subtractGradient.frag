@@ -81,9 +81,8 @@ void main()
   }
 
   vec3 velocity = texelFetch(velocityTexture, pos, 0).xyz;
-  vec3 pressureGradient = vec3(xUpP - xDownP, yUpP - yDownP, zUpP - zDownP) * 0.9; // ska vara gridscale
+  vec3 pressureGradient = vec3(xUpP - xDownP, yUpP - yDownP, zUpP - zDownP) * 0.9;
   vec3 subtractedVelocity = velocity - pressureGradient;
   value = (mask * subtractedVelocity) + obstacleVelocity;
-  // value = subtractedVelocity;
 
 }
