@@ -16,6 +16,7 @@
 \usepackage{amssymb, graphicx, fancyheadings}
 \usepackage{graphicx}
 \usepackage{listings}
+ \usepackage{float}
 % Ursäkta lite bloat men det behövs för att få highlighting på GLSL
 \lstdefinelanguage{GLSL}
 {
@@ -482,15 +483,12 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 	MATLAB är ett verktyg med inbyggda kommandon som underlättar framför allt beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras för förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. Däremot är det ett verktyg för den som vill lösa och förstå dem vanligaste problemen som kan uppstå vid simulering av flöde.
 
 		\Subsection{OpenGL/GLSL}
-		\Subsubsection{Introduktion}
 		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
-		
-		\Subsubsection{Metod}
 		
 		För GPU-implementationen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för att styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
-		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen: 
-\begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3d-textur.}]
+		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen i listning~\ref{lst::texImage}. 
+\begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3d-textur.}, label = {lst::texImage}]
 void glTexImage3D(GLenum target,
  	GLint level,
  	GLint internalFormat,
@@ -502,12 +500,12 @@ void glTexImage3D(GLenum target,
  	GLenum type,
  	const GLvoid * data);
 \end{lstlisting}
-De parametrar som kontrollerar antalet komponenter är internalFormat och format. Nedan visas en tabell över de texturer som användes, hur många komponenter de hade och vilka värden som användes på de ovan nämnda parametrarna.
+De parametrar som kontrollerar antalet komponenter är internalFormat och format. I tabell~\ref{tbl:texturer} visas en lista över de texturer som användes, hur många komponenter de hade och vilka värden som användes på de ovan nämnda parametrarna.
 
-
-\begin{table}
+\begin{table}[h]
 \begin{center}
 \caption{Lista över de olika texturerna som används.}
+\label{tbl:texturer}
 	 \begin{tabular}{| l | l | l | l |}
 	 \hline
 		Storhet & Komponenter & internalFormat & format \\ \hline
@@ -523,10 +521,11 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}.
 En implementations specifik detalj är att de storheter som behöver uppdateras när simuleringen körs behövde lagras i två texturer, en att läsa från och en att skriva till. 
 
-För att kunna representera hinder användes ytligare en 3d-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder.  
+För att kunna representera hinder användes ytligare en 3d-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
 
 
-De beräkningar som beskrevs under Numerisk implementation som programmet behövde utföra implementerades som shader-program för att köras på grafikkort. Advektions-termen 
+De beräkningar som beskrevs under Numerisk implementation som programmet behövde utföra implementerades som shader-program för att köras på grafikkort.
+Advektions-termen implementerades i en shader som beräknade det nya värdet på en plats i volymen genom att använda Eulers implicita metod. Den här shadern utnyttjade även 
 		
 	\Section{Grafisk implementation}
 
@@ -541,24 +540,22 @@ För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. De
 		Inom projektet utvecklades fortfarande ett fungerande GUI som visade på funktionaliteten att användaren via interaktion med till exempel knappar kan kommunicera med C++-lagret. Tyvärr används inte denna implementation alls i resultatet av projektet, då vårt slutgiltiga bibliotek GLFW och Qt inte är kompatibla med varandra. Det skulle vara möjligt att använda Qt, förutsatt att man i början av projektet lägger mycket tid på att abstrahera C++-applikationen och Qt-gränssnittet, och anpassar sig efter de förutsättningar som finns.
 				
 
-%		\begin{figure}[ht!]
-%			\centering
-%			\includegraphics[width=90mm]{QtGui}
-%			\caption{Användargränsnittet skapat i Qt som inte kom med till slutresultatet}
-%			\label{QtGui}
-%		\end{figure}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=90mm]{report_images/QtGui}
+			\caption{Användargränsnittet skapat i Qt som inte kom med till slutresultatet}
+			\label{fig:QtGui}
+		\end{figure}
 		
 		\Subsection{GLFW}
 		
-		\Subsection{Introduktion}
 		GLFW är ett plattformsoberoende fönsterhanterings-ramverk utan onödiga finesser. GLFW har inte något inbyggt stöd för att göra GUI, men är ett mycket uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det som GLFW kan sköta är fönsterhantering och inmatning från bland annat mus och tangentbord.
 		
-		\Subsection{Metod}
 		När GLFW används vid utveckling av en OpenGL-applikationer behövs först ett annat ramverk för att ladda de OpenGL-funktioner som finns tillgängliga på systemet. För detta ändamål användes GLEW. I den här rapporten kommer inte GLEW att beskrivas i detalj. Det finns många bibliotek med samma funktionalitet och valet mellan dessa spelar inte någon större roll.
 
-		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela viewporten. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns nedan:
+		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela \textit{viewport}:en. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns i listning~\ref{lst:vizShader}.
 
-\begin{lstlisting}[language=GLSL, caption={Fragment-shader för att visualisera ett lager ut en 3d-textur.}]
+\begin{lstlisting}[language=GLSL, caption={Fragment-shader för att visualisera ett lager ur en 3d-textur.}, label = {lst:vizShader}]
 out vec3 color;
 uniform sampler3D tex;
 uniform float layer;
@@ -573,16 +570,14 @@ void main()
 \end{lstlisting} 
 
 
-		\Subsection{Diskussion}
 		Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
 		Resultat
 		
 		Nedan visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
 
-		\Subsection{Resultat}
 		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
 	
-	\begin{figure}[h]
+	\begin{figure}[H]
     	\centering
     	\includegraphics[width=\linewidth]{report_images/resultat.png}
     	\caption{Resultat av simuleringen.}
@@ -607,7 +602,7 @@ void main()
 
 	\Section{Slutsats}
 		
-		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier Stokes ekvationer är –fortfarande 2014– ett av de olösta matematiska millenieproblemen.
+		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier Stokes ekvationer är fortfarande, 2014, ett av de olösta matematiska millenieproblemen.
 
 		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes ekvationer har vi främst använt \cite{GPUGems1} som referens och för rök-implementation har vi använt \cite{Grasshopper} och \cite{Fedkiw}.
 
