@@ -408,15 +408,12 @@ Marcus Nygren, marny568}
 För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
 	\\
-	\\
-		Mer teori och bakgrund finns hämta i.
-
+		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
 	\begin{center}
 		\begin{equation}\label{eq:Navier-stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
 		\end{equation}
 	\end{center}
-	
 	Tillsammans med villkoret:
 	\begin{center}
 		\begin{equation}\label{eq:villkor}
@@ -427,15 +424,15 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 	
 	
 	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
- 	$ \bold u \cdot \nabla \bold u $ beskriver advektionen, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
+ 	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
 	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
 
 
-	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
+	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $
 	\begin{center}
 		\begin{equation}\label{eq:vektor w}
-			\bold w = \bold u + \nabla p
+			\bold w = \bold u + \nabla p.
 		\end{equation}
 	\end{center}
 	
@@ -447,11 +444,13 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Det innebär att metoden först kräver en gissad lösning och för att den sedan ska kunna iterera en förbättrad lösning för varje steg som tas. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Metoden går ut på att först initiera en gissning på en lösning av systemet och sedan iterera fram en förbättrad lösning. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
 	
 	För en fullständig lösning på Poissons ekvation krävs hantering av tryck -och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts till 0. För trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
 
-	Slutligen uppdateras hastigheten med externa krafter. Det finns olika externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. 
+	Slutligen uppdateras hastigheten med externa krafter. Det finns olika lämpliga externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. 
+	
+	% Mer om hur man tar fram temperaturen och densiteten 	
 	\iffalse
 	 Temperatur- och densitetsförändringen ges av ekvationerna $ \ref{eq:Temperatur} $ respektive $ \ref{eq:Densitet} $
 
@@ -466,14 +465,15 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 		\end{equation}
 	\end{center}
 \fi
+
 	Från ekvation $\ref{eq:Navier-stokes simple}$ kan den externa kraften, $ \bold f$, beräknas genom ekvation $\ref{eq:Buoyancy}$.
 	\begin{center}
 		\begin{equation}\label{eq:Buoyancy}
-			\bold f_{buoy} = - \alpha\rho\bold z + \beta(T-T_{amb})\bold z	
+			\bold f_{buoy} = - \alpha\rho\bold y + \beta(T-T_{amb})\bold y
 		\end{equation}
 	\end{center}
 
-
+I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att ekvationen är fysikalisk meningsfull. Temperaturen och den initiala temperaturen är $ T $ respektive $ T_{amb} $. Riktningen hos kraften är $ \bold y = (0,1,0) $
 
 
 
@@ -525,7 +525,7 @@ För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~13
 		\Subsection{Qt}
 För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad “Signals \& Slots” och kan även hantera JavaScript-funktioner.
 
-		Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
+		%Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
 
 		Inom projektet utvecklades fortfarande ett fungerande GUI som visade på funktionaliteten att användaren via interaktion med till exempel knappar kan kommunicera med C++-lagret. Tyvärr används inte denna implementation alls i resultatet av projektet, då vårt slutgiltiga bibliotek GLFW och Qt inte är kompatibla med varandra. Det skulle vara möjligt att använda Qt, förutsatt att man i början av projektet lägger mycket tid på att abstrahera C++-applikationen och Qt-gränssnittet, och anpassar sig efter de förutsättningar som finns.
 				
@@ -543,7 +543,7 @@ För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. De
 		GLFW är ett plattformsoberoende fönsterhanterings-ramverk utan onödiga finesser. GLFW har inte något inbyggt stöd för att göra GUI, men är ett mycket uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det som GLFW kan sköta är fönsterhantering och inmatning från bland annat mus och tangentbord.
 		
 		\Subsection{Metod}
-		När GLFW används vid utveckling av en OpenGL-applikationer behövs först ett annat ramverk för att ladda de OpenGL-funktioner som finns tillgängliga på systemet. För detta ändamål användes GLEW. I den här rapporten kommer inte GLEW att beskrivas i detalj. Det finns många bibliotek med samma funktionalitet och valet mellan dessa spelar inte någon större roll.
+		När GLFW används vid utveckling av en OpenGL-applikation behövs först ett annat ramverk för att ladda de OpenGL-funktioner som finns tillgängliga på systemet. För detta ändamål användes GLEW. I den här rapporten kommer inte GLEW att beskrivas i detalj. Det finns många bibliotek med samma funktionalitet och valet mellan dessa spelar inte någon större roll.
 
 		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela viewporten. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns nedan:
 
@@ -564,11 +564,11 @@ void main()
 
 		\Subsection{Diskussion}
 		Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
-		Resultat
+		
+		\Subsection{Resultat}
 		
 		Nedan visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
 
-		\Subsection{Resultat}
 		I figur 1 visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
 
 		<Lägg in resultat-bild här>
