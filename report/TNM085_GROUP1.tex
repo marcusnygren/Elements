@@ -409,7 +409,7 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 	ekvation $ \ref{eq:Navier-stokes simple} $
 	\\
 	\\
-		Mer teori och bakgrund finns hämta  i <Nvidia referens>.
+		Mer teori och bakgrund finns hämta i.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-stokes simple}
@@ -427,12 +427,12 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 	
 	
 	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
- 	$ \bold u \cdot \nabla \bold u $ beskriver 	förflyttningen av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
+ 	$ \bold u \cdot \nabla \bold u $ beskriver advektionen, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
 	
-	Den första komponenten som beräknas är förflyttningen. Förlyttning av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Förflyttningen sker genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
 
 
-	När förflyttning har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
+	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
 	\begin{center}
 		\begin{equation}\label{eq:vektor w}
 			\bold w = \bold u + \nabla p
@@ -592,7 +592,7 @@ void main()
 		
 		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier Stokes ekvationer är –fortfarande 2014– ett av de olösta matematiska millenieproblemen.
 
-		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes har vi främst använt <Nvidia-länk> som referens, för rök-implementation av Navier-Stokes har vi främst använt <Grasshopper-länk> och <Visual Simulation of Smoke-länk>.
+		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes ekvationer har vi främst använt \cite{GPUGems1} som referens och för rök-implementation har vi använt \cite{Grasshopper} och \cite{Fedkiw}.
 
 		Förutom referenserna på nästa sida vill vi även tacka vår kurshandledare Anna Lombardi.
 
@@ -600,6 +600,8 @@ void main()
 	\begin{thebibliography}{9}
 		\bibitem{OpenGLSuperBible}
 		Graham Sellers, Richard S. Wright, Jr. och Nicholas Haemel, \emph{OpenGL Super Bible, Sixth Edition}, Addison-Wesley 2013
+		\bibitem{Fedkiw}
+		Ronald Fedkiw, Jos Stam och Henrik Wann Jensen, \emph{Visual Simulation of Smoke}, ACM SIGGRAPH 2001
 		\bibitem{GPUGems1}
 		Mark J. Harris \emph{Fast Fluid Dynamics Simulation on the GPU, GPU Gems, sida 637, Chapter 38}, NVIDIA och Addison-Wesley 2004
 	   \bibitem{GPUGems3}
