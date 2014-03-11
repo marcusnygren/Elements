@@ -516,7 +516,12 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 \end{table}
 
 För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}.
+En implementations specifik detalj är att de storheter som behöver uppdateras när simuleringen körs behövde lagras i två texturer, en att läsa från och en att skriva till. 
 
+För att kunna representera hinder användes ytligare en 3d-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder.  
+
+
+De beräkningar som beskrevs under Numerisk implementation som programmet behövde utföra implementerades som shader-program för att köras på grafikkort. Advektions-termen 
 		
 	\Section{Grafisk implementation}
 
@@ -524,7 +529,7 @@ För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~13
 		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
 		
 		\Subsection{Qt}
-För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad “Signals \& Slots” och kan även hantera JavaScript-funktioner.
+För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 
 		Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
 
