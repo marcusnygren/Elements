@@ -448,8 +448,12 @@ För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekv
 	\end{center}
 	
 	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Det innebär att metoden först kräver en gissad lösning och för att den sedan ska kunna iterera en förbättrad lösning för varje steg som tas. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
+	
+	För en fullständig lösning på Poissons ekvation krävs hantering av tryck -och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts till 0. För trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
 
-Slutligen uppdateras hastigheten med externa krafter. Det finns olika externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. Temperatur- och densitetsförändringen ges av ekvationerna $ \ref{eq:Temperatur} $ respektive $ \ref{eq:Densitet} $
+	Slutligen uppdateras hastigheten med externa krafter. Det finns olika externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. 
+	\iffalse
+	 Temperatur- och densitetsförändringen ges av ekvationerna $ \ref{eq:Temperatur} $ respektive $ \ref{eq:Densitet} $
 
 	\begin{center}
 		\begin{equation}\label{eq:Temperatur}
@@ -461,19 +465,20 @@ Slutligen uppdateras hastigheten med externa krafter. Det finns olika externa kr
 			\frac{\partial \rho}{\partial t} = -(\bold u \cdot \nabla)\rho.	 
 		\end{equation}
 	\end{center}
-
+\fi
 	Från ekvation $\ref{eq:Navier-stokes simple}$ kan den externa kraften, $ \bold f$, beräknas genom ekvation $\ref{eq:Buoyancy}$.
 	\begin{center}
 		\begin{equation}\label{eq:Buoyancy}
-			\bold f_{buoy} = - \alpha\rho\bold z + \beta(T-T_{amb})\bold z	 
+			\bold f_{buoy} = - \alpha\rho\bold z + \beta(T-T_{amb})\bold z	
 		\end{equation}
 	\end{center}
 
 
 
 
+
 		\Subsection{Matlab}
-		\emph{Allt vi gjort i Matlab och vad vi kom fram till med hjälp av detta. Varför använde vi Matlab? Fanns det andra metoder att gå tillväga? Hur fick vi över ekvationerna till Matlab?}
+	MATLAB är ett verktyg med inbyggda kommandon som underlättar framför allt beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras för förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. Däremot är det ett verktyg för den som vill lösa och förstå dem vanligaste problemen som kan uppstå vid simulering av flöde.
 
 		\Subsection{OpenGL/GLSL}
 		\Subsubsection{Introduktion}
