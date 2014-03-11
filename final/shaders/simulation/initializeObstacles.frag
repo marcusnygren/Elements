@@ -24,13 +24,4 @@ void main()
     value = vec3(0,0,0);
   }
 
-  // if (layer > 0 && layer < 70)
-  //   value = vec4(0,1,0,1);
-  // else
-  //   value =  vec4(1,0,0,1);
-
- // value =  vec4(1,0,0,1);
-
-  // value = vec4(gl_FragCoord.x / 100,gl_FragCoord.y / 100,0,1);
-
 }
