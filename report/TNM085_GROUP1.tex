@@ -103,6 +103,7 @@ morecomment=[l]{//},
 morecomment=[s]{/*}{*/},
 morecomment=[l][keywordstyle4]{\#},
 }
+\renewcommand*{\lstlistingname}{Listning}
 \addtolength{\textheight}{20mm}
 \addtolength{\voffset}{-5mm}
 \renewcommand{\sectionmark}[1]{\markleft{#1}}
@@ -484,7 +485,7 @@ Slutligen uppdateras hastigheten med externa krafter. Det finns olika externa kr
 		För GPU-implementationen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för att styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
 		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen: 
-\begin{lstlisting}[language=C++]
+\begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3d-textur.}]
 void glTexImage3D(GLenum target,
  	GLint level,
  	GLint internalFormat,
@@ -498,7 +499,10 @@ void glTexImage3D(GLenum target,
 \end{lstlisting}
 De parametrar som kontrollerar antalet komponenter är internalFormat och format. Nedan visas en tabell över de texturer som användes, hur många komponenter de hade och vilka värden som användes på de ovan nämnda parametrarna.
 
+
+\begin{table}
 \begin{center}
+\caption{Lista över de olika texturerna som används.}
 	 \begin{tabular}{| l | l | l | l |}
 	 \hline
 		Storhet & Komponenter & internalFormat & format \\ \hline
@@ -509,7 +513,9 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 		Temperatur & 1 & GL\_R16F & GL\_RED \\ \hline
 	\end{tabular}
 \end{center}
-För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}. \\
+\end{table}
+
+För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}.
 
 		
 	\Section{Grafisk implementation}
@@ -542,7 +548,7 @@ För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. De
 
 		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela viewporten. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns nedan:
 
-\begin{lstlisting}[language=GLSL]
+\begin{lstlisting}[language=GLSL, caption={Fragment-shader för att visualisera ett lager ut en 3d-textur.}]
 out vec3 color;
 uniform sampler3D tex;
 uniform float layer;
