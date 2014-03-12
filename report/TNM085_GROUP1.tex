@@ -225,13 +225,11 @@ Marcus Nygren, marny568}
 %		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
 		
-	\Section{Fysikalisk beskrivning}
+	\Section{Modellering}
 
-	<Sammanfattning av samtliga steg/viktiga punkter nedan, ge snabb överblick>
-	
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $. RTT säger att summan av en fysisk egenskap, $ \psi  $, definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor.
-	
+		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
+		
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
 			\bold \varrho \left ( \frac{\partial }{\partial t} \bold u + \bold u \cdot \nabla \bold u \right ) 
@@ -242,6 +240,19 @@ Marcus Nygren, marny568}
 		
 		\begin{equation}\label{eq:Konservering av massa}
 		 	\nabla \cdot \bold u = 0 
+		\end{equation}
+	\end{center}
+			
+	\Subsection{Konservering av energi}
+		 RTT säger att summan av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $ för att bevara energin.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Orginal}
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V  
+			+ \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
+			+ \int_{\Omega}^{ } \chi \ \mathrm{d}V
+			=
+			0
 		\end{equation}
 	\end{center}
 
@@ -284,7 +295,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
@@ -309,7 +320,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
+	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, se ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
 	
 	
 	\Subsection{Konservering av rörelsemängd}
@@ -361,7 +372,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. $ \sigma $ är Cauchys spänningstensor och kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är tryck, $ I $ är identitesmatrisen, 
+	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. 
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
@@ -386,21 +397,101 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter.
+	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är minus medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitesmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes ekvation.
 		
-		
-	\Subsection{Konservering av energi}
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 7}
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \sigma + \bold f
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 8}
+		 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \left ( -pI +  \bold \Gamma \right ) + \bold f
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 9}
+	 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			- \nabla p + \nabla \cdot \bold \Gamma  + \bold f
+		\end{equation}
+	\end{center}
+	
+
 	
 	\Subsection{Val av beräkningsmetod}
 	
-	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Till skillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger inte det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet, temperatur, beräknas i varje given punkt.
-
+	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+	
 	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 	
-		\Subsection{Modellering}
-		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
 		
-		Modell för inkompressibel homogen fluid:		
+	
+		\Subsection{Förstudie}
+		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
+		
+		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
+		
+För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+	ekvation $ \ref{eq:Navier-stokes simple} $
+	\begin{center}
+		\begin{equation}\label{eq:Navier-stokes simple}
+			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
+		\end{equation}
+	\end{center}
+	
+	Tillsammans med villkoret:
+	\begin{center}
+		\begin{equation}\label{eq:villkor}
+			\nabla \cdot \bold u = 0
+		\end{equation}
+	\end{center}
+	
+	
+	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
+ 	$ \bold u \cdot \nabla \bold u $ beskriver 	förflyttningen av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
+	
+	Den första komponenten som beräknas är förflyttningen. Förlyttning av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Förflyttningen sker genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+
+
+	När förflyttning har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
+	\begin{center}
+		\begin{equation}\label{eq:vektor w}
+			\bold w = \bold u + \nabla p
+		\end{equation}
+	\end{center}
+	
+	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Poissons ekvation}
+			\nabla ^2 p = \nabla \cdot \bold w 
+		\end{equation}
+	\end{center}
+	
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Det innebär att metoden först kräver en gissad lösning och för att den sedan ska kunna iterera en förbättrad lösning för varje steg som tas. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
+
+Slutligen uppdateras hastigheten med externa krafter. I många verklighetsscenrion finns det olika krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. Temperatur- och densitetsförändringen ges av 
+
+	\begin{center}
+		\begin{equation}\label{eq:Temperatur}
+			\frac{\partial T}{\partial t} = -(\bold u \cdot \nabla)T,			
+		\end{equation}
+	\end{center}
+		\begin{center}
+	\begin{equation}\label{eq:Densitet}
+			\frac{\partial \rho}{\partial t} = -(\bold u \cdot \nabla)\rho.	 
+		\end{equation}
+	\end{center}
 
 	\Section{Numerisk implementation}
 
