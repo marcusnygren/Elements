@@ -488,7 +488,8 @@ I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att e
 
 		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen i listning~\ref{lst::texImage}. 
 \begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3d-textur.}, label = {lst::texImage}]
-void glTexImage3D(GLenum target,
+void glTexImage3D(
+	GLenum target,
  	GLint level,
  	GLint internalFormat,
  	GLsizei width,
@@ -517,13 +518,62 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 	\end{tabular}
 \end{center}
 \end{table}
+För att kunna representera hinder användes ytligare en 3d-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
 För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}. \\
 
-För att kunna representera hinder användes ytligare en 3d-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
+För att sedan kunna uppdatera värdena i texturerna användes så kallade \textit{Framebuffer Objects}. Med \textit{Framebuffer Objects} kunde resultatet från grafikkortets beräkningar sparas i texturer i stället för att ritas på skärmen. Varje textur binds till ett \textit{Framebuffer Object} som sedan kan aktiveras innan rendering. Ett problem som behövde hanteras var att OpenGL inte kan rendera direkt till en 3d-textur. Istället behövde texturen delas in i tvådimensionella skivor som sedan renderades till var för sig. För att uppnå maximal prestanda och minska belastningen på CPU användes OpenGL funktionen i listning~\ref{lst:drawInstanced}.
 
+\begin{lstlisting}[language=GLSL, caption={OpenGL funktion för att rendera flera instanser.}, label = {lst:drawInstanced}]
+void glDrawArraysInstanced(
+	GLenum mode,
+	GLint first,
+ 	GLsizei count,
+ 	GLsizei primcount); 
+\end{lstlisting}
 
-De beräkningar som beskrevs under Numerisk implementation som programmet behövde utföra implementerades som shader-program för att köras på grafikkort.
-Advektions-termen implementerades i en shader som beräknade det nya värdet på en plats i volymen genom att använda Eulers implicita metod. Den här shadern utnyttjade även 
+Parametern mode talar om vilken typ av primitiv som ska renderas och sattes i detta fall till GL\_TRIANGLE\_STRIP. first talar om var i vertex listan renderingen ska starta. För den parametern sattes värdet noll då renderingen skulle börja från början av listan. Eftersom det var en quad som ritades sattes count till fyra, det vill säga antalet hörnpunkter som skulle renderas. Den mest intressanta parametern är primcount då den talar om hur många instanser av som ska göras av renderingen. Då volymen delades upp i z-led sattes primcount till djupet på volymen. Vid instansrendering ökas värdet på den inbyggda vertex-shader variabel \textit{gl\_InstanceID} med ett för varje instans. För att använda den variabeln skapades en vertex-shader som sparade den till en \textit{Output} variabel och skickade den vidare till en geometry-shader. Vertex-shader visas i listning~\ref{lst:vertex}. 
+
+\begin{lstlisting}[language=GLSL, caption={Vertex-shader för att hantera instansrendering}, label = {lst:vertex}]
+layout (location = 0) in vec4 vertexPosition;
+flat out int layerInstance;
+
+void main()
+{
+  layerInstance = gl_InstanceID; 
+  gl_Position = vertexPosition;
+
+}
+\end{lstlisting}
+
+En geometry-shader behandlar, till skillnad från vertex-shader, inte enstaka hörnpunkter utan istället hela primitiver. I detta fall användes den för att koppla en instans av renderingen till rätt texturlager. Första steget var att sätta den inbyggda variabeln \textit{gl\_Layer} till värdet på den aktuella instansen. \textit{gl\_Layer} talar om för OpenGL till vilket lager i texturen som är bunden till den aktiverade \textit{Framebuffer Object} som renderingen ska ske. Nästa steg var att ta fram det värdet som skulle användas för åtkomst till ett lager i en bunden textur. Detta kunde inte vara samma som \textit{gl\_Layer} då varje voxel behandlas från centrum men värdet från en textur hämtas från kanten. Detta löstes genom att introducera en förskjutning på 0.5 till värdet på \textit{gl\_Layer}. Slutligen skickade geometry-shadern hörnpunkterna vidare till nästa steg i renderingen. Shadern visas i listning~\ref{lst:geom}.
+
+\begin{lstlisting}[language=GLSL, caption={Geometry-shader för att välja rätt texturlager.}, label = {lst:geom}]
+layout(triangles) in;
+layout(triangle_strip, max_vertices = 3) out;
+ 
+flat in int layerInstance[3];
+out float layer;
+ 
+void main()
+{
+    gl_Layer = layerInstance[0];
+    layer = float(gl_Layer) + 0.5;
+
+    for (int i = 0; i < gl_in.length(); i++)
+    {
+        gl_Position = gl_in[i].gl_Position;
+        EmitVertex();
+    }
+    EndPrimitive();
+}
+\end{lstlisting}
+
+De ovan beskrivna vertex- och geometry-shaders är gemensamma för alla beräkningar som utfördes på GPU. Varje beräkning implementerades sedan som en egen fragment-shader. Nedan följer korta beskrivningar av dessa fragment-shaders.
+
+Advektions-termen implementerades i en shader som beräknade det nya värdet på en plats i volymen genom att använda Eulers implicita metod. Med hjälp av texturen som innehöll information om hinder kunde det avgöras om en voxel låg i ett hinder och i så fall sattes värdet där till noll.
+
+För att beräkna lyftkraften som orsakas av temperaturen i volymen 
+
 		
 	\Section{Grafisk implementation}
 
@@ -531,7 +581,7 @@ Advektions-termen implementerades i en shader som beräknade det nya värdet på en
 		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
 		
 		\Subsection{Qt}
-För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad “Signals \& Slots” och kan även hantera JavaScript-funktioner.
+För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 
 		%Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
 
@@ -615,7 +665,7 @@ void main()
 	   \bibitem{GPUGems3}
 	   Keenan Crane, Ignacio Llamas och Sarah Tariq \emph{Real-Time Simulation and Rendering of 3D Fluids, GPU Gems 3, Chapter 30, http://http.developer.nvidia.com/GPUGems3/gpugems3\_ch30.html}, NVIDIA 2007
 	   \bibitem{Grasshopper}
-	   Philip Rideout \emph{Simple Fluid Simulation, http://prideout.net/blog/?p=58}, The Little Grasshopper 2010
+	   Philip Rideout \emph{Simple Fluid Simulation, http://prideout.net/blog/?p=58}, The Little Grasshopper 2010, 2014-03-11
 	\end{thebibliography}
 		
 	\newpage
