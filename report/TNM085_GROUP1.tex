@@ -513,7 +513,7 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 		Hastighet & 3 & GL\_RGB16F & GL\_RGB \\ \hline
 		Densitet & 3 & GL\_RGB16F & GL\_RGB \\ \hline
 		Tryck & 1 & GL\_R16F & GL\_RED \\ \hline
-		Divergens & 3 & GL\_RGB16F & GL\_RGB \\ \hline
+		Divergens & 1 & GL\_R16F & GL\_RED \\ \hline
 		Temperatur & 1 & GL\_R16F & GL\_RED \\ \hline
 	\end{tabular}
 \end{center}
@@ -568,12 +568,25 @@ void main()
 }
 \end{lstlisting}
 
-De ovan beskrivna vertex- och geometry-shaders är gemensamma för alla beräkningar som utfördes på GPU. Varje beräkning implementerades sedan som en egen fragment-shader. Nedan följer korta beskrivningar av dessa fragment-shaders.
+De ovan beskrivna vertex- och geometry-shaders är gemensamma för alla beräkningar som utfördes på GPU. Varje beräkning implementerades sedan som en egen fragment-shader. Nedan följer korta beskrivningar av dessa fragment-shaders i den ordning de körs i programmet. Alla konstanter som användes vid i implementationen listats i Bilaga A, tabell~\ref{tbl:konstanter}.
 
 Advektions-termen implementerades i en shader som beräknade det nya värdet på en plats i volymen genom att använda Eulers implicita metod. Med hjälp av texturen som innehöll information om hinder kunde det avgöras om en voxel låg i ett hinder och i så fall sattes värdet där till noll.
 
-För att beräkna lyftkraften som orsakas av temperaturen i volymen 
+För att beräkna lyftkraften som orsakas av temperaturen i volymen implementerades ekvation~\ref{eq:Buoyancy} i en fragment-shader. Utöver ekvation~\ref{eq:Buoyancy} implementerades även en term för rumstemperatur som gör så att en starttemperatur från början finns i hela volymen. Detta gjordes genom att jämföra om temperaturen i en punkt var mindre än rumstemperaturen och i så fall låta hastigheten vara oförändrad.
 
+Nästa steg var att lägga till källor av olika slag. Samma fragment-shader kunde användas för att lägga till olika typer av källor så som densitet och temperatur men även för att lägga till hinder. Shadern ritade en sfär med en given radie på en given plats i en textur. Genom att använda alpha-blending kunde de nya värden blandas ihop med de gamla som redan låg i texturen och på så vis ge upphov till en källa.
+
+Sedan beräknades divergensen av hastigheten, se högerledet i ekvation~\ref{eq:Poissons ekvation}. Detta beräknades med central differensen av alla omkringliggande värden ur hastgihets-texturen. Innan beräkningen utfördes kontrollerades om någon av de omkringliggande värde befann sig i ett hinder. Om så var fallet sattes hastigheten där till noll.
+
+För att beräkna trycket ur ekvation~\ref{eq:Poissons ekvation} användes som nämnt Jacobi-iteration. I en fragment-shader implementerades en iteration som sedan kördes i en loop. Kring 20 iterationer visade sig ge ett bra resultat. På samma sätt som för divergensen användes de omkringliggande värdena fast denna gång för trycket. Ekvationen för att uppdatera trycket under en iteration visas i ekvation~\ref{eq:jacobiIteration} där $ \alpha $ och $ \beta $ är konstanter, se tabell~\ref{tbl:konstanter}, och $ b_{i,j} $ är divergensen.
+
+	\begin{center}
+		\begin{equation}\label{eq:jacobiIteration}
+			p_{i,j} = (p_{x+1} + p_{x-1} + p_{y+1} + p_{y-1} + p_{z+1} + p_{z-1} + \alpha * b_{i,j}) * \beta
+		\end{equation}
+	\end{center}
+	
+Sista steget i beräkningen var att 
 		
 	\Section{Grafisk implementation}
 
@@ -672,7 +685,25 @@ void main()
 	\appendix
 
 	\Section{Bilaga}
-	\ldots{}här kan man lägga till bilagor
+	\setcounter{table}{0}
+	\renewcommand{\thetable}{A\arabic{table}}
+
+	\begin{table}[h]
+	\begin{center}
+	\caption{Lista över konstanter.}
+	\label{tbl:konstanter}
+	 	\begin{tabular}{| l | l |}
+	 	\hline
+			Konstant: & Värde: \\ \hline
+			Tidssteg & 0.1 \\ \hline
+			Lyftkraft:  $ \alpha $ & 0,0125 \\ \hline
+			Lyftkraft: $ \beta $ & 1 \\ \hline
+			Rumstemperatur & 0 \\ \hline
+			Jacobi:  $ \alpha $ & -100 \\ \hline
+			Jacobi: $ \beta $ & 0,1\\ \hline
+		\end{tabular}
+	\end{center}
+	\end{table}
 	
 	\newpage
 	\Section{Bilaga}
