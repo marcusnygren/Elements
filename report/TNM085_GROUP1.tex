@@ -220,28 +220,42 @@ Marcus Nygren, marny568}
 	\setlength{\parskip}{10pt}
 
 	\Section{Introduktion}
-		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men systemet är utformat för att i framtiden kunna byggas ut med eld och vatten samt ökad funktionalitet. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer med hjälp av att experimentera med olika interaktiva realtidssimuleringar.
+		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
 
 %		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
 		
-	\Section{Fysikalisk beskrivning}
+	\Section{Modellering}
 
-	<Sammanfattning av samtliga steg/viktiga punkter nedan, ge snabb överblick>
-	
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $. RTT säger att summan av en fysisk egenskap, $ \psi  $, definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor.
-	
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
+
+
+
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
 			\bold \varrho \left ( \frac{\partial }{\partial t} \bold u + \bold u \cdot \nabla \bold u \right ) 
-			= 
+			=
 			- \nabla p
 			+ \nabla \cdot \bold \Gamma + \bold f
 		\end{equation}	
 		
 		\begin{equation}\label{eq:Konservering av massa}
 		 	\nabla \cdot \bold u = 0 
+		\end{equation}
+	\end{center}
+
+			
+	\Subsection{Konservering av energi}
+		 RTT säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $ för att bevara energin.
+	
+	\begin{center}
+		\begin{equation}\label{eq:Reynolds Transport Theorem Orginal}
+			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V  
+			+ \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
+			+ \int_{\Omega}^{ } \chi \ \mathrm{d}V
+			=
+			0
 		\end{equation}
 	\end{center}
 
@@ -284,7 +298,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $ som blir det slutgiltliga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att appliciera det på konserverig av massa och konservering av rörelsemängd.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
@@ -298,7 +312,7 @@ Marcus Nygren, marny568}
 	
 	
 	\Subsection{Konservering av massa}
-	Här är $ \psi = \varrho $ och då det inte finns några källor eller sänkor av massa blir $ \chi  $ lika med noll, detta i enlighet med ekvation $ \ref{eq:Konservering av massa 1} $.
+	Enligt RTT blir $ \psi = \varrho $ vid konservering av massa och då det inte finns några källor eller sänkor av massa blir $ \chi = 0 $, vilket ger ekvation $ \ref{eq:Konservering av massa 1} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av massa 1}
@@ -309,11 +323,11 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
+	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, se ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
 	
 	
 	\Subsection{Konservering av rörelsemängd}
-	Från rörelsemängd, $ p = m\bold u $, fås att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
+	För rörelsemängd, $ p = m\bold u $, fås enligt RTT att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd}
@@ -361,7 +375,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. $ \sigma $ är Cauchys spänningstensor och kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är tryck, $ I $ är identitesmatrisen, 
+	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. 
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
@@ -386,43 +400,56 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter.
+	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är minus medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitesmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes ekvation.
 		
-		
-	\Subsection{Konservering av energi}
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 7}
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \sigma + \bold f
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 8}
+		 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \left ( -pI +  \bold \Gamma \right ) + \bold f
+		\end{equation}
+	\end{center}
+	
+	\begin{center}
+		\begin{equation}\label{eq:Konservering av rörelsemängd 9}
+	 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			- \nabla p + \nabla \cdot \bold \Gamma  + \bold f
+		\end{equation}
+	\end{center}
+	
+
 	
 	\Subsection{Val av beräkningsmetod}
 	
-	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Till skillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger inte det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet, temperatur, beräknas i varje given punkt.
-
-	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 	
-		\Subsection{Modellering}
-		\emph{Övergripande beskrivning kring modellerings implementationen i vårt projekt.}
-		
-		Modell för inkompressibel homogen fluid:		
+	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 	\Section{Numerisk implementation}
 
-		
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+För implementaion av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
-	\\
+
 		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
 	\begin{center}
-		\begin{equation}\label{eq:Navier-stokes simple}
+		\begin{equation}\label{eq:Navier-Stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
 		\end{equation}
 	\end{center}
-	Tillsammans med villkoret:
-	\begin{center}
-		\begin{equation}\label{eq:villkor}
-			\nabla \cdot \bold u = 0
-		\end{equation}
-	\end{center}
-	
-	
+	Tillsammans med villkoret i ekvation $\ref{eq:Konservering av massa}$
 	
 	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
@@ -478,9 +505,12 @@ I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att e
 
 
 
-		\Subsection{Matlab}
-	MATLAB är ett verktyg med inbyggda kommandon som underlättar framför allt beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras för förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. Däremot är det ett verktyg för den som vill lösa och förstå dem vanligaste problemen som kan uppstå vid simulering av flöde.
-
+		\Subsection{Simulering i Matlab}
+	MATLAB är ett verktyg med inbyggda kommandon som underlättar  beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras som en förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. 
+\\
+\\	
+I MATLAB användes samma steg som beskrivs i avsnitt 3.1 Implementation av Navier-Stokes ekvationer. Till skillnad från simuleringen som beskrivs i avsnitt 3.3 OpenGL/GLSL, simplifierades det visuella utseendet för att lösa och förstå dem numeriska problem som kunde uppstå. Simuleringen visade att tidsteget gav varierande resultat och var känslig för mindre ändringar. Det insågs också att $ \alpha $ och $ \beta $ i ekvation $ \ref{eq:Buoyancy} $ har en kraftig påverkan på ekvationen. 
+	
 		\Subsection{OpenGL/GLSL}
 		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
 		
@@ -631,7 +661,7 @@ void main()
 \end{lstlisting} 
 
 
-		Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
+	Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
 		
 
 		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
@@ -661,7 +691,7 @@ void main()
 
 	\Section{Slutord}
 		
-		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier Stokes ekvationer är fortfarande, 2014, ett av de olösta matematiska millenieproblemen.
+		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier-Stokes ekvationer är fortfarande, 2014, ett av de olösta matematiska millenieproblemen.
 
 		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes ekvationer har vi främst använt \cite{GPUGems1} som referens och för rök-implementation har vi använt \cite{Grasshopper} och \cite{Fedkiw}.
 
