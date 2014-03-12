@@ -440,19 +440,15 @@ Marcus Nygren, marny568}
 		\Subsection{Implementation av Navier-stokes ekvationer}
 För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
-	\\
+
 		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
 	\begin{center}
 		\begin{equation}\label{eq:Navier-stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
 		\end{equation}
 	\end{center}
-	Tillsammans med villkoret:
-	\begin{center}
-		\begin{equation}\label{eq:villkor}
-			\nabla \cdot \bold u = 0
-		\end{equation}
-	\end{center}
+	Tillsammans med villkoret i ekvation $\ref{eq:Konservering av massa}$
+
 	
 	
 	
@@ -510,9 +506,9 @@ I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att e
 
 
 
-		\Subsection{Matlab}
-	MATLAB är ett verktyg med inbyggda kommandon som underlättar  beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras för förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. Däremot är det ett verktyg för den som vill lösa och förstå dem vanligaste problemen som kan uppstå vid simulering av flöde.
-
+		\Subsection{Simulering i Matlab}
+	MATLAB är ett verktyg med inbyggda kommandon som underlättar  beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras som en förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. I MATLAB användes samma steg som beskrivs i avsnitt 3. 
+	
 		\Subsection{OpenGL/GLSL}
 		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
 		
