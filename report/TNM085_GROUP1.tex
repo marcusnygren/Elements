@@ -436,87 +436,20 @@ Marcus Nygren, marny568}
 	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 	
 	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
-	
-		
-	
-		\Subsection{Förstudie}
-		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
-		
-		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
-		
-För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
-	ekvation $ \ref{eq:Navier-stokes simple} $
-	\begin{center}
-		\begin{equation}\label{eq:Navier-stokes simple}
-			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
-		\end{equation}
-	\end{center}
-	
-	Tillsammans med villkoret:
-	\begin{center}
-		\begin{equation}\label{eq:villkor}
-			\nabla \cdot \bold u = 0
-		\end{equation}
-	\end{center}
-	
-	
-	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
- 	$ \bold u \cdot \nabla \bold u $ beskriver 	förflyttningen av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
-	
-	Den första komponenten som beräknas är förflyttningen. Förlyttning av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Förflyttningen sker genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
-
-
-	När förflyttning har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
-	\begin{center}
-		\begin{equation}\label{eq:vektor w}
-			\bold w = \bold u + \nabla p
-		\end{equation}
-	\end{center}
-	
-	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
-	
-	\begin{center}
-		\begin{equation}\label{eq:Poissons ekvation}
-			\nabla ^2 p = \nabla \cdot \bold w 
-		\end{equation}
-	\end{center}
-	
-	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Det innebär att metoden först kräver en gissad lösning och för att den sedan ska kunna iterera en förbättrad lösning för varje steg som tas. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
-
-Slutligen uppdateras hastigheten med externa krafter. I många verklighetsscenrion finns det olika krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. Temperatur- och densitetsförändringen ges av 
-
-	\begin{center}
-		\begin{equation}\label{eq:Temperatur}
-			\frac{\partial T}{\partial t} = -(\bold u \cdot \nabla)T,			
-		\end{equation}
-	\end{center}
-		\begin{center}
-	\begin{equation}\label{eq:Densitet}
-			\frac{\partial \rho}{\partial t} = -(\bold u \cdot \nabla)\rho.	 
-		\end{equation}
-	\end{center}
 
 	\Section{Numerisk implementation}
 
-		
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+För implementaion av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
-	\\
+
 		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
 	\begin{center}
-		\begin{equation}\label{eq:Navier-stokes simple}
+		\begin{equation}\label{eq:Navier-Stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
 		\end{equation}
 	\end{center}
-	Tillsammans med villkoret:
-	\begin{center}
-		\begin{equation}\label{eq:villkor}
-			\nabla \cdot \bold u = 0
-		\end{equation}
-	\end{center}
-	
-	
+	Tillsammans med villkoret i ekvation $\ref{eq:Konservering av massa}$
 	
 	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
@@ -572,9 +505,12 @@ I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att e
 
 
 
-		\Subsection{Matlab}
-	MATLAB är ett verktyg med inbyggda kommandon som underlättar framför allt beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras för förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. Däremot är det ett verktyg för den som vill lösa och förstå dem vanligaste problemen som kan uppstå vid simulering av flöde.
-
+		\Subsection{Simulering i Matlab}
+	MATLAB är ett verktyg med inbyggda kommandon som underlättar  beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras som en förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. 
+\\
+\\	
+I MATLAB användes samma steg som beskrivs i avsnitt 3.1 Implementation av Navier-Stokes ekvationer. Till skillnad från simuleringen som beskrivs i avsnitt 3.3 OpenGL/GLSL, simplifierades det visuella utseendet för att lösa och förstå dem numeriska problem som kunde uppstå. Simuleringen visade att tidsteget gav varierande resultat och var känslig för mindre ändringar. Det insågs också att $ \alpha $ och $ \beta $ i ekvation $ \ref{eq:Buoyancy} $ har en kraftig påverkan på ekvationen. 
+	
 		\Subsection{OpenGL/GLSL}
 		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
 		
@@ -742,7 +678,7 @@ void main()
 
 	\Section{Slutord}
 		
-		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier Stokes ekvationer är fortfarande, 2014, ett av de olösta matematiska millenieproblemen.
+		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier-Stokes ekvationer är fortfarande, 2014, ett av de olösta matematiska millenieproblemen.
 
 		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes ekvationer har vi främst använt \cite{GPUGems1} som referens och för rök-implementation har vi använt \cite{Grasshopper} och \cite{Fedkiw}.
 
