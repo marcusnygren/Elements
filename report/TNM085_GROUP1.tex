@@ -220,7 +220,7 @@ Marcus Nygren, marny568}
 	\setlength{\parskip}{10pt}
 
 	\Section{Introduktion}
-		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men systemet är utformat för att i framtiden kunna byggas ut med eld och vatten samt ökad funktionalitet. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer med hjälp av att experimentera med olika interaktiva realtidssimuleringar.
+		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
 
 %		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
@@ -228,12 +228,14 @@ Marcus Nygren, marny568}
 	\Section{Modellering}
 
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvationer, se ekvation $ \ref{eq:Navier-Stokes} $ och $ \ref{eq:Konservering av massa} $, som modellerar en fluid ser på fluiden som en kontinuerlig substans där hela volymen studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
 		
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, referas i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
+
+
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
 			\bold \varrho \left ( \frac{\partial }{\partial t} \bold u + \bold u \cdot \nabla \bold u \right ) 
-			= 
+			=
 			- \nabla p
 			+ \nabla \cdot \bold \Gamma + \bold f
 		\end{equation}	
@@ -242,9 +244,10 @@ Marcus Nygren, marny568}
 		 	\nabla \cdot \bold u = 0 
 		\end{equation}
 	\end{center}
+
 			
 	\Subsection{Konservering av energi}
-		 RTT säger att summan av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $ för att bevara energin.
+		 RTT säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $ för att bevara energin.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Orginal}
@@ -295,7 +298,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $ som blir det slutgiltliga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att appliciera det på konserverig av massa och konservering av rörelsemängd.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
@@ -309,7 +312,7 @@ Marcus Nygren, marny568}
 	
 	
 	\Subsection{Konservering av massa}
-	Här är $ \psi = \varrho $ och då det inte finns några källor eller sänkor av massa blir $ \chi  $ lika med noll, detta i enlighet med ekvation $ \ref{eq:Konservering av massa 1} $.
+	Enligt RTT blir $ \psi = \varrho $ vid konservering av massa och då det inte finns några källor eller sänkor av massa blir $ \chi = 0 $, vilket ger ekvation $ \ref{eq:Konservering av massa 1} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av massa 1}
@@ -324,7 +327,7 @@ Marcus Nygren, marny568}
 	
 	
 	\Subsection{Konservering av rörelsemängd}
-	Från rörelsemängd, $ p = m\bold u $, fås att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
+	För rörelsemängd, $ p = m\bold u $, fås enligt RTT att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd}
