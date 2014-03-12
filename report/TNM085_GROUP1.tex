@@ -433,65 +433,6 @@ Marcus Nygren, marny568}
 	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 	
 	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
-	
-		
-	
-		\Subsection{Förstudie}
-		\emph{Vad gjorde vi för research innan vi började hacka. Ekvationer? Förenklingar?}
-		
-		Vi spenderade mycket tid på att förstå ekvationerna och läsa litteratur om såväl teori som implementation. Flera i gruppen härledde också delar av ekvationerna för att förstå förenklingar och val utifrån originalekvationen. Ekvationen beskriver ett inkompressibelt flöde; Alltså ett flöde där volymen är oföränderlig.
-		
-För implementaion av Navier-stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
-	ekvation $ \ref{eq:Navier-stokes simple} $
-	\begin{center}
-		\begin{equation}\label{eq:Navier-stokes simple}
-			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
-		\end{equation}
-	\end{center}
-	
-	Tillsammans med villkoret:
-	\begin{center}
-		\begin{equation}\label{eq:villkor}
-			\nabla \cdot \bold u = 0
-		\end{equation}
-	\end{center}
-	
-	
-	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
- 	$ \bold u \cdot \nabla \bold u $ beskriver 	förflyttningen av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet tills alla komponenter har beräknats och därefter påbörjas en ny beräkning.
-	
-	Den första komponenten som beräknas är förflyttningen. Förlyttning av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Förflyttningen sker genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
-
-
-	När förflyttning har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$ enligt ekvation  $ \ref{eq:vektor w} $
-	\begin{center}
-		\begin{equation}\label{eq:vektor w}
-			\bold w = \bold u + \nabla p
-		\end{equation}
-	\end{center}
-	
-	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
-	
-	\begin{center}
-		\begin{equation}\label{eq:Poissons ekvation}
-			\nabla ^2 p = \nabla \cdot \bold w 
-		\end{equation}
-	\end{center}
-	
-	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen, alltså inte samma hastighet som är divergenslös i villkoret i ekvation $ \ref{eq:villkor} $. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Det innebär att metoden först kräver en gissad lösning och för att den sedan ska kunna iterera en förbättrad lösning för varje steg som tas. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
-
-Slutligen uppdateras hastigheten med externa krafter. I många verklighetsscenrion finns det olika krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. Temperatur- och densitetsförändringen ges av 
-
-	\begin{center}
-		\begin{equation}\label{eq:Temperatur}
-			\frac{\partial T}{\partial t} = -(\bold u \cdot \nabla)T,			
-		\end{equation}
-	\end{center}
-		\begin{center}
-	\begin{equation}\label{eq:Densitet}
-			\frac{\partial \rho}{\partial t} = -(\bold u \cdot \nabla)\rho.	 
-		\end{equation}
-	\end{center}
 
 	\Section{Numerisk implementation}
 
