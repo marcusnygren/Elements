@@ -17,6 +17,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
  \usepackage{float}
+ 	\usepackage{amsmath,environ}
 % Ursäkta lite bloat men det behövs för att få highlighting på GLSL
 \lstdefinelanguage{GLSL}
 {
@@ -230,8 +231,6 @@ Marcus Nygren, marny568}
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
 		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
 
-
-
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
 			\bold \varrho \left ( \frac{\partial }{\partial t} \bold u + \bold u \cdot \nabla \bold u \right ) 
@@ -247,18 +246,53 @@ Marcus Nygren, marny568}
 
 			
 	\Subsection{Konservering av energi}
-		 RTT säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $ för att bevara energin.
+		 RTT säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem} $ för att bevara energin.
 	
-	\begin{center}
-		\begin{equation}\label{eq:Reynolds Transport Theorem Orginal}
-			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V  
+
+
+	\NewEnviron{Reynolds Transport Theorem}{%
+	\begin{equation}\label{eq:Reynolds Transport Theorem}\begin{split}
+	  \BODY
+	\end{split}
+	\end{equation}
+	}
+
+	\begin{Reynolds Transport Theorem}
+		\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V  
 			+ \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
 			+ \int_{\Omega}^{ } \chi \ \mathrm{d}V
-			=
-			0
-		\end{equation}
-	\end{center}
+			= 
+			0 
+		\ \ \Leftrightarrow \\ \\
+		\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+				= 
+				- \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
+				- \int_{\Omega}^{ } \chi \ \mathrm{d}V	
+		\ \ \Leftrightarrow \\ \\
+		\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
+				= 
+				- \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
+				- \int_{\Omega}^{ } \chi   \ \mathrm{d} V
+		\ \ \Leftrightarrow \\ \\		
+		\int_{\Omega}^{ } \frac{\partial }{\partial t} \psi\ \mathrm{d}V
+				+ \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
+				+ \int_{\Omega}^{ } \chi   \ \mathrm{d} V
+				=
+				0
+		\ \ \Leftrightarrow \\ \\
+		\int_{\Omega}^{ } \left ( \frac{  \partial }{\partial t} \psi\ 
+				+ \nabla \cdot \left (  \psi \bold u \right ) 
+				+ \chi  \right ) \mathrm{d}V
+				= 
+				0	\ \ 	\ \ 	\ \ 	
+	\end{Reynolds Transport Theorem}
 
+
+		
+
+
+
+\iffalse
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem}
 			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
@@ -276,7 +310,7 @@ Marcus Nygren, marny568}
 			- \int_{\Omega}^{ } \chi   \ \mathrm{d} V
 		\end{equation}
 	\end{center}
-	
+
 	Leibniz lag säger att vi kan flytta in derivatan.
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem 3}
@@ -297,8 +331,9 @@ Marcus Nygren, marny568}
 			0
 		\end{equation}
 	\end{center}
+\fi
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $ som blir det slutgiltliga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att appliciera det på konserverig av massa och konservering av rörelsemängd.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $ som blir det slutgiltliga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att appliciera det på konserverig av massa och konservering av rörelsemängd.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
@@ -363,10 +398,10 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
+	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ i vänsterledet innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
 	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
 	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna term måste vara lika med noll, vilket innebär att kvar blir ekvation $ \ref{eq:Konservering av rörelsemängd 4} $.
-	
+
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 4}
 			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
@@ -375,8 +410,33 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 5} $ och $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. 
+	En anekdot är att utveckling av ekvation $ \ref{eq:Konservering av rörelsemängd 4} $ ger ett samband som kan knytas till Newtons andra lag, $ \bold F = m \bold a $, se ekvation  $ \ref{eq:Konservering av rörelsemängd 6} $, där $ \varrho $ representerar massan $ m $, $ \bold b $ yttre krafter $ \bold F $ och där materialderivatan för $ \bold u $ representerar accelerationen $ \bold a $. 
+
+	\NewEnviron{Konservering av rörelsemängd 6}{%
+	\begin{equation}\label{eq:Konservering av rörelsemängd 6}\begin{split}
+ \BODY
+	\end{split}
+	\end{equation}
+	}
+	\begin{Konservering av rörelsemängd 6}
+			\varrho \left ( 
+			\frac{\partial \bold u }{\partial t}
+			+  u _{x} \frac{\partial u _{x}} {\partial x} 
+			+  u _{y} \frac{\partial u _{y}} {\partial y} 
+			+  u _{z} \frac{\partial u _{z}} {\partial z} 
+			\right )
+			=
+			\bold b
+		\ \ \Leftrightarrow \\ \\
+			\varrho \
+			\frac{\partial }{\partial t} 
+			\bold u(x,y,z,t)
+			=
+			\bold b \ \ \ \ \ \
+	\end{Konservering av rörelsemängd 6}
 	
+	
+	\iffalse
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
 			\varrho \left ( 
@@ -400,8 +460,36 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
+	\fi
+	
 	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är minus medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitesmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes ekvation.
+	
+	\NewEnviron{Konservering av rörelsemängd 9}{%
+	\begin{equation}\label{eq:Konservering av rörelsemängd 9}\begin{split}
+ \BODY
+	\end{split}
+	\end{equation}
+	}
+	\begin{Konservering av rörelsemängd 9}
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			\nabla \cdot \sigma + \bold f
+		\ \ \Leftrightarrow \\ \\
+			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
+					+ \bold u \cdot \nabla \bold u \right )
+					= 
+					\nabla \cdot \left ( -pI +  \bold \Gamma \right ) + \bold f
+		\ \ \Leftrightarrow \\ \\
+		\varrho \left ( \frac{  \partial }{\partial t} \bold u 
+			+ \bold u \cdot \nabla \bold u \right )
+			= 
+			- \nabla p + \nabla \cdot \bold \Gamma  + \bold f	
+			\ \ \
+	\end{Konservering av rörelsemängd 9}
 		
+		
+	\iffalse
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 7}
 			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
@@ -429,6 +517,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
+	\fi
 
 	
 	\Subsection{Val av beräkningsmetod}
