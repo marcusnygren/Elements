@@ -612,11 +612,11 @@ För att beräkna trycket ur ekvation~\ref{eq:Poissons ekvation} användes som nämn
 
 	\begin{center}
 		\begin{equation}\label{eq:jacobiIteration}
-			p_{i,j} = (p_{x+1} + p_{x-1} + p_{y+1} + p_{y-1} + p_{z+1} + p_{z-1} + \alpha * b_{i,j}) * \beta
+			p_{i,j} = (p_{x+1} + p_{x-1} + p_{y+1} + p_{y-1} + p_{z+1} + p_{z-1} + \alpha \cdot b_{i,j}) \cdot \beta
 		\end{equation}
 	\end{center}
 	
-Sista steget i beräkningen var att 
+Sista steget i beräkningen var att beräkna gradienten av trycket och subtrahera den med hastigheten. Detta kommer från att den slutgiltiga hastigheten, $ \bold u $, fås av att i ekvation~\ref{eq:vektor w} flytta $ \nabla p $ till vänster ledet. Ytligare en gång hämtades alla omkringliggande värden ur tryck-texturen och dessa användes för att beräkna gradienten. Här kontrolleras även i fall någon omkringliggande cell befinner sig i ett hinder. I så fall sätts trycket till värdet i den centrala cellen och hastigheten sätts till noll.
 		
 	\Section{Grafisk implementation}
 
