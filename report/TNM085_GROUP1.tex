@@ -229,7 +229,7 @@ Marcus Nygren, marny568}
 	\Section{Modellering}
 
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
@@ -398,7 +398,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ i vänsterledet innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
+	I vänsterledet i ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
 	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
 	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna term måste vara lika med noll, vilket innebär att kvar blir ekvation $ \ref{eq:Konservering av rörelsemängd 4} $.
 
@@ -519,14 +519,13 @@ Marcus Nygren, marny568}
 	
 	\fi
 
-	
-	\Subsection{Val av beräkningsmetod}
-	
-	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
-	
-	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
-
 	\Section{Numerisk implementation}
+	
+		\Subsection{Val av beräkningsmetod}
+		
+		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+		
+		Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
 För implementaion av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
