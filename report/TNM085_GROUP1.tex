@@ -766,17 +766,6 @@ void main()
 
 
 	Den ovan nämnda metoden för att visualisera innehållet i en 3D-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
-		
-
-		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
-	
-	\begin{figure}[H]
-    	\centering
-    	\includegraphics[width=\linewidth]{report_images/Simulering1.png}
-    	\caption{\emph{Resultat av simuleringen.}}
-   		\label{fig:resultat}
-	\end{figure}
-	
 	
 	\Section{Diskussion}
 		
@@ -789,16 +778,23 @@ void main()
 		Den inledande idéen var att ha flera olika fluider, större användarkontroll, 3D-representation samt fler externa krafter representerade och dess värden modifierbara. Resultatet bedöms ändå som framgångsrikt, då de kunskapsmässiga målen för kursen överträffats och vi är nöjda med vår representation. Att göra applikationen GPU-baserad visade sig vara ett effektivt val. Simuleringen kör i realtid, så det går att interagera med den via piltangenterna, vilket inte hade varit möjligt annars. 
 
 	\Section{Resultat}
-		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
+		\emph{Beskriv vad det är vi ser i denna bild och den förra bilden.}
+		
+		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre  rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänsta och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Vissa tangenter är även bindna till att ändra värden hos parametrarna, exempelvis temperatur, som i detta fall är inställda enligt ~\ref{tbl:konstanter}.
+	
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[width=\linewidth]{report_images/Simulering3.png}
+    	\caption{\emph{Resultat av simuleringen.}}
+   		\label{fig:resultat}
+	\end{figure}		
 		
 		\begin{figure}[H]
     	\centering
     	\includegraphics[width=\linewidth]{report_images/Simulering2.png}
-    	\caption{\emph{Resultat av simuleringen.}}
-   		\label{fig:resultat}
+    	\caption{\emph{Resultat av simuleringen, efter att användaren har förflyttat en av punktkällorna med hjälp av piltangenterna.}}
+   		\label{fig:resultat2}
 	\end{figure}
-	
-		Projektet Elements är en mjukvara skapad för att 
 
 	\Section{Slutord}
 		
@@ -839,7 +835,8 @@ void main()
 			Tidssteg & 0.1 \\ \hline
 			Lyftkraft:  $ \alpha $ & 0,0125 \\ \hline
 			Lyftkraft: $ \beta $ & 1 \\ \hline
-			Rumstemperatur & 0 \\ \hline
+			Värmekällans temperatur vid start: $ T_{amb} $ & 20 \\ \hline
+			Rummets temperatur vid start & 0 \\ \hline
 			Jacobi:  $ \alpha $ & -100 \\ \hline
 			Jacobi: $ \beta $ & 0,1\\ \hline
 		\end{tabular}
