@@ -16,8 +16,8 @@
 \usepackage{amssymb, graphicx, fancyheadings}
 \usepackage{graphicx}
 \usepackage{listings}
- \usepackage{float}
- 	\usepackage{amsmath,environ}
+\usepackage{float}
+\usepackage{amsmath,environ}
 % Ursäkta lite bloat men det behövs för att få highlighting på GLSL
 \lstdefinelanguage{GLSL}
 {
@@ -200,7 +200,9 @@ Marcus Nygren}
 
 	%Skapa sammanfattning
 	\begin{abstract}
-	I den här rapporten presenteras en Eulerisk implementation av Navier-Stokes ekvationer för att simulera rök, och i förlängningen även andra fluider. Beräkningarna görs i 3D på datorns GPU, medan representationen är i 2D. Rapporten kan användas som stöd inför utförandet av en egen fluidsimulering, eller som en detaljerad praktisk redogörelse för Navier-Stokes ekvationer.
+		I den här rapporten presenteras en Eulerisk implementation av Navier-Stokes ekvationer för att simulera rök, och i förlängningen även andra fluider. Beräkningarna görs i 3D på datorns GPU, medan representationen sker i 2D. 
+		
+		Rapporten kan användas som ett stöd inför utförandet av en egen fluidsimulering, eller som en praktisk redogörelse för Navier-Stokes ekvationer.
 	\end{abstract}
 	
 	% skapar innehållsförteckning.
@@ -219,7 +221,7 @@ Marcus Nygren}
 	\setlength{\parskip}{10pt}
 
 	\Section{Introduktion}
-		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
+		Elements är en programvara som utför fluidsimuleringar baserade på Navier-Stokes ekvationer i realtid på GPU. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
 
 %		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
@@ -338,7 +340,7 @@ Marcus Nygren}
 	\end{center}
 \fi
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds transportteorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Leibniz-Reynolds transportteorem 2} $ som blir det slutgiltiga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att applicera det på konservering av massa och konservering av rörelsemängd.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds transportteorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Leibniz-Reynolds transportteorem 2} $ som blir det slutgiltiga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att applicera det på konservering av massa respektive konservering av rörelsemängd.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Leibniz-Reynolds transportteorem 2}
@@ -528,15 +530,13 @@ Marcus Nygren}
 	
 		\Subsection{Val av beräkningsmetod}
 		
-		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Tillskillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 		
-		Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+		Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För implementation av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
-	ekvation $ \ref{eq:Navier-stokes simple} $
-
-		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
+För implementation av Navier-Stokes ekvationerna förenklas systemet från ekvation $ \ref{eq:Navier-Stokes} $ till
+	ekvation $ \ref{eq:Navier-stokes simple} $. Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
@@ -547,10 +547,10 @@ För implementation av Navier-Stokes ekvationerna förenklas 				systemet 	från ek
 	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
-	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden, därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
 
 
-	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $
+	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
 	\begin{center}
 		\begin{equation}\label{eq:vektor w}
 			\bold w = \bold u + \nabla p.
@@ -567,7 +567,7 @@ För implementation av Navier-Stokes ekvationerna förenklas 				systemet 	från ek
 	
 	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = Q $, där $\bold A $ byggs av Laplaceoperatorn, $ Q $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Metoden går ut på att först initiera en gissning på en lösning av systemet och sedan iterera fram en förbättrad lösning. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
 	
-	För en fullständig lösning på Poissons ekvation krävs hantering av tryck -och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts till 0. För trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
+	För en fullständig lösning på Poissons ekvation krävs hantering av tryck- och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts till 0. För trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
 
 	Slutligen uppdateras hastigheten med externa krafter. Det finns olika lämpliga externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. 
 	
@@ -787,24 +787,24 @@ void main()
 	\Section{Resultat}
 		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
 		
-		TEXT..
+		Projektet Elements är en mjukvara skapad för att 
 
 	\Section{Slutord}
 		
 		Det finns en anledning till att fluidsimuleringar blivit så populära: det är både logiskt och visuellt stimulerande, det finns många appliceringar, och Navier-Stokes ekvationer är fortfarande, 2014, ett av de olösta matematiska millenieproblemen.
 
-		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också väldigt utmanande. Om du som läsare vill göra något liknande, rekommenderar vi verkligen att se vilka referenser vi använt som grund för detta arbete. För matematisk teori och implementation av Navier-Stokes ekvationer har vi främst använt \cite{GPUGems1} som referens och för rök-implementation har vi använt \cite{Grasshopper} och \cite{Fedkiw}.
+		Att som studenter utforska och tillämpa dessa för att skapa denna applikation har varit roligt, utvecklande och bitvis också mycket utmanande. Om du som läsare vill göra något liknande, rekommenderar vi att läsa de referenser som använts under arbetets gång.
 
-		Förutom referenserna på nästa sida vill vi även tacka vår kurshandledare Anna Lombardi.
+		Förutom referenserna på nästa sida vill vi även tacka Anna Lombardi och Ulf Sannemo för deras handledning under projektets gång.
 
 	\newpage
 	\begin{thebibliography}{9}
+		\bibitem{GPUGems1}
+		Mark J. Harris \emph{Fast Fluid Dynamics Simulation on the GPU, GPU Gems, sida 637, Chapter 38}, NVIDIA och Addison-Wesley 2004		
 		\bibitem{OpenGLSuperBible}
 		Graham Sellers, Richard S. Wright, Jr. och Nicholas Haemel, \emph{OpenGL Super Bible, Sixth Edition}, Addison-Wesley 2013
 		\bibitem{Fedkiw}
 		Ronald Fedkiw, Jos Stam och Henrik Wann Jensen, \emph{Visual Simulation of Smoke}, ACM SIGGRAPH 2001
-		\bibitem{GPUGems1}
-		Mark J. Harris \emph{Fast Fluid Dynamics Simulation on the GPU, GPU Gems, sida 637, Chapter 38}, NVIDIA och Addison-Wesley 2004
 	   \bibitem{GPUGems3}
 	   Keenan Crane, Ignacio Llamas och Sarah Tariq \emph{Real-Time Simulation and Rendering of 3D Fluids, GPU Gems 3, Chapter 30, http://http.developer.nvidia.com/GPUGems3/gpugems3\_ch30.html}, NVIDIA 2007
 	   \bibitem{Grasshopper}
