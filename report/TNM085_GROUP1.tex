@@ -229,7 +229,7 @@ Marcus Nygren, marny568}
 	\Section{Modellering}
 
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds transportteorem (RTT), ekvation $ \ref{eq:Reynolds transportteorem} $.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
@@ -246,18 +246,18 @@ Marcus Nygren, marny568}
 
 			
 	\Subsection{Konservering av energi}
-		 RTT säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat innuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds Transport Theorem} $ för att bevara energin.
+		 RTT säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definierad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat inuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds transportteorem} $ för att bevara energin.
 	
 
 
-	\NewEnviron{Reynolds Transport Theorem}{%
-	\begin{equation}\label{eq:Reynolds Transport Theorem}\begin{split}
+	\NewEnviron{Reynolds transportteorem}{%
+	\begin{equation}\label{eq:Reynolds transportteorem}\begin{split}
 	  \BODY
 	\end{split}
 	\end{equation}
 	}
 
-	\begin{Reynolds Transport Theorem}
+	\begin{Reynolds transportteorem}
 		\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V  
 			+ \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
 			+ \int_{\Omega}^{ } \chi \ \mathrm{d}V
@@ -285,7 +285,7 @@ Marcus Nygren, marny568}
 				+ \chi  \right ) \mathrm{d}V
 				= 
 				0	\ \ 	\ \ 	\ \ 	
-	\end{Reynolds Transport Theorem}
+	\end{Reynolds transportteorem}
 
 
 		
@@ -294,7 +294,7 @@ Marcus Nygren, marny568}
 
 \iffalse
 	\begin{center}
-		\begin{equation}\label{eq:Reynolds Transport Theorem}
+		\begin{equation}\label{eq:Reynolds transportteorem}
 			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
 			= 
 			- \int_{\partial\Omega}^{ } \psi \bold u \cdot \bold n \ \mathrm{d}A 
@@ -303,7 +303,7 @@ Marcus Nygren, marny568}
 	\end{center}
 	
 	\begin{center}
-		\begin{equation}\label{eq:Reynolds Transport Theorem 2}
+		\begin{equation}\label{eq:Reynolds transportteorem 2}
 			\frac{\partial }{\partial t}\int_{\Omega}^{ } \psi\ \mathrm{d}V 
 			= 
 			- \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
@@ -313,7 +313,7 @@ Marcus Nygren, marny568}
 
 	Leibniz lag säger att vi kan flytta in derivatan.
 	\begin{center}
-		\begin{equation}\label{eq:Reynolds Transport Theorem 3}
+		\begin{equation}\label{eq:Reynolds transportteorem 3}
 			\int_{\Omega}^{ } \frac{\partial }{\partial t} \psi\ \mathrm{d}V
 			+ \int_{\Omega}^{ } \nabla \cdot \left (  \psi \bold u \right ) \mathrm{d}V
 			+ \int_{\Omega}^{ } \chi   \ \mathrm{d} V
@@ -323,7 +323,7 @@ Marcus Nygren, marny568}
 	\end{center}
 	
 	\begin{center}
-		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz}
+		\begin{equation}\label{eq:Leibniz-Reynolds transportteorem}
 			\int_{\Omega}^{ } \left ( \frac{  \partial }{\partial t} \psi\ 
 			+ \nabla \cdot \left (  \psi \bold u \right ) 
 			+ \chi  \right ) \mathrm{d}V
@@ -333,10 +333,10 @@ Marcus Nygren, marny568}
 	\end{center}
 \fi
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds Transport Theorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Reynolds Transport Theorem Leibniz 2} $ som blir det slutgiltliga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att appliciera det på konserverig av massa och konservering av rörelsemängd.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds transportteorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Leibniz-Reynolds transportteorem 2} $ som blir det slutgiltiga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att applicera det på konservering av massa och konservering av rörelsemängd.
 	
 	\begin{center}
-		\begin{equation}\label{eq:Reynolds Transport Theorem Leibniz 2}
+		\begin{equation}\label{eq:Leibniz-Reynolds transportteorem 2}
 			\frac{  \partial }{\partial t} \psi\ 
 			+ \nabla \cdot \left (  \psi \bold u \right ) 
 			+ \chi 
@@ -358,7 +358,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, se ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompinerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
+	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, se ekvation $ \ref{eq:Konservering av massa} $, som ofta ackomponerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
 	
 	
 	\Subsection{Konservering av rörelsemängd}
@@ -387,7 +387,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 		
-	Ytterliggare omskrivning av ekvation $ \ref{eq:Konservering av rörelsemängd 2} $ ger ekvation $ \ref{eq:Konservering av rörelsemängd 3} $.
+	Ytterligare omskrivning av ekvation $ \ref{eq:Konservering av rörelsemängd 2} $ ger ekvation $ \ref{eq:Konservering av rörelsemängd 3} $.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 3}
@@ -398,7 +398,7 @@ Marcus Nygren, marny568}
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ i vänsterledet innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
+	I vänsterledet i ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
 	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
 	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna term måste vara lika med noll, vilket innebär att kvar blir ekvation $ \ref{eq:Konservering av rörelsemängd 4} $.
 
@@ -462,7 +462,7 @@ Marcus Nygren, marny568}
 	
 	\fi
 	
-	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer engligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är minus medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitesmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes ekvation.
+	Genom att studera en voxel i en fluid fås att kraften $ \bold b $ kan delas upp i två termer enligt $ \bold b =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är minus medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitetsmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes ekvation.
 	
 	\NewEnviron{Konservering av rörelsemängd 9}{%
 	\begin{equation}\label{eq:Konservering av rörelsemängd 9}\begin{split}
@@ -519,17 +519,16 @@ Marcus Nygren, marny568}
 	
 	\fi
 
-	
-	\Subsection{Val av beräkningsmetod}
-	
-	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
-	
-	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
-
 	\Section{Numerisk implementation}
+	
+		\Subsection{Val av beräkningsmetod}
+		
+		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+		
+		Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För implementaion av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
+För implementation av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
 	ekvation $ \ref{eq:Navier-stokes simple} $
 
 		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
@@ -561,7 +560,7 @@ För implementaion av Navier-Stokes ekvationerna förenklas 				systemet 	från ekv
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ är byggd från laplacianen, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Metoden går ut på att först initiera en gissning på en lösning av systemet och sedan iterera fram en förbättrad lösning. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ byggs av Laplaceoperatorn, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Metoden går ut på att först initiera en gissning på en lösning av systemet och sedan iterera fram en förbättrad lösning. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
 	
 	För en fullständig lösning på Poissons ekvation krävs hantering av tryck -och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts till 0. För trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
 
@@ -605,8 +604,8 @@ I MATLAB användes samma steg som beskrivs i avsnitt 3.1 Implementation av Navier
 		
 		För GPU-implementationen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för att styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
-		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3d-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3d-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen i listning~\ref{lst::texImage}. 
-\begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3d-textur.}, label = {lst::texImage}]
+		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3D-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3D-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen i listning~\ref{lst::texImage}. 
+\begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3D-textur.}, label = {lst::texImage}]
 void glTexImage3D(
 	GLenum target,
  	GLint level,
@@ -637,10 +636,10 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 	\end{tabular}
 \end{center}
 \end{table}
-För att kunna representera hinder användes ytligare en 3d-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
+För att kunna representera hinder användes ytligare en 3D-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
 För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}. \\
 
-För att sedan kunna uppdatera värdena i texturerna användes så kallade \textit{Framebuffer Objects}. Med \textit{Framebuffer Objects} kunde resultatet från grafikkortets beräkningar sparas i texturer i stället för att ritas på skärmen. Varje textur binds till ett \textit{Framebuffer Object} som sedan kan aktiveras innan rendering. Ett problem som behövde hanteras var att OpenGL inte kan rendera direkt till en 3d-textur. Istället behövde texturen delas in i tvådimensionella skivor som sedan renderades till var för sig. För att uppnå maximal prestanda och minska belastningen på CPU användes OpenGL funktionen i listning~\ref{lst:drawInstanced}.
+För att sedan kunna uppdatera värdena i texturerna användes så kallade \textit{Framebuffer Objects}. Med \textit{Framebuffer Objects} kunde resultatet från grafikkortets beräkningar sparas i texturer i stället för att ritas på skärmen. Varje textur binds till ett \textit{Framebuffer Object} som sedan kan aktiveras innan rendering. Ett problem som behövde hanteras var att OpenGL inte kan rendera direkt till en 3D-textur. Istället behövde texturen delas in i tvådimensionella skivor som sedan renderades till var för sig. För att uppnå maximal prestanda och minska belastningen på CPU användes OpenGL funktionen i listning~\ref{lst:drawInstanced}.
 
 \begin{lstlisting}[language=GLSL, caption={OpenGL funktion för att rendera flera instanser.}, label = {lst:drawInstanced}]
 void glDrawArraysInstanced(
@@ -650,7 +649,7 @@ void glDrawArraysInstanced(
  	GLsizei primcount); 
 \end{lstlisting}
 
-Parametern mode talar om vilken typ av primitiv som ska renderas och sattes i detta fall till GL\_TRIANGLE\_STRIP. first talar om var i vertex listan renderingen ska starta. För den parametern sattes värdet noll då renderingen skulle börja från början av listan. Eftersom det var en quad som ritades sattes count till fyra, det vill säga antalet hörnpunkter som skulle renderas. Den mest intressanta parametern är primcount då den talar om hur många instanser av som ska göras av renderingen. Då volymen delades upp i z-led sattes primcount till djupet på volymen. Vid instansrendering ökas värdet på den inbyggda vertex-shader variabel \textit{gl\_InstanceID} med ett för varje instans. För att använda den variabeln skapades en vertex-shader som sparade den till en \textit{Output} variabel och skickade den vidare till en geometry-shader. Vertex-shader visas i listning~\ref{lst:vertex}. 
+Parametern mode talar om vilken typ av primitiv som ska renderas och sattes i detta fall till GL\_TRIANGLE\_STRIP. first talar om var i vertex-listan renderingen ska starta. För den parametern sattes värdet noll då renderingen skulle börja från början av listan. Eftersom det var en quad som ritades sattes count till fyra, det vill säga antalet hörnpunkter som skulle renderas. Den mest intressanta parametern är primcount då den talar om hur många instanser av som ska göras av renderingen. Då volymen delades upp i z-led sattes primcount till djupet på volymen. Vid instansrendering ökas värdet på den inbyggda vertex-shader variabel \textit{gl\_InstanceID} med ett för varje instans. För att använda den variabeln skapades en vertex-shader som sparade den till en \textit{Output} variabel och skickade den vidare till en geometry-shader. Vertex-shader visas i listning~\ref{lst:vertex}. 
 
 \begin{lstlisting}[language=GLSL, caption={Vertex-shader för att hantera instansrendering}, label = {lst:vertex}]
 layout (location = 0) in vec4 vertexPosition;
@@ -695,7 +694,7 @@ För att beräkna lyftkraften som orsakas av temperaturen i volymen implementerade
 
 Nästa steg var att lägga till källor av olika slag. Samma fragment-shader kunde användas för att lägga till olika typer av källor så som densitet och temperatur men även för att lägga till hinder. Shadern ritade en sfär med en given radie på en given plats i en textur. Genom att använda alpha-blending kunde de nya värden blandas ihop med de gamla som redan låg i texturen och på så vis ge upphov till en källa.
 
-Sedan beräknades divergensen av hastigheten, se högerledet i ekvation~\ref{eq:Poissons ekvation}. Detta beräknades med central differensen av alla omkringliggande värden ur hastgihets-texturen. Innan beräkningen utfördes kontrollerades om någon av de omkringliggande värde befann sig i ett hinder. Om så var fallet sattes hastigheten där till noll.
+Sedan beräknades divergensen av hastigheten, se högerledet i ekvation~\ref{eq:Poissons ekvation}. Detta beräknades med central differensen av alla omkringliggande värden ur hastighets-texturen. Innan beräkningen utfördes kontrollerades om någon av de omkringliggande värde befann sig i ett hinder. Om så var fallet sattes hastigheten där till noll.
 
 För att beräkna trycket ur ekvation~\ref{eq:Poissons ekvation} användes som nämnt Jacobi-iteration. I en fragment-shader implementerades en iteration som sedan kördes i en loop. Kring 20 iterationer visade sig ge ett bra resultat. På samma sätt som för divergensen användes de omkringliggande värdena fast denna gång för trycket. Ekvationen för att uppdatera trycket under en iteration visas i ekvation~\ref{eq:jacobiIteration} där $ \alpha $ och $ \beta $ är konstanter, se tabell~\ref{tbl:konstanter}, och $ b_{i,j} $ är divergensen.
 
@@ -733,9 +732,9 @@ För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. De
 		
 		När GLFW används vid utveckling av en OpenGL-applikationer behövs först ett annat ramverk för att ladda de OpenGL-funktioner som finns tillgängliga på systemet. För detta ändamål användes GLEW. I den här rapporten kommer inte GLEW att beskrivas i detalj. Det finns många bibliotek med samma funktionalitet och valet mellan dessa spelar inte någon större roll.
 
-		Resultatet från den numeriska lösningen är en 3d-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3d-texturen visualiseras genom att ett 2d-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela \textit{viewport}:en. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3d-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns i listning~\ref{lst:vizShader}.
+		Resultatet från den numeriska lösningen är en 3D-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3D-texturen visualiseras genom att ett 2D-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela \textit{viewport}:en. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3D-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns i listning~\ref{lst:vizShader}.
 
-\begin{lstlisting}[language=GLSL, caption={Fragment-shader för att visualisera ett lager ur en 3d-textur.}, label = {lst:vizShader}]
+\begin{lstlisting}[language=GLSL, caption={Fragment-shader för att visualisera ett lager ur en 3D-textur.}, label = {lst:vizShader}]
 out vec3 color;
 uniform sampler3D tex;
 uniform float layer;
@@ -750,10 +749,10 @@ void main()
 \end{lstlisting} 
 
 
-	Den ovan nämnda metoden för att visualisera innehållet i en 3d-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
+	Den ovan nämnda metoden för att visualisera innehållet i en 3D-textur användes för att den är mycket lätt att implementera, dock går en stor del av meningen med att utföra simuleringen i tre dimensioner förlorad. Ett mer tilltalande alternativ hade varit att visualisera hela volymen i tre dimensioner med hjälp av volymrendering. Detta hade dock krävt betydligt mer implementation, vilket var utanför denna kurs ramar.
 		
 
-		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3d-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
+		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De olika punktkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. Implementationen tillåter en användare att styra den mittersta punktkällan.
 	
 	\begin{figure}[H]
     	\centering
@@ -769,7 +768,7 @@ void main()
 
 		Om vi hade gjort om projektet hade vi utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete bortprioriterades.
 
-		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargräsnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen. 
+		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargränssnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen. 
 		
 		Den inledande idéen var att ha flera olika fluider, större användarkontroll, 3D-representation samt fler externa krafter representerade och dess värden modifierbara. Resultatet bedöms ändå som framgångsrikt, då de kunskapsmässiga målen för kursen överträffats och vi är nöjda med vår representation. Att göra applikationen GPU-baserad visade sig vara ett effektivt val. Simuleringen kör i realtid, så det går att interagera med den via piltangenterna, vilket inte hade varit möjligt annars. 
 
@@ -814,7 +813,7 @@ void main()
 	 	\begin{tabular}{| l | l |}
 	 	\hline
 			Konstant: & Värde: \\ \hline
-			Tidssteg & 0.001 \\ \hline
+			Tidssteg & 0.1 \\ \hline
 			Lyftkraft:  $ \alpha $ & 0,0125 \\ \hline
 			Lyftkraft: $ \beta $ & 1 \\ \hline
 			Rumstemperatur & 0 \\ \hline
