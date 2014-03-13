@@ -690,6 +690,13 @@ Advektions-termen implementerades i en shader som beräknade det nya värdet på en
 
 För att beräkna lyftkraften som orsakas av temperaturen i volymen implementerades ekvation~\ref{eq:Buoyancy} i en fragment-shader. Utöver ekvation~\ref{eq:Buoyancy} implementerades även en term för rumstemperatur som gör så att en starttemperatur från början finns i hela volymen. Detta gjordes genom att jämföra om temperaturen i en punkt var mindre än rumstemperaturen och i så fall låta hastigheten vara oförändrad.
 
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[width=\linewidth]{report_images/warm_cold.png}
+    	\caption{Lyftkraften av rök beror på temperaturen av källan. Kallare temperaturer gör att röken sjunker, lik dimma (1) och en varmare temperatur skapar en stigande rök (2) likt den som skapas vid bränder.}
+   		\label{fig:warm_cold}
+	\end{figure}
+
 Nästa steg var att lägga till källor av olika slag. Samma fragment-shader kunde användas för att lägga till olika typer av källor så som densitet och temperatur men även för att lägga till hinder. Shadern ritade en sfär med en given radie på en given plats i en textur. Genom att använda alpha-blending kunde de nya värden blandas ihop med de gamla som redan låg i texturen och på så vis ge upphov till en källa.
 
 Sedan beräknades divergensen av hastigheten, se högerledet i ekvation~\ref{eq:Poissons ekvation}. Detta beräknades med central differensen av alla omkringliggande värden ur hastighets-texturen. Innan beräkningen utfördes kontrollerades om någon av de omkringliggande värde befann sig i ett hinder. Om så var fallet sattes hastigheten där till noll.
