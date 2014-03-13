@@ -16,8 +16,8 @@
 \usepackage{amssymb, graphicx, fancyheadings}
 \usepackage{graphicx}
 \usepackage{listings}
- \usepackage{float}
- 	\usepackage{amsmath,environ}
+\usepackage{float}
+\usepackage{amsmath,environ}
 % Ursäkta lite bloat men det behövs för att få highlighting på GLSL
 \lstdefinelanguage{GLSL}
 {
@@ -200,7 +200,9 @@ Marcus Nygren}
 
 	%Skapa sammanfattning
 	\begin{abstract}
-	I den här rapporten presenteras en Eulerisk implementation av Navier-Stokes ekvationer för att simulera rök, och i förlängningen även andra fluider. Beräkningarna görs i 3D på datorns GPU, medan representationen är i 2D. Rapporten kan användas som stöd inför utförandet av en egen fluidsimulering, eller som en detaljerad praktisk redogörelse för Navier-Stokes ekvationer.
+		I den här rapporten presenteras en Eulerisk implementation av Navier-Stokes ekvationer för att simulera rök, och i förlängningen även andra fluider. Beräkningarna görs i 3D på datorns GPU, medan representationen sker i 2D. 
+		
+		Rapporten kan användas som ett stöd inför utförandet av en egen fluidsimulering, eller som en praktisk redogörelse för Navier-Stokes ekvationer.
 	\end{abstract}
 	
 	% skapar innehållsförteckning.
@@ -229,6 +231,8 @@ Marcus Nygren}
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
 
 		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans, det vill säga att istället för att enskilda molekyler studeras så studers små volymelement av fluiden som kan innehålla flera molekyler. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds transportteorem} $.
+		
+		I följande ekvationer är $ \bold u $ hastigheten $ \bold u(x,y,z,t) $, det vill säga hastigheten i x-, y och z-led samt ett indirekt beroende av tiden t.
 
 
 	\begin{center}
@@ -246,7 +250,7 @@ Marcus Nygren}
 
 			
 	\Subsection{Konservering av energi}
-		 RTT är en balansekvation som säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat inuti $ \Omega $ genom eventuella källor och sänkor. Detta i enlighet med ekvation $ \ref{eq:Reynolds transportteorem} $ och kan tolkas som ett sätt att bevara energi.
+		 RTT är en balansekvation som säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ måste vara lika med vad som är förändrat genom randen till $ \Omega $ plus vad som är förändrat inuti $ \Omega $ genom eventuella källor och sänkor $ \chi $. Detta i enlighet med ekvation $ \ref{eq:Reynolds transportteorem} $ och kan tolkas som ett sätt att bevara energi.
 	
 	\NewEnviron{Reynolds transportteorem}{%
 	\begin{equation}\label{eq:Reynolds transportteorem}\begin{split}
@@ -778,7 +782,7 @@ void main()
 	\Section{Resultat}
 		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
 		
-		TEXT..
+		Projektet Elements är en mjukvara skapad för att 
 
 	\Section{Slutord}
 		
