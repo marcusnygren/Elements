@@ -200,7 +200,7 @@ Marcus Nygren}
 
 	%Skapa sammanfattning
 	\begin{abstract}
-	This is the paper's abstract. This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract. This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.This is the paper's abstract.
+	I den här rapporten presenteras en Eulerisk implementation av Navier-Stokes ekvationer för att simulera rök, och i förlängningen även andra fluider. Beräkningarna görs i 3D på datorns GPU, medan representationen är i 2D. Rapporten kan användas som stöd inför utförandet av en egen fluidsimulering, eller som en detaljerad praktisk redogörelse för Navier-Stokes ekvationer.
 	\end{abstract}
 	
 	% skapar innehållsförteckning.
@@ -227,7 +227,7 @@ Marcus Nygren}
 	\Section{Modellering}
 
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
-		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem} $.
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans där hela fluidens volym studeras. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds Transport Theorem Orginal} $.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes}
@@ -396,7 +396,7 @@ Marcus Nygren}
 		\end{equation}
 	\end{center}
 	
-	I vänsterledet i ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
+	I ekvation $ \ref{eq:Konservering av rörelsemängd 3} $ i vänsterledet innehåller den första termen sambandet om konservering av massa, ekvation $ \ref{eq:Konservering av massa 1} $, då
 	$ \bold u \cdot \nabla \varrho + \varrho \nabla \cdot \bold u 
 	= \nabla \cdot \left ( \varrho \bold u \right ) $. Detta medför att denna term måste vara lika med noll, vilket innebär att kvar blir ekvation $ \ref{eq:Konservering av rörelsemängd 4} $.
 
@@ -517,13 +517,14 @@ Marcus Nygren}
 	
 	\fi
 
-	\Section{Numerisk implementation}
 	
-		\Subsection{Val av beräkningsmetod}
-		
-		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
-		
-		Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+	\Subsection{Val av beräkningsmetod}
+	
+	Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagrageiska synsättet. Det Lagrangeiska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagrangeiska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+	
+	Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+
+	\Section{Numerisk implementation}
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
 För implementaion av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
@@ -754,7 +755,7 @@ void main()
 	
 	\begin{figure}[H]
     	\centering
-    	\includegraphics[width=\linewidth]{report_images/resultat.png}
+    	\includegraphics[width=\linewidth]{report_images/ny_resultat.png}
     	\caption{Resultat av simuleringen.}
    		\label{fig:resultat}
 	\end{figure}
@@ -766,9 +767,9 @@ void main()
 
 		Om vi hade gjort om projektet hade vi utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete bortprioriterades.
 
-		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargräsnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både i Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen - som flera olika fluider, större användarkontroll, 3D-representation, fler externa krafter representerade, etcetera. Resultatet bedöms ändå som framgångsrikt, då de kunskapsmässiga målen för kursen överträffats.
-
-		Att göra applikationen GPU-baserad visade sig vara ett effektivt val. Simuleringen kör i realtid, så det går att interagera med den via piltangenterna, vilket inte hade varit möjligt annars. 
+		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargräsnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen. 
+		
+		Den inledande idéen var att ha flera olika fluider, större användarkontroll, 3D-representation samt fler externa krafter representerade och dess värden modifierbara. Resultatet bedöms ändå som framgångsrikt, då de kunskapsmässiga målen för kursen överträffats och vi är nöjda med vår representation. Att göra applikationen GPU-baserad visade sig vara ett effektivt val. Simuleringen kör i realtid, så det går att interagera med den via piltangenterna, vilket inte hade varit möjligt annars. 
 
 	\Section{Resultat}
 		\emph{Projektets resultat. Om man följer hela workflowen i metod-delen vart hamnar man då? Vad kom vi fram till?}
@@ -811,7 +812,7 @@ void main()
 	 	\begin{tabular}{| l | l |}
 	 	\hline
 			Konstant: & Värde: \\ \hline
-			Tidssteg & 0.1 \\ \hline
+			Tidssteg & 0.001 \\ \hline
 			Lyftkraft:  $ \alpha $ & 0,0125 \\ \hline
 			Lyftkraft: $ \beta $ & 1 \\ \hline
 			Rumstemperatur & 0 \\ \hline
