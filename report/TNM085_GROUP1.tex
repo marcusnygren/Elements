@@ -219,7 +219,7 @@ Marcus Nygren}
 	\setlength{\parskip}{10pt}
 
 	\Section{Introduktion}
-		Elements är en programvara som utför fluid-simuleringar baserade på Navier-Stokes ekvationer. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
+		Elements är en programvara som utför fluidsimuleringar baserade på Navier-Stokes ekvationer i realtid på GPU. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
 
 %		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
@@ -331,7 +331,7 @@ Marcus Nygren}
 	\end{center}
 \fi
 	
-	Eftersom integralen i ekvation $ \ref{eq:Reynolds transportteorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Leibniz-Reynolds transportteorem 2} $ som blir det slutgiltiga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att applicera det på konservering av massa och konservering av rörelsemängd.
+	Eftersom integralen i ekvation $ \ref{eq:Reynolds transportteorem} $ ska vara lika med noll för alla volymer $ \Omega $ erhålls ekvation $ \ref{eq:Leibniz-Reynolds transportteorem 2} $ som blir det slutgiltiga sambandet för konservering av energi. Detta samband nyttjas i framtagandet av Navier-Stokes ekvationer genom att applicera det på konservering av massa respektive konservering av rörelsemängd.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Leibniz-Reynolds transportteorem 2}
@@ -521,13 +521,13 @@ Marcus Nygren}
 	
 		\Subsection{Val av beräkningsmetod}
 		
-		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Tillskillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 		
-		Vid fluid-simuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+		Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom dem intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För implementation av Navier-Stokes ekvationerna förenklas 				systemet 	från ekvation $ \ref{eq:Navier-Stokes} $ till
-	ekvation $ \ref{eq:Navier-stokes simple} $
+För implementation av Navier-Stokes ekvationerna förenklas systemet från ekvation $ \ref{eq:Navier-Stokes} $ till
+	ekvation $ \ref{eq:Navier-stokes simple} $.
 
 		Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
 	\begin{center}
