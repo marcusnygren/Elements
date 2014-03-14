@@ -256,10 +256,10 @@ Marcus Nygren}
 		 	\nabla \cdot \bold u = 0 
 		\end{equation}
 	\end{center}
-
 			
 	\Subsection{Konservering av energi}
-		 RTT är en balansekvation som säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definerad på volymen $ \Omega $ ska vara lika med skillnaden mellan vad som är förändrat genom randen till $ \Omega $ och vad som är förändrat inuti $ \Omega $ genom eventuella källor och sänkor $ \chi $. Detta i enlighet med ekvation $ \ref{eq:Reynolds transportteorem} $ och kan tolkas som ett sätt att bevara energi.
+
+		 RTT är en balansekvation som säger att förändringen av en fysisk egenskap $ \psi  $ (antingen skalär- eller vektor-baserad) definierad på volymen $ \Omega $ ska vara lika med skillnaden mellan vad som är förändrat genom randen till $ \Omega $ och vad som är förändrat inuti $ \Omega $ genom eventuella källor och sänkor $ \chi $. Detta i enlighet med ekvation $ \ref{eq:Reynolds transportteorem} $ och kan tolkas som ett sätt att bevara energi.
 	
 	\NewEnviron{Reynolds transportteorem}{%
 	\begin{equation}\label{eq:Reynolds transportteorem}\begin{split}
@@ -297,8 +297,6 @@ Marcus Nygren}
 				= 
 				0	\ \ 	\ \ 	\ \ 	
 	\end{Reynolds transportteorem}
-
-
 		
 
 
@@ -370,8 +368,7 @@ Marcus Nygren}
 	\end{center}
 	
 	Om $ \varrho $ fixeras till en konstant leder det till att $ \frac{  \partial }{\partial t} \varrho \  = 0 $ och att $ \nabla \cdot \left (  \varrho \bold u \right ) = 0 $. Det senare villkoret leder fram till sambandet om konserverandet av massa, se ekvation $ \ref{eq:Konservering av massa} $, som ofta ackompanjerar Navier-Stokes ekvation, $ \ref{eq:Navier-Stokes} $. Sambandet innebär att fluiden är inkompressibel, det vill säga att fluiden alltid behåller sin ursprungliga volym.
-	
-	
+
 	\Subsection{Konservering av rörelsemängd}
 	För rörelsemängd, $ p = m\bold u $, fås enligt RTT att $ \psi = \varrho \bold u $, vilket ger ekvation $ \ref{eq:Konservering av rörelsemängd} $.
 	
@@ -445,9 +442,9 @@ Marcus Nygren}
 			=
 			\chi \ \ \ \ \ \
 	\end{Konservering av rörelsemängd 6}
+%\fi
 	
-	
-	\iffalse
+	%\iffalse
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
 			\varrho \left ( 
@@ -471,7 +468,6 @@ Marcus Nygren}
 		\end{equation}
 	\end{center}
 	
-	\fi
 	
 	Genom att studera ett fluidelement i en fluid fås att kraften $ \chi $ kan delas upp i två termer enligt $ \chi =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitetsmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor som brukligt kallas för viskositetstermen. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes generella ekvation.
 	
@@ -498,9 +494,8 @@ Marcus Nygren}
 			- \nabla p + \nabla \cdot \bold \Gamma  + \bold f	
 			\ \ \
 	\end{Konservering av rörelsemängd 9}
-		
-		
-	\iffalse
+
+
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 7}
 			 \varrho \left ( \frac{  \partial }{\partial t} \bold u 
@@ -528,31 +523,28 @@ Marcus Nygren}
 		\end{equation}
 	\end{center}
 	
-	\fi
 
 	\Section{Numerisk implementation}
 	
 		\Subsection{Val av beräkningsmetod}
 		
-		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+			Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 		
-		Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+			Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För implementation av Navier-Stokes ekvationerna förenklas systemet från ekvation $ \ref{eq:Navier-Stokes} $ till
-	ekvation $ \ref{eq:Navier-stokes simple} $. Mer teori och bakgrund finns att hämta i \cite{GPUGems1}.
+			För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$. Mer teori och bakgrund om röksimulering finns att hämta i referens \cite{GPUGems1} och \cite{Fedkiw}.
+
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes simple}
 			\frac{du}{dt}= -(\bold u \cdot \nabla \bold u) - \frac{1}{ \rho } 				\nabla p + \bold f
 		\end{equation}
 	\end{center}
-	Tillsammans med villkoret i ekvation $\ref{eq:Konservering av massa}$
 	
-	Ekvation $ \ref{eq:Navier-stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
+	Ekvation $ \ref{eq:Navier-Stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
 	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
-
 
 	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
 	\begin{center}
@@ -598,7 +590,7 @@ För implementation av Navier-Stokes ekvationerna förenklas systemet från ekvatio
 		\end{equation}
 	\end{center}
 
-I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att ekvationen är fysikalisk meningsfull. Temperaturen och den initiala temperaturen är $ T $ respektive $ T_{amb} $. Riktningen hos kraften är $ \bold y = (0,1,0) $
+I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att ekvationen är fysikalisk meningsfull. Temperaturen och den initiala temperaturen är $ T $ respektive $ T_{amb} $. Riktningen hos kraften är $ \bold y = (0,1,0) $. Djupare teori om framtagning av temperatur och densitet finns att se i \cite{Fedkiw}. 
 
 
 
@@ -609,7 +601,7 @@ I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att e
 I MATLAB användes samma steg som beskrivs i avsnitt 3.1 Implementation av Navier-Stokes ekvationer. Till skillnad från simuleringen som beskrivs i avsnitt 3.3 OpenGL/GLSL, simplifierades det visuella utseendet för att lösa och förstå dem numeriska problem som kunde uppstå. Simuleringen visade att tidsteget gav varierande resultat och var känslig för mindre ändringar. Det insågs också att $ \alpha $ och $ \beta $ i ekvation $ \ref{eq:Buoyancy} $ har en kraftig påverkan på ekvationen. 
 	
 		\Subsection{OpenGL/GLSL}
-		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
+		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor, dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
 		
 		För GPU-implementationen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för att styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
@@ -841,10 +833,6 @@ void main()
 		\end{tabular}
 	\end{center}
 	\end{table}
-	
-	\newpage
-	\Section{Bilaga}
-	\ldots{}här kan man lägga till bilagor
 
 	% bilagor, t.ex. källkod. En tom extrasida kommer att skrivas ut för
 	% att få alla sidnummer att stämma
