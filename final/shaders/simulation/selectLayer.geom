@@ -9,13 +9,12 @@ out float layer;
 void main()
 {
     gl_Layer = layerInstance[0];
-    layer = float(gl_Layer) + 0.5; // Fixning drift in z
+    layer = float(gl_Layer) + 0.5;
 
-    gl_Position = gl_in[0].gl_Position;
-    EmitVertex();
-    gl_Position = gl_in[1].gl_Position;
-    EmitVertex();
-    gl_Position = gl_in[2].gl_Position;
-    EmitVertex();
+    for (int i = 0; i < gl_in.length(); i++)
+    {
+        gl_Position = gl_in[i].gl_Position;
+        EmitVertex();
+    }
     EndPrimitive();
 }

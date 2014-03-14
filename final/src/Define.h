@@ -7,4 +7,4 @@
 #define VOLUME_WIDTH 300
 #define VOLUME_HEIGHT 300
 #define VOLUME_DEPTH 10
-#define TIME_STEP 0.1
+#define TIME_STEP 0.001
