@@ -545,14 +545,7 @@ Marcus Nygren}
 	Ekvation $ \ref{eq:Navier-Stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft som verkar på rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
-	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten till en punkt bakåt i tiden, vilket illustreras i figur \ref{fig:fetch_data}. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
-
-		\begin{figure}[H]
-			\centering
-			\includegraphics[scale=1.45]{report_images/fetch_data}
-			\caption{\emph{Advektionen fungerar så att en punkt spåras bakåt i tiden (1) för att sedan hämta det värdet som finns i den punkten (2).}}
-			\label{fig:fetch_data}
-		\end{figure}
+	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten till en punkt bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
 
 	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $\bold w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
 
@@ -705,7 +698,7 @@ För att beräkna lyftkraften som orsakas av temperaturen i volymen implementerade
 	\begin{figure}[H]
     	\centering
     	\includegraphics[scale=0.94]{report_images/warm_cold.png}
-    	\caption{\emph{Lyftkraften av rök beror på temperaturen från källan. Kallare temperaturer gör att röken sjunker, lik dimma (1) och en varmare temperatur skapar en stigande rök (2) likt den som skapas vid bränder.}}
+    	\caption{\emph{Lyftkraften av rök beror på temperaturen av källan. Kallare temperaturer gör att röken sjunker, lik dimma (1) och en varmare temperatur skapar en stigande rök (2) likt den som skapas vid bränder.}}
    		\label{fig:warm_cold}
 	\end{figure}
 
@@ -771,7 +764,7 @@ void main()
 		
 		Från början gick projektet ut på att utveckla ett gränssnitt i Qt där användaren grafiskt fick modifiera parametrarna och dess värden i Navier-Stokes, med syftet att ge användaren en väldigt pedagogisk koppling mellan ekvationerna och dess visuella representation.
 
-		Om vi hade gjort om projektet hade vi istället utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete bortprioriterades.
+		Om vi hade gjort om projektet hade vi utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete bortprioriterades. Istället för ett grafiskt gränssnitt har vi skapat en konsol där det går att skriva in kommandon för att ändra på variabler och parametrar i programmet.
 
 		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargränssnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen. 
 		
@@ -779,7 +772,7 @@ void main()
 
 	\Section{Resultat}
 		
-		I figurerna ~\ref{fig:resultat2} och ~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänstra och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Vissa tangenter är även bundna till att ändra värden hos parametrarna, exempelvis temperatur, som i detta fall är inställda enligt tabell ~\ref{tbl:konstanter} i bilaga A.
+		I figurerna ~\ref{fig:resultat2} och ~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänstra och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Genom att skriva in olika kommandon så går det att ändra på parametervärdena, exempelvis temperatur, som i detta fall är inställda enligt ~\ref{tbl:konstanter}.
 	
 	\begin{figure}[H]
     	\centering
