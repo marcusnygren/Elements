@@ -520,9 +520,9 @@ Marcus Nygren}
 
 			Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
-		\Subsection{Implementation av Navier-stokes ekvationer}
+		\Subsection{Implementation av Navier-Stokes ekvationer}
 
-			För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \\\\\bold \Gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$, med villkoret $\ref{eq:Konservering av massa}$. Mer teori och bakgrund om röksimulering finns att hämta i referens \cite{GPUGems1} och \cite{Fedkiw}.
+			För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \bold \Gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$, med villkoret $\ref{eq:Konservering av massa}$. Mer teori och bakgrund om röksimulering finns att hämta i referens \cite{GPUGems1} och \cite{Fedkiw}.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes simple}
@@ -543,7 +543,7 @@ Marcus Nygren}
 		\end{equation}
 	\end{center}
 	
-	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet ekvation $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
+	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret i ekvation $ \ref{eq:Konservering av massa} $ blir resultatet ekvation $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Poissons ekvation}
@@ -764,14 +764,14 @@ void main()
 	
 	\begin{figure}[H]
     	\centering
-    	\includegraphics[width=\linewidth]{report_images/Simulering3.png}
+    	\includegraphics[scale = 0.3]{report_images/Simulering3.png}
     	\caption{\emph{Resultat av simuleringen vid startstadium.}}
    		\label{fig:resultat}
 	\end{figure}		
 		
 		\begin{figure}[H]
     	\centering
-    	\includegraphics[width=\linewidth]{report_images/Simulering2.png}
+    	\includegraphics[scale = 0.3]{report_images/Simulering2.png}
     	\caption{\emph{Resultat av simuleringen efter att användaren har förflyttat en av punktkällorna med hjälp av piltangenterna.}}
    		\label{fig:resultat2}
 	\end{figure}
