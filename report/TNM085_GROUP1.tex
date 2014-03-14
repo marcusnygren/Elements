@@ -764,7 +764,7 @@ void main()
 		
 		Från början gick projektet ut på att utveckla ett gränssnitt i Qt där användaren grafiskt fick modifiera parametrarna och dess värden i Navier-Stokes, med syftet att ge användaren en väldigt pedagogisk koppling mellan ekvationerna och dess visuella representation.
 
-		Om vi hade gjort om projektet hade vi utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete bortprioriterades.
+		Om vi hade gjort om projektet hade vi istället utvecklat applikationen direkt i GLFW med tanke på att kursens tyngd låg i att utforma modellering och simulering, ej att producera en färdig produkt. Alldeles för sent i projektet upptäcktes varför det var så svårt att få en fungerande avancerad grafiska applikationer att fungera i Qt. Så fort projektet bytte fokus till GLFW gick det mycket snabbare att utveckla, även om det innebar att allt GUI-arbete bortprioriterades.
 
 		Med det sagt lämpar sig Qt fortfarande väl för tunga C++-applikationer som gynnas av användargränssnitt, men kraven på hur man utformar programvaran blir mycket högre och en kalkylerad avvägning rekommenderas. För utvecklingsteamet var det uppskattat att lära sig både Qt och GLFW under en och samma projekt. Det har dock fått följden att gruppen inte kommit så långt som visionen varit i något av systemen. 
 		
@@ -772,7 +772,7 @@ void main()
 
 	\Section{Resultat}
 		
-		I figurerna ~\ref{fig:resultat2} och ~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänstra och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Vissa tangenter är även bundna till att ändra värden hos parametrarna, exempelvis temperatur, som i detta fall är inställda enligt ~\ref{tbl:konstanter}.
+		I figurerna ~\ref{fig:resultat2} och ~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänstra och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Vissa tangenter är även bundna till att ändra värden hos parametrarna, exempelvis temperatur, som i detta fall är inställda enligt tabell ~\ref{tbl:konstanter} i bilaga A.
 	
 	\begin{figure}[H]
     	\centering
