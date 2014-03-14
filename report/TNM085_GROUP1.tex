@@ -545,7 +545,14 @@ Marcus Nygren}
 	Ekvation $ \ref{eq:Navier-Stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft som verkar på rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
-	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten till en punkt bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten till en punkt bakåt i tiden, vilket illustreras i figur \ref{fig:fetch_data}. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=1.45]{report_images/fetch_data}
+			\caption{\emph{Advektionen fungerar så att en punkt spåras bakåt i tiden (1) för att sedan hämta det värdet som finns i den punkten (2).}}
+			\label{fig:fetch_data}
+		\end{figure}
 
 	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $\bold w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
 
@@ -698,7 +705,7 @@ För att beräkna lyftkraften som orsakas av temperaturen i volymen implementerade
 	\begin{figure}[H]
     	\centering
     	\includegraphics[scale=0.94]{report_images/warm_cold.png}
-    	\caption{\emph{Lyftkraften av rök beror på temperaturen av källan. Kallare temperaturer gör att röken sjunker, lik dimma (1) och en varmare temperatur skapar en stigande rök (2) likt den som skapas vid bränder.}}
+    	\caption{\emph{Lyftkraften av rök beror på temperaturen från källan. Kallare temperaturer gör att röken sjunker, lik dimma (1) och en varmare temperatur skapar en stigande rök (2) likt den som skapas vid bränder.}}
    		\label{fig:warm_cold}
 	\end{figure}
 
