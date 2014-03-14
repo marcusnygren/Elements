@@ -1,13 +1,3 @@
-%______________________________________________________
-%
-%   LaTeX-mall för nybörjare
-%
-%   Konstruerad av Marcus Bergner, bergner@cs.umu.se
-%
-%   Vid funderingar titta längst ned i denna fil,
-%   eller skicka ett mail
-%______________________________________________________
-%
 
 % lite inställningar
 \documentclass[10pt, titlepage, oneside, a4paper]{article}
@@ -232,7 +222,7 @@ Marcus Nygren}
 
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
 
-		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans, det vill säga; att istället för att enskilda molekyler studeras så studers små volymelement av fluiden som kan innehålla flera molekyler. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym; se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds transportteorem} $.
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans, det vill säga; att istället för att enskilda molekyler studeras så studers små volymelement av fluiden som kan innehålla flera molekyler. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym; se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds transportteorem} $. För en mer utförlig förklaring och djupare analys av Navier-Stokes ekvationer se referens $ \cite{NS Deriation} $.
 		
 		I följande ekvationer är $ \bold u $ hastigheten 	\begin{center}
 			    $ \bold u(x,y,z,t) = \begin{pmatrix}
@@ -796,8 +786,12 @@ void main()
 
 	\newpage
 	\begin{thebibliography}{9}
+		 \bibitem{NS Deriation}
+		 Sebastian Böö, \emph{Navier-Stokes ekvationer. Några enkla lösningar
+		 och tillämpningar inom meteorologi, http://www2.math.su.se/gemensamt/grund/exjobb/matte/2008/rep6/report.pdf}, Matematiska Institutionen, Stockholms Universitet, 2008
+		 
 		\bibitem{GPUGems1}
-		Mark J. Harris \emph{Fast Fluid Dynamics Simulation on the GPU, GPU Gems, sida 637, Chapter 38}, NVIDIA och Addison-Wesley 2004		
+		Mark J. Harris, \emph{Fast Fluid Dynamics Simulation on the GPU, GPU Gems, sida 637, Chapter 38}, NVIDIA och Addison-Wesley 2004		
 		\bibitem{OpenGLSuperBible}
 		Graham Sellers, Richard S. Wright, Jr. och Nicholas Haemel, \emph{OpenGL Super Bible, Sixth Edition}, Addison-Wesley 2013
 		\bibitem{Fedkiw}
@@ -843,160 +837,3 @@ void main()
 	\end{appendices}
 
 \end{document}
-
-
-% Lite information om hur man arbetar med LaTeX
-%-----------------------------------------------
-%
-% LaTeX-koden kan skrivas med en godtycklig editor.
-% För att "kompilera" dokumentet används kommandot latex:
-%    bergner@peppar:~/edu/sysprog/lab1> latex rapportmall.tex
-% Resultatet blir ett antal filer, bl.a. en som heter rapportmall.dvi.
-% Denna fil kan användas för att titta hur dokumentet egentligen ser
-% ut med hjälp av programmet xdvi:
-%    bergner@peppar:~/edu/sysprog/lab1> xdvi rapportmall.dvi &
-% Du får då upp ett fönster som visar ditt dokument. Detta fönster
-% kommer automatiskt att uppdateras då du ändrar och kompilerar om din
-% LaTeX-kod. 
-% När du anser att din rapport är färdig att skrivas ut använder man
-% lämpligtvis kommandona dvips och lpr:
-%    bergner@peppar:~/edu/sysprog/lab1> dvips -P ma436ps rapportmall.dvi
-% Om man vill ha kvar PostScript-filen som dvips genererar kan man göra:
-%    bergner@peppar:~/edu/sysprog/lab1> dvips -o rapport.ps rapportmall.dvi
-%    bergner@peppar:~/edu/sysprog/lab1> lpr -P ma436ps rapport.ps
-% OBS!!! För att innehållsförteckningen och eventuella referenser till
-% tabeller och figurer garanterat ska stämma måste man köra latex 2ggr
-% på sitt dokument efter att man har ändrat något.
-%
-%
-% Lite information om saker man kan tänkas behöva i sitt arbete med LaTeX
-%-------------------------------------------------------------------------
-%
-% FORMATTERA TEXT
-%
-% För att formattera text på lite olika sätt kan man använda följande LaTeX-
-% kommandon:
-%    \textbf{denna text kommer att vara i fetstil}
-%    \emph{denna text är viktig (kursiv stil)}
-%    \texttt{i denna text blir alla tecken lika breda, som med en skrivmaskin}
-%    \textsf{denna text visas med ett typsnitt utan serifer}
-%
-%
-% MATEMATISKA FORMLER
-%
-% För att typsätta matematiska formler kan man använda:
-%    $f(x) = x^2 - 3$, vilket lägger in formeln i texten, eller
-%    \begin{displaymath}
-%        g(x) = \frac{\sin x}{x}
-%    \end{displaymath}, vilket låter formeln visas centrerat på en egen rad
-% Om du vill att en formel ska numreras byter du ut displaymath mot equation.
-% Det finns massor med matematiska symboler, vilket gör att man behöver
-% någon liten manual att titta i om man ska konstruera avancerade formler.
-% Se slutet på filen för lite råd om var du kan hitta sådana.
-%
-%
-% INFOGA FIGURER
-%
-% För att infoga en figur kan man göra på följande sätt:
-%    \begin{figure}[htb]
-%        \includegraphics[scale=0.5, angle=90]{exec_flow.eps}
-%        \caption{Detta är bildtexten}
-%        \label{EXECFLOW}
-%    \end{figure}
-% Om man vill referera till denna bild i texten skulle man då skriva enligt:
-%    ...i figur \ref{EXECFLOW} kan man se att...
-% Några små förklaringar till figurer:
-%    [htb] = talar om hur latex ska försöka placera bilden (Here, Top, Bottom)
-%            Om du använder [!h], innebär det Here!!!
-%    scale = kan skala om bilden, om den är skalbar
-%    angle = kan rotera bilden
-%    exec_flow.eps = filnamnet på bilden. Notera att formatet .EPS används
-% För att skapa figurer används lämpligtvis programmet xfig:
-%    bergner@peppar:~/edu/sysprog/lab1> xfig &
-% Rita (och spara ofta) tills du är klar. Välj sedan "Export" och exportera
-% din figur till EPS-format.
-% Om man vill kan man använda endast \includegraphics, men det är inte ofta
-% man gör det.
-%
-%
-% INFOGA TABELLER
-%
-% Om man vill skapa en tabell gör man på följande sätt:
-%    \begin{table}[htb]
-%        \begin{tabular}{|rlp{10cm}|}
-%            \hline
-%            13 & $17.26$ & En kommentar som kan sträcka sig över flera rader \\
-%            \hline
-%        \end{tabular}
-%        \caption{Tabelltexten...}
-%        \label{TBL:MINTABELL}
-%    \end{table}
-% Om man vill kan man endast använda raderna 2-6, dvs få en tabell utan text
-% och nummer. Om man gör på detta vis kommer tabellen alltid att läggas på
-% det ställe den skrivs i koden, dvs ungefär samma sak som [!h] -> Here!!!
-% Några förklaringar:
-%    l, r, c = vänsterjustera, högerjustera eller centrera kolumn
-%    p{bredd} = skapa en vänsterjusterad kolumn med en viss bredd
-%               kan innehålla flera rader text
-%    | = en vertikal linje i tabellen
-%    \hline = en horisontell linje i tabellen
-%    & = kolumnseparator
-%    \\ = radseparator
-% Tänk på att tabeller oftast ser bättre ut med ganska få linjer.
-%
-%
-% INFOGA KÄLLKOD ELLER UTDATA FRÅN TESTKÖRNINGAR
-%
-% Om man vill infoga källkod eller något annat liknande, t.ex. utdata från
-% en testkörning är det bra om LaTeX återger utdatan korrekt, dvs en radbrytning
-% betyder en radbrytning och 8 mellanslag på rad betyder 8 mellanslag på rad.
-% För att åstadkomma detta används:
-%    \begin{verbatim}
-%        allt som skrivs här återges exakt, med skrivmaskinstypsnitt
-%    \end{verbatim}
-% Oftast finns det dock bättre verktyg för att skriva ut källkod. Exempel på
-% sådana är a2ps, enscript och atp.
-%
-%
-% ÄNDRA STORLEK PÅ TEXT
-%
-% Om du vill ändra storleken på ett stycke, t.ex. på din nyss infogade
-% testkörning omger du stycket med \begin{STORLEK} \end{STORLEK}, där
-% STORLEK är någon av:
-%    tiny, scriptsize, footnotesize, small, normalsize, large, Large,
-%    LARGE, huge, Huge
-% Tänk på att inte mixtra för mycket med storlekar bara.
-%
-%
-% SKAPA LISTOR AV OLIKA SLAG
-%
-% Det är ganska vanligt att man vill rada upp saker på något sätt. För att
-% skapa punktlistor används:
-%    \begin{itemize}
-%        \item Detta är första punkten
-%        \item Detta är andra punkten
-%    \end{itemize}
-% Om man istället vill ha en numrerad lista kan man använda enumerate istället
-% för itemize. Listor kan användas i flera nivåer
-%
-%
-% MER INFORMATION OM LaTeX
-%
-% Lite blandad information om LaTeX, länkar och annat hittar du på
-% http://www.cs.umu.se/~bergner/latex.htm
-% En del information om rapportskrivning hittar du på
-% http://www.cs.umu.se/~bergner/rapport/
-% Det finns massor med information om LaTeX på Internet. Ett litet urval:
-% http://www.giss.nasa.gov/latex/
-%     är en mycket välfylld sida om LaTeX
-% http://wwwinfo.cern.ch/asdoc/WWW/essential/essential.html
-%     är en manual som genererats utifrån ett LaTeX-dokument mha latex2html
-% http://tex.loria.fr/english/
-%     är ett fylligt arkiv av länkar till LaTeX-dokument på Internet
-%
-% Min personliga favorit är dock manualen "The Not So Short Introduction to
-% LaTeX2e", som finns i DVI-format på ~bergner/LaTeX/lshort2e.dvi
-% Där står i princip allt man behöver veta. Det är bara att använda xdvi och
-% titta efter det du söker, vilket oftast finns där.
-% Om du, precis som jag, vill kunna leka med många kommandon i LaTeX finns en
-% "LaTeX Command Summary" på ~bergner/LaTeX/latexcmds.ps
