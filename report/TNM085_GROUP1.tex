@@ -442,9 +442,9 @@ Marcus Nygren}
 			=
 			\chi \ \ \ \ \ \
 	\end{Konservering av rörelsemängd 6}
-\fi
+%\fi
 	
-	\iffalse
+	%\iffalse
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
 			\varrho \left ( 
@@ -528,12 +528,12 @@ Marcus Nygren}
 	
 		\Subsection{Val av beräkningsmetod}
 		
-		Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+			Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 		
-		Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
+			Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
-För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$. Mer teori och bakgrund om röksimulering finns att hämta i \cite{GPUGems1} och \cite{Fedkiw}.
+			För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$. Mer teori och bakgrund om röksimulering finns att hämta i referens \cite{GPUGems1} och \cite{Fedkiw}.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes simple}
@@ -545,7 +545,6 @@ För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Fö
  	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
 	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
-
 
 	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
 	\begin{center}
