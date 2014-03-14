@@ -442,9 +442,9 @@ Marcus Nygren}
 			=
 			\chi \ \ \ \ \ \
 	\end{Konservering av rörelsemängd 6}
-%\fi
+
 	
-	%\iffalse
+	\iffalse
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 5}
 			\varrho \left ( 
@@ -467,7 +467,7 @@ Marcus Nygren}
 			\chi
 		\end{equation}
 	\end{center}
-	
+	\fi
 	
 	Genom att studera ett fluidelement i en fluid fås att kraften $ \chi $ kan delas upp i två termer enligt $ \chi =   \nabla \cdot \sigma + \bold f $, där $ \nabla \cdot \sigma $ härstammar från tryck och där $ \bold f $ härstammar från yttre krafter. Cauchys spänningstensor $ \sigma $ kan förenklas till $ \sigma = -pI +  \bold \Gamma \ $, där $ p $ är medelvärdet av det normala trycket i $ x $-, $ y $- och $ z $-led, $ I $ är identitetsmatrisen och där $ \bold \Gamma $ är en deriverbar spänningstensor som brukligt kallas för viskositetstermen. För en fluid i vila är exempelvis $ \bold \Gamma = 0 $. Detta resulterar i ekvation $ \ref{eq:Konservering av rörelsemängd 9} $ som är Navier-Stokes generella ekvation.
 	
@@ -495,6 +495,7 @@ Marcus Nygren}
 			\ \ \
 	\end{Konservering av rörelsemängd 9}
 
+\iffalse
 
 	\begin{center}
 		\begin{equation}\label{eq:Konservering av rörelsemängd 7}
@@ -522,7 +523,7 @@ Marcus Nygren}
 			- \nabla p + \nabla \cdot \bold \Gamma  + \bold f
 		\end{equation}
 	\end{center}
-	
+\fi	
 
 	\Section{Numerisk implementation}
 	
