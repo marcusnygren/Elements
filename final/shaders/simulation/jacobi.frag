@@ -46,7 +46,7 @@ void main()
   if (zDownO.x > 0)
     zDownP = centerP;
 
-  vec4 bc = texelFetch(bTexture, pos, 0);
+  float bc = texelFetch(bTexture, pos, 0).x;
 
   value = (xUpP + xDownP + yUpP + yDownP + zUpP + zDownP + alpha * bc) * beta;
 }

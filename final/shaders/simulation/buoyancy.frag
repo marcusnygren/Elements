@@ -23,6 +23,6 @@ void main()
 
     if (temp > ambientTemperature) {
         float density = texelFetch(densityTexture, pos, 0).x;
-        value += (timeStep * (temp - ambientTemperature) * alpha - density * beta ) * vec3(0, -1, 0);
+        value += (1 * (temp - ambientTemperature) * beta - density * alpha ) * vec3(0, 1, 0);
     }
 }

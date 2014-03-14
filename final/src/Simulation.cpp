@@ -6,7 +6,7 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
 : _density(width, height, depth, 3),
   _velocity(width, height, depth, 3),
   _pressure(width, height, depth, 2),
-  _divergence(width, height, depth, 3),
+  _divergence(width, height, depth, 2),
   _obstacles(width, height, depth, 3),
   _temperature(width, height, depth, 2),
   _timeStep(timeStep),
@@ -124,7 +124,7 @@ void Simulation::stepSimulation()
   computeBuoyancy(_velocity.getBuffer1(), _temperature.getBuffer1(), _density.getBuffer1(), _velocity.getBuffer2());
   _velocity.swapBuffers();
 
-  addSource(_temperature.getBuffer1(), _temperaturePosition, glm::vec4(20), 20);
+  addSource(_temperature.getBuffer1(), _temperaturePosition, glm::vec4(5), 300);
 
   addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(1,0.5,0.75,0), 5);
   addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2+80, _dimensions.y/2, _dimensions.z/2), glm::vec4(4,3,5,0), 5);
@@ -132,13 +132,16 @@ void Simulation::stepSimulation()
 
   addSource(&_obstacles, glm::vec3(_dimensions.x/2-75, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
   addSource(&_obstacles, glm::vec3(_dimensions.x/2+75, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  // addSource(&_obstacles, glm::vec3(_dimensions.x/2-35, _dimensions.y/2-40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  // addSource(&_obstacles, glm::vec3(_dimensions.x/2+35, _dimensions.y/2-40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+
   addSource(&_obstacles, glm::vec3(_dimensions.x/2, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
 
   computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
 
   setTextureValue(_pressure.getBuffer1(), 0);
 
-  for (int i = 0; i < 40; ++i)
+  for (int i = 0; i < 20; ++i)
   {
     computeJacobi(_pressure.getBuffer1(), &_divergence, _pressure.getBuffer2(), &_obstacles);
     _pressure.swapBuffers();
@@ -267,7 +270,7 @@ void Simulation::computeDivergence(Volume* velocity, Volume* destination, Volume
 
   setUniform("velocityTexture", 0); // Bind velocity texture to unit 0
   setUniform("obstacleTexture", 1); // Bind obstacle texture to unit 1
-  setUniform("cellSize", _dimensions.z); // borde vara den här eller ? kanske gridScale???
+  setUniform("cellSize", _dimensions.z);
 
   glBindFramebuffer(GL_FRAMEBUFFER, destination->getFbo());
   glActiveTexture(GL_TEXTURE0);
