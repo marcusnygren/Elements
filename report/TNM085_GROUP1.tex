@@ -225,7 +225,7 @@ Marcus Nygren}
 	\setlength{\parskip}{10pt}
 
 	\Section{Introduktion}
-		Elements är en programvara som utför fluidsimuleringar baserade på Navier-Stokes ekvationer i realtid på GPU. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med olika värden på variablerna i Navier-Stokes ekvationer.
+		Elements är en programvara som utför fluidsimuleringar baserade på Navier-Stokes ekvationer i realtid på GPU. Programmet visar i dagsläget endast rök, men programmet är utformat för att i framtiden kunna byggas ut med fler simuleringar som exempelvis eld och vatten. Visionen med Elements är att användaren ska kunna utforska Navier-Stokes ekvationer genom att i realtid kunna experimentera med parametervärdena.
 
 %		Målet med projektet har varit att utmanas tekniskt, kombinera medieteknik och datateknik, erfara modellering och simulering, och genom projektet bidra till ökad kunskap hos andra.
 	
@@ -234,7 +234,7 @@ Marcus Nygren}
 
 	\Subsection{Förklaring av Navier-Stokes ekvationer}
 
-		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans, det vill säga att istället för att enskilda molekyler studeras så studers små volymelement av fluiden som kan innehålla flera molekyler. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym, se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds transportteorem} $.
+		Navier-Stokes ekvation, ekvation $ \ref{eq:Navier-Stokes} $, och sambandet om konserverandet av massa, ekvation $ \ref{eq:Konservering av massa} $, refereras i allmänhet till Navier-Stokes ekvationer. Dessa modellerar tillsammans en fluid genom att se på fluiden som en kontinuerlig substans, det vill säga; att istället för att enskilda molekyler studeras så studers små volymelement av fluiden som kan innehålla flera molekyler. Ekvationerna i sig bygger på konservering av massa, rörelsemängd och energi och härstammar från ett antal volym- och yt-integraler över en godtycklig volym; se stycket om konservering av energi under sektion 2.2 som beskriver Reynolds Transport Theorem (RTT), ekvation $ \ref{eq:Reynolds transportteorem} $.
 		
 		I följande ekvationer är $ \bold u $ hastigheten 	\begin{center}
 			    $ \bold u(x,y,z,t) = \begin{pmatrix}
@@ -528,12 +528,12 @@ Marcus Nygren}
 	
 		\Subsection{Val av beräkningsmetod}
 		
-			Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser kontinuumet som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
+			Det finns två olika sätt att basera sina beräkningar på, det Euleriska synsättet och det Lagranska synsättet. Det Lagranska synsättet ser fluiden som ett partikelsystem, där en partikel kan likställas med ett fluidelement som rör på sig och som går att associera med en enskild molekyl. Till skillnad från det Lagranska synsättet där enskilda partiklar studeras, bygger istället det Euleriska synsättet på att fixerade punkter i rummet studeras. Fluidens egenskaper som exempelvis hastighet, densitet och temperatur beräknas i varje given punkt.
 		
 			Vid fluidsimuleringar på GPU lämpar det sig bäst att använda sig av det Euleriska synsättet, eftersom de intressanta punkterna i rymden med fördel kan placeras i ett rutnät som direkt kan representeras av en textur. Således tillämpas det Euleriska synsättet i det här projektet.
 
 		\Subsection{Implementation av Navier-stokes ekvationer}
-			För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$. Mer teori och bakgrund om röksimulering finns att hämta i referens \cite{GPUGems1} och \cite{Fedkiw}.
+			För simulering av rök förenklas systemet i ekvation $\ref{eq:Navier-Stokes}$. Först inses att spänningstensorn $ \\\\\bold \Gamma $  är försumbar för simulering av rök. Därefter divideras höger -och vänsterledet med $\rho$, för att sedan flytta över $\bold u \cdot \nabla \bold u$ till högerledet. Resultatet blir då ekvation $\ref{eq:Navier-Stokes simple}$, med villkoret $\ref{eq:Konservering av massa}$. Mer teori och bakgrund om röksimulering finns att hämta i referens \cite{GPUGems1} och \cite{Fedkiw}.
 
 	\begin{center}
 		\begin{equation}\label{eq:Navier-Stokes simple}
@@ -542,18 +542,18 @@ Marcus Nygren}
 	\end{center}
 	
 	Ekvation $ \ref{eq:Navier-Stokes simple} $ kan brytas ned och beräknas komponentvis. Där 
- 	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft för simulering av rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
+ 	$ \bold u \cdot \nabla \bold u $ beskriver advektion av hastigheten, $ \nabla p $  tryckförändringen i rummet och $\bold f $ är en lämplig extern kraft som verkar på rök. För varje komponent uppdateras rutnätet stegvis tills alla komponenter har beräknats, för att därefter påbörja en ny beräkning.
 	
-	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
+	Den första komponenten som beräknas är advektionen. Advektion av en fysikalisk kvantitet kan beräknas numerisk med olika metoder. En användbar stegmetod för fluider är Eulers implicita stegmetod. Då Eulers explicita metod tenderar att ge okontrollerbar ökning av felet så är den implicita metoden stabil för vissa valda tidssteg och enkel att implementera på GPU:n. Advektionen beräknas genom att spåra kvantiteten till en punkt bakåt i tiden. Därefter beräknas en billinjär interpolation på dem fyra närliggande värdena i rutnätet.
 
-	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
+	När adkvetion har genomförts beräknas den andra komponenten, trycket. Trycket beräknas genom att först skapa en vektor $\bold w$, som en summa av två vektorer, enligt ekvation  $ \ref{eq:vektor w} $:
 	\begin{center}
 		\begin{equation}\label{eq:vektor w}
 			\bold w = \bold u + \nabla p.
 		\end{equation}
 	\end{center}
 	
-	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
+	Därefter appliceras divergensoperatorn på ekvation $ \ref{eq:vektor w} $ och tillsammans med villkoret $ \ref{eq:villkor} $ blir resultatet ekvation $ \ref{eq:Poissons ekvation} $, Poissons ekvation.
 	
 	\begin{center}
 		\begin{equation}\label{eq:Poissons ekvation}
@@ -561,9 +561,9 @@ Marcus Nygren}
 		\end{equation}
 	\end{center}
 	
-	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = Q $, där $\bold A $ byggs av Laplaceoperatorn, $ Q $ är konstanter från $ \bold w $ och $ \bold x $ är den sökta vektorn. Metoden som används för att lösa systemet är Jacobis iterativa metod. Metoden går ut på att först initiera en gissning på en lösning av systemet och sedan iterera fram en förbättrad lösning. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
+	I ekvation $ \ref{eq:Poissons ekvation} $ står $\bold w$ för hastigheten som hittills räknats ut av dem tidigare komponenterna i ekvationen. Poissons ekvation kan skrivas om till matrisform, $ \bold A \bold x = \bold b $, där $\bold A $ byggs av Laplaceoperatorn, $ \bold b $ är konstanter från $ \bold w $ och $ \bold x $ är vektorn med sökta element. Metoden som används för att lösa systemet är Jacobis iterativa metod. Metoden går ut på att först initiera en gissning på en lösning av systemet och sedan iterera fram en förbättrad lösning. Processen är iterativ tills lösningen konvergerar. Det finns olika numeriska metoder till att lösa Poissons ekvation, men tack vare Jacobis enkla struktur utförs beräkningarna snabbt på GPU:n, även om metoden konvergerar långsammare än andra metoder.
 	
-	För en fullständig lösning på Poissons ekvation krävs hantering av tryck- och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts till 0. För trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
+	För en fullständig lösning på Poissons ekvation krävs hantering av tryck- och hastighets-problem som uppstår vid randen. Hastigheten i randens riktning sätts då till 0 och för trycket används Neumanns randvillkor, på så sätt att $ \frac{\partial p}{\partial t} = 0 $. 
 
 	Slutligen uppdateras hastigheten med externa krafter. Det finns olika lämpliga externa krafter som verkar på rök. Men för enkelhetens skull har bara en kraft tagits med i implementationen, rökens lyftkraft. Det är en kraft som återfinns i verkliga sammanhang och som beror av temperaturen i rummet och gasens densitet. 
 	
@@ -583,29 +583,29 @@ Marcus Nygren}
 	\end{center}
 \fi
 
-	Från ekvation $\ref{eq:Navier-stokes simple}$ kan den externa kraften, $ \bold f$, beräknas genom ekvation $\ref{eq:Buoyancy}$.
+	Från ekvation $\ref{eq:Navier-Stokes simple}$ kan den externa kraften, $ \bold f$, beräknas genom ekvation $\ref{eq:Buoyancy}$.
 	\begin{center}
 		\begin{equation}\label{eq:Buoyancy}
 			\bold f_{buoy} = - \alpha\rho\bold y + \beta(T-T_{amb})\bold y
 		\end{equation}
 	\end{center}
 
-I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att ekvationen är fysikalisk meningsfull. Temperaturen och den initiala temperaturen är $ T $ respektive $ T_{amb} $. Riktningen hos kraften är $ \bold y = (0,1,0) $. Djupare teori om framtagning av temperatur och densitet finns att se i \cite{Fedkiw}. 
+I $ \ref{eq:Buoyancy} $ är $ \alpha $ och $ \beta $ positiva konstanter så att ekvationen är fysikalisk meningsfull. Temperaturen och den initiala temperaturen är $ T $ respektive $ T_{amb} $. Riktningen hos kraften är $ \bold y = (0,1,0) $. Djupare teori om framtagning av temperatur och densitet finns att se i referens \cite{Fedkiw}. 
 
 
 
-		\Subsection{Simulering i Matlab}
+		\Subsection{Simulering i MATLAB}
 	MATLAB är ett verktyg med inbyggda kommandon som underlättar  beräkningar av matriser. Med programmets kommandon kan en enklare flödessimulering utföras som en förstudie och ökad förståelse. Det är dock svårt att verifiera om en simulering utförs korrekt eftersom programmet saknar visuell funktionalitet. 
 \\
 \\	
-I MATLAB användes samma steg som beskrivs i avsnitt 3.1 Implementation av Navier-Stokes ekvationer. Till skillnad från simuleringen som beskrivs i avsnitt 3.3 OpenGL/GLSL, simplifierades det visuella utseendet för att lösa och förstå dem numeriska problem som kunde uppstå. Simuleringen visade att tidsteget gav varierande resultat och var känslig för mindre ändringar. Det insågs också att $ \alpha $ och $ \beta $ i ekvation $ \ref{eq:Buoyancy} $ har en kraftig påverkan på ekvationen. 
+I MATLAB användes samma steg som beskrivs i avsnitt 3.1 Implementation av Navier-Stokes ekvationer. Till skillnad från simuleringen som beskrivs i avsnitt 3.3 OpenGL/GLSL, simplifierades det visuella utseendet för att lösa och förstå de numeriska problem som kunde uppstå. Simuleringen visade bland annat att tidsteget gav varierande resultat och var känslig för mindre ändringar. Det insågs också att $ \alpha $ och $ \beta $ i ekvation $ \ref{eq:Buoyancy} $ har en kraftig påverkan på ekvationen. 
 	
 		\Subsection{OpenGL/GLSL}
 		Realtidssimuleringar av fluider är mycket krävande även för dagens moderna datorer, vilket innebär att metoder för bättre prestanda är eftertraktade. En sådan teknik är att implementera den numeriska lösningen på GPU (istället för CPU), för att utnyttja möjligheten att köra beräkningarna parallellt. Även på moderna processorer är det möjligt att utföra beräkningar parallellt på fyra eller till och med åtta kärnor, dock kan detta inte mäta sig med de upp emot 2500 beräkningskärnor som kan tillgås på ett nyare grafikkort.
 		
 		För GPU-implementationen användes programmeringsspråket C++ med grafikbiblioteket OpenGL för att styra programmet på applikationsnivå. För att komma närmare hårdvaran och kontrollera hur grafikkortet utförde beräkningarna användes även språket GLSL. 
 
-		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3D-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3D-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen i listning~\ref{lst::texImage}. 
+		För att beskriva simuleringen behövdes att antal värden sparas för varje cell i volymen. Dessa värden kan intuitivt representeras som 3D-texturer med olika många komponenter per voxel (volymelement).  Till exempel så kan en hastighet i tre dimensioner lagras som en vektor med tre komponenter. För att spara en hastighet för varje cell i volymen användes en 3D-textur där varje voxel innehåller tre komponenter. För att bestämma hur många komponenter en textur skulle ha användes OpenGL-funktionen i listing~\ref{lst::texImage}. 
 \begin{lstlisting}[language=C++, caption = {OpenGL-funktionen för att skapa en 3D-textur.}, label = {lst::texImage}]
 void glTexImage3D(
 	GLenum target,
@@ -637,10 +637,10 @@ De parametrar som kontrollerar antalet komponenter är internalFormat och format.
 	\end{tabular}
 \end{center}
 \end{table}
-För att kunna representera hinder användes ytligare en 3D-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
-För en mer omfattande beskrivning av hur texturer skapas i OpenGL se \cite[s.~138]{OpenGLSuperBible}. \\
+För att kunna representera hinder användes ytterligare en 3D-textur. För detta krävdes endast en textur med en komponent. Om värdet i denna komponent var större än noll ansågs den voxeln i volymen att ligga i ett hinder. 
+För en mer omfattande beskrivning av hur texturer skapas i OpenGL se referens \cite[s.~138]{OpenGLSuperBible}. \\
 
-För att sedan kunna uppdatera värdena i texturerna användes så kallade \textit{Framebuffer Objects}. Med \textit{Framebuffer Objects} kunde resultatet från grafikkortets beräkningar sparas i texturer i stället för att ritas på skärmen. Varje textur binds till ett \textit{Framebuffer Object} som sedan kan aktiveras innan rendering. Ett problem som behövde hanteras var att OpenGL inte kan rendera direkt till en 3D-textur. Istället behövde texturen delas in i tvådimensionella skivor som sedan renderades till var för sig. För att uppnå maximal prestanda och minska belastningen på CPU användes OpenGL funktionen i listning~\ref{lst:drawInstanced}.
+För att sedan kunna uppdatera värdena i texturerna användes så kallade \textit{Framebuffer Objects}. Med \textit{Framebuffer Objects} kunde resultatet från grafikkortets beräkningar sparas i texturer i stället för att ritas på skärmen. Varje textur binds till ett \textit{Framebuffer Object} som sedan kan aktiveras före rendering. Ett problem som behövde hanteras var att OpenGL inte kan rendera direkt till en 3D-textur. Istället behövde texturen delas in i tvådimensionella skivor som sedan renderades till var för sig. För att uppnå maximal prestanda och minska belastningen på CPU användes OpenGL funktionen i listing~\ref{lst:drawInstanced}.
 
 \begin{lstlisting}[language=GLSL, caption={OpenGL funktion för att rendera flera instanser.}, label = {lst:drawInstanced}]
 void glDrawArraysInstanced(
@@ -650,7 +650,7 @@ void glDrawArraysInstanced(
  	GLsizei primcount); 
 \end{lstlisting}
 
-Parametern mode talar om vilken typ av primitiv som ska renderas och sattes i detta fall till GL\_TRIANGLE\_STRIP. first talar om var i vertex-listan renderingen ska starta. För den parametern sattes värdet noll då renderingen skulle börja från början av listan. Eftersom det var en quad som ritades sattes count till fyra, det vill säga antalet hörnpunkter som skulle renderas. Den mest intressanta parametern är primcount då den talar om hur många instanser av som ska göras av renderingen. Då volymen delades upp i z-led sattes primcount till djupet på volymen. Vid instansrendering ökas värdet på den inbyggda vertex-shader variabel \textit{gl\_InstanceID} med ett för varje instans. För att använda den variabeln skapades en vertex-shader som sparade den till en \textit{Output} variabel och skickade den vidare till en geometry-shader. Vertex-shader visas i listning~\ref{lst:vertex}. 
+Parametern mode talar om vilken typ av primitiv som ska renderas och sattes i detta fall till GL\_TRIANGLE\_STRIP. first talar om var i vertex-listan renderingen ska starta. För den parametern sattes värdet noll då renderingen skulle börja från början av listan. Eftersom det var en quad som ritades sattes count till fyra, det vill säga antalet hörnpunkter som skulle renderas. Den mest intressanta parametern är primcount då den talar om hur många instanser av som ska göras av renderingen. Då volymen delades upp i z-led sattes primcount till djupet på volymen. Vid instansrendering ökas värdet på den inbyggda vertex-shader variabel \textit{gl\_InstanceID} med ett för varje instans. För att använda den variabeln skapades en vertex-shader som sparade den till en \textit{Output} variabel och skickade den vidare till en geometry-shader. Vertex-shader visas i listing~\ref{lst:vertex}. 
 
 \begin{lstlisting}[language=GLSL, caption={Vertex-shader för att hantera instansrendering}, label = {lst:vertex}]
 layout (location = 0) in vec4 vertexPosition;
@@ -664,7 +664,7 @@ void main()
 }
 \end{lstlisting}
 
-En geometry-shader behandlar, till skillnad från vertex-shader, inte enstaka hörnpunkter utan istället hela primitiver. I detta fall användes den för att koppla en instans av renderingen till rätt texturlager. Första steget var att sätta den inbyggda variabeln \textit{gl\_Layer} till värdet på den aktuella instansen. \textit{gl\_Layer} talar om för OpenGL till vilket lager i texturen som är bunden till den aktiverade \textit{Framebuffer Object} som renderingen ska ske. Nästa steg var att ta fram det värdet som skulle användas för åtkomst till ett lager i en bunden textur. Detta kunde inte vara samma som \textit{gl\_Layer} då varje voxel behandlas från centrum men värdet från en textur hämtas från kanten. Detta löstes genom att introducera en förskjutning på 0.5 till värdet på \textit{gl\_Layer}. Slutligen skickade geometry-shadern hörnpunkterna vidare till nästa steg i renderingen. Shadern visas i listning~\ref{lst:geom}.
+En geometry-shader behandlar, till skillnad från vertex-shader, inte enstaka hörnpunkter utan istället hela primitiver. I detta fall användes den för att koppla en instans av renderingen till rätt texturlager. Första steget var att sätta den inbyggda variabeln \textit{gl\_Layer} till värdet på den aktuella instansen. \textit{gl\_Layer} talar om för OpenGL till vilket lager i texturen som är bunden till den aktiverade \textit{Framebuffer Object} som renderingen ska ske. Nästa steg var att ta fram det värdet som skulle användas för åtkomst till ett lager i en bunden textur. Detta kunde inte vara samma som \textit{gl\_Layer} då varje voxel behandlas från centrum men värdet från en textur hämtas från kanten. Detta löstes genom att introducera en förskjutning på 0.5 till värdet på \textit{gl\_Layer}. Slutligen skickade geometry-shadern hörnpunkterna vidare till nästa steg i renderingen. Shadern visas i listing~\ref{lst:geom}.
 
 \begin{lstlisting}[language=GLSL, caption={Geometry-shader för att välja rätt texturlager.}, label = {lst:geom}]
 layout(triangles) in;
@@ -712,14 +712,11 @@ För att beräkna trycket ur ekvation~\ref{eq:Poissons ekvation} användes som nämn
 		\end{equation}
 	\end{center}
 	
-Sista steget i beräkningen var att beräkna gradienten av trycket och subtrahera den med hastigheten. Detta kommer från att den slutgiltiga hastigheten, $ \bold u $, fås av att i ekvation~\ref{eq:vektor w} flytta $ \nabla p $ till vänster ledet. Ytligare en gång hämtades alla omkringliggande värden ur tryck-texturen och dessa användes för att beräkna gradienten. Här kontrolleras även i fall någon omkringliggande cell befinner sig i ett hinder. I så fall sätts trycket till värdet i den centrala cellen och hastigheten sätts till noll.
+Sista steget i beräkningen var att beräkna gradienten av trycket och subtrahera den med hastigheten. Detta kommer från att den slutgiltiga hastigheten, $ \bold u $, fås av att i ekvation~\ref{eq:vektor w} flytta $ \nabla p $ till vänsterledet. Ytligare en gång hämtades alla omkringliggande värden ur tryck-texturen och dessa användes för att beräkna gradienten. Här kontrolleras även i fall någon omkringliggande cell befinner sig i ett hinder. I så fall sätts trycket till värdet i den centrala cellen och hastigheten sätts till noll.
 		
 	\Section{Grafisk implementation}
-
-		\Subsection{OpenGL}
-		\emph{Varför valde vi OpenGL? Hur fick vi fram renderingen på skärmen?}
 		
-		\Subsection{Qt}
+		\Subsection{Användargränssnitt}
 För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. Det är ett populärt multiplattformsbibliotek för att utveckla GUI:n, med ett egenutvecklat designskriptspråk, QML. Detta språket kommunicerar med C++ via en metod kallad ''Signals \& Slots'' och kan även hantera JavaScript-funktioner.
 
 		%Det upptäcktes dock att medan Qt lämpar sig väldigt väl för att göra ett avancerat GUI, vilket var ett av projektens önskemål, lämpar sig inte biblioteket för att göra avancerad 3D i OpenGL, främst därför att Qt styr över i vilken ordning olika operationer ska utföras, vilket kan vara en försvårande omständighet i mer avancerade grafikapplikationer.
@@ -730,7 +727,7 @@ För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. De
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=90mm]{report_images/QtGui}
-			\caption{\emph{Användargränsnittet skapat i Qt som inte kom med till slutresultatet}}
+			\caption{\emph{Användargränsnittet skapat i Qt som inte kom med i slutresultatet}}
 			\label{fig:QtGui}
 		\end{figure}
 		
@@ -739,8 +736,10 @@ För att utveckla och skapa ett användagränssnitt i C++ rekommenderas ofta Qt. De
 		GLFW är ett plattformsoberoende fönsterhanterings-ramverk utan onödiga finesser. GLFW har inte något inbyggt stöd för att göra GUI, men är ett mycket uppskattat ramverk bland utvecklare för att utveckla prestandatunga applikationer i OpenGL. Det som GLFW kan sköta är fönsterhantering och inmatning från bland annat mus och tangentbord.
 		
 		När GLFW används vid utveckling av en OpenGL-applikationer behövs först ett annat ramverk för att ladda de OpenGL-funktioner som finns tillgängliga på systemet. För detta ändamål användes GLEW. I den här rapporten kommer inte GLEW att beskrivas i detalj. Det finns många bibliotek med samma funktionalitet och valet mellan dessa spelar inte någon större roll.
+		
+		\Subsection{3D-texturer}
 
-		Resultatet från den numeriska lösningen är en 3D-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3D-texturen visualiseras genom att ett 2D-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela \textit{viewport}:en. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3D-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns i listning~\ref{lst:vizShader}.
+		Resultatet från den numeriska lösningen är en 3D-textur som innehåller diskreta värden för densitetens utbredning i fluiden. 3D-texturen visualiseras genom att ett 2D-plan plockas ut vid ett diskret z-värde i mitten av volymen för att sedan mappas till en quad som täcker hela \textit{viewport}:en. Detta görs genom att rendera två trianglar som tillsammans bildar en rektangel och fyller hela skärmen. Hörnpunkterna skickas sedan till en vertex-shader som inte utför några beräkningar utan endast skickar den vidare. Det är först när de enskilda fragmenten ska behandlas som något meningsfullt sker. Här behandlas varje fragment av en fragment-shader som hämtar ett värde ur den bundna 3D-texturen beroende på fragmentets koordinater samt vilken nivå i z-led som ska visas. Viktigt att notera är att fragmentets koordinater antar värden mellan noll och fönstretsstorlek medan texturkoordinater ges mellan noll och ett. Det är alltså nödvändigt för fragment-shadern att veta om fönstret storlek så att koordinaterna kan normaliseras. Fragment-shadern syns i listing~\ref{lst:vizShader}.
 
 \begin{lstlisting}[language=GLSL, caption={Fragment-shader för att visualisera ett lager ur en 3D-textur.}, label = {lst:vizShader}]
 out vec3 color;
@@ -771,19 +770,19 @@ void main()
 
 	\Section{Resultat}
 		
-		I figur~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre  rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänsta och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Vissa tangenter är även bindna till att ändra värden hos parametrarna, exempelvis temperatur, som i detta fall är inställda enligt ~\ref{tbl:konstanter}.
+		I figurerna ~\ref{fig:resultat2} och ~\ref{fig:resultat} visas resultatet av att rendera ett lager av 3D-texturen som innehåller densitetens utbredning. De tre rökkällorna har olika densitet, där röken efter en tid breder ut sig och krockar med de cirkulära objekten. En värmekälla är placerad vid samma position som rökkällan i mitten i figur ~\ref{fig:resultat}. Detta kan ses i figuren genom att observera hur röken på den vänstra och högra sidan rör sig i motsatt riktning till värmekällan. Implementationen tillåter en användare att styra den mittersta källan via piltangenterna, se exempel i figur ~\ref{fig:resultat2}. Vissa tangenter är även bundna till att ändra värden hos parametrarna, exempelvis temperatur, som i detta fall är inställda enligt ~\ref{tbl:konstanter}.
 	
 	\begin{figure}[H]
     	\centering
     	\includegraphics[width=\linewidth]{report_images/Simulering3.png}
-    	\caption{\emph{Resultat av simuleringen.}}
+    	\caption{\emph{Resultat av simuleringen vid startstadium.}}
    		\label{fig:resultat}
 	\end{figure}		
 		
 		\begin{figure}[H]
     	\centering
     	\includegraphics[width=\linewidth]{report_images/Simulering2.png}
-    	\caption{\emph{Resultat av simuleringen, efter att användaren har förflyttat en av punktkällorna med hjälp av piltangenterna.}}
+    	\caption{\emph{Resultat av simuleringen efter att användaren har förflyttat en av punktkällorna med hjälp av piltangenterna.}}
    		\label{fig:resultat2}
 	\end{figure}
 
