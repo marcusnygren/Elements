@@ -59,6 +59,7 @@ class Simulation
     Console* _console;
 
     GLuint _vbo;
+    GLuint _vao;
     GLuint _volumeVbo;
 
     Loader _shaderLoader;

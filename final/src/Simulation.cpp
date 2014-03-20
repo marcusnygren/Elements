@@ -83,6 +83,7 @@ Simulation::Simulation(int width, int height, int depth)
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_STATIC_DRAW);
 
+
   // Create vbo for determining volume intersection
   GLfloat volumeVertecies[] = 
   {
@@ -133,6 +134,8 @@ Simulation::Simulation(int width, int height, int depth)
 
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+  glGenVertexArrays(1, &_vao);
+  glBindVertexArray(_vao);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
   glViewport(0, 0, _dimensions.x, _dimensions.y);
 
@@ -153,6 +156,7 @@ void Simulation::stepSimulation()
 { 
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+  glBindVertexArray(_vao);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
   glViewport(0, 0, _dimensions.x, _dimensions.y);
