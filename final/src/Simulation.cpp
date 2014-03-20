@@ -2,19 +2,23 @@
 #include "Simulation.h"
 
 #include <iostream>
-Simulation::Simulation(int width, int height, int depth, float timeStep)
+Simulation::Simulation(int width, int height, int depth)
 : _density(width, height, depth, 3),
   _velocity(width, height, depth, 3),
   _pressure(width, height, depth, 2),
   _divergence(width, height, depth, 2),
   _obstacles(width, height, depth, 3),
   _temperature(width, height, depth, 2),
-  _timeStep(timeStep),
+  _timeStep(TIME_STEP),
   _gridScale(1.0f/(float)width, 1.0f/ (float)height, 1.0f/(float) depth),
   _dimensions(width, height, depth),
   _sourcePosition(width/2, height/2, depth/2),
   _obstaclePosition(width/2, height/2, depth/2),
   _temperaturePosition(width/2, height/2, depth/2),
+  _temperatureValue(30),
+  _sourceDensity(0.5),
+  _smokeBuoyancy(1.0f),
+  _smokeWeight(0.0125f),
   #if FULLSCREEN == 1
     _cubeFront(FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT, 3),
     _cubeBack(FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT, 3)
@@ -23,6 +27,46 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
     _cubeBack(WINDOW_WIDTH, WINDOW_HEIGHT, 3)
   #endif
 { 
+  _console = Console::getInstance();
+  _console->addItem("temp", [&](std::string args)
+  {
+      std::istringstream is(args);
+      float tmp;
+      is >> tmp;
+      _temperatureValue = tmp;
+  }, "float", "Set the temperature.");
+
+  _console->addItem("density", [&](std::string args)
+  {
+      std::istringstream is(args);
+      float tmp;
+      is >> tmp;
+      _sourceDensity = tmp;
+  }, "float", "Set the density.");
+
+  _console->addItem("step", [&](std::string args)
+  {
+      std::istringstream is(args);
+      float tmp;
+      is >> tmp;
+      _timeStep = tmp;
+  }, "float", "Set the time step.");
+
+  _console->addItem("weight", [&](std::string args)
+  {
+      std::istringstream is(args);
+      float tmp;
+      is >> tmp;
+      _smokeWeight = tmp;
+  }, "float", "Set the smoke weight.");
+
+  _console->addItem("buoyancy", [&](std::string args)
+  {
+      std::istringstream is(args);
+      float tmp;
+      is >> tmp;
+      _smokeBuoyancy = tmp;
+  }, "float", "Set the smoke buoyancy.");
 
   _shaderLoader.loadPrograms("shaders/simulation/calculationPrograms.prog");
   _shaderLoader.loadPrograms("shaders/visualization/viz.prog");
@@ -92,6 +136,7 @@ Simulation::Simulation(int width, int height, int depth, float timeStep)
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
   glViewport(0, 0, _dimensions.x, _dimensions.y);
 
+  // initializeObstaclesWithImage(&_obstacles, "hej.png");
   initializeObstacles(&_obstacles);
 
   _ambientTemperature = 0.0f;
@@ -124,18 +169,18 @@ void Simulation::stepSimulation()
   computeBuoyancy(_velocity.getBuffer1(), _temperature.getBuffer1(), _density.getBuffer1(), _velocity.getBuffer2());
   _velocity.swapBuffers();
 
-  addSource(_temperature.getBuffer1(), _temperaturePosition, glm::vec4(5), 300);
+  addSource(_temperature.getBuffer1(), _temperaturePosition, glm::vec4(_temperatureValue), 300);
 
-  addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(1,0.5,0.75,0), 5);
-  addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2+80, _dimensions.y/2, _dimensions.z/2), glm::vec4(4,3,5,0), 5);
-  addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2-80, _dimensions.y/2, _dimensions.z/2), glm::vec4(9,15,12,0), 5);
+  addSource(_density.getBuffer1(), _sourcePosition, glm::vec4(_sourceDensity,1.0,0.75,0), 5);
+  addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2+80, _dimensions.y/2, _dimensions.z/2), glm::vec4(4.0f/5.0f,3.0f/5.0f,1,0), 5);
+  addSource(_density.getBuffer1(), glm::vec3(_dimensions.x/2-80, _dimensions.y/2, _dimensions.z/2), glm::vec4(9.0f/15.0f,15.0f/15.0f,12.0f/15.0f,0), 5);
 
   addSource(&_obstacles, glm::vec3(_dimensions.x/2-75, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
   addSource(&_obstacles, glm::vec3(_dimensions.x/2+75, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
-  // addSource(&_obstacles, glm::vec3(_dimensions.x/2-35, _dimensions.y/2-40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
-  // addSource(&_obstacles, glm::vec3(_dimensions.x/2+35, _dimensions.y/2-40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  addSource(&_obstacles, glm::vec3(_dimensions.x/2-35, _dimensions.y/2-40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  addSource(&_obstacles, glm::vec3(_dimensions.x/2+35, _dimensions.y/2-40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
 
-  addSource(&_obstacles, glm::vec3(_dimensions.x/2, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
+  // addSource(&_obstacles, glm::vec3(_dimensions.x/2, _dimensions.y/2 + 40, _dimensions.z/2), glm::vec4(1,0,0,0), 10);
 
   computeDivergence(_velocity.getBuffer1(), &_divergence, &_obstacles);
 
@@ -345,6 +390,8 @@ void Simulation::addSource(Volume* destination, glm::vec3 position, glm::vec4 va
 
 void Simulation::initializeObstacles(Volume* obstacles)
 {
+  
+
   glUseProgram(_shaderLoader.accessProgram("initializeObstacles"));
 
   setUniform("dimensions", _dimensions);
@@ -355,6 +402,46 @@ void Simulation::initializeObstacles(Volume* obstacles)
   glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
   resetGlState();
 }
+
+void Simulation::initializeObstaclesWithImage(Volume* obstacles, std::string fileName)
+{
+  std::vector<unsigned char> image;
+  unsigned width, height;
+  unsigned error = lodepng::decode(image, width, height, fileName.c_str());
+
+  if(error != 0)
+  {
+    std::cout << "error " << error << ": " << lodepng_error_text(error) << std::endl;
+  }else 
+    std::cout << "Sucessfully opened obstacle file: " << fileName << std::endl;
+
+  // for (int i = 0; i < image.size(); ++i)
+  // {
+  //   std::cout << "pix: " << image.at(i) << std::endl;
+  // }
+
+  GLuint imageTexture;
+  glGenTextures(1, &imageTexture);
+  glBindTexture(GL_TEXTURE_2D, imageTexture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
+
+  glUseProgram(_shaderLoader.accessProgram("initializeObstaclesWithImage"));
+
+  setUniform("image", 0);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, obstacles->getFbo());
+  // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glBindTexture(GL_TEXTURE_2D, imageTexture);
+  glActiveTexture(GL_TEXTURE0);
+
+  glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _dimensions.z);
+  resetGlState();
+}
+
 
 void Simulation::initializeVelocity(Volume* velocity)
 {

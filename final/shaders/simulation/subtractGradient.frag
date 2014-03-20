@@ -17,7 +17,7 @@ void main()
   vec3 solid = texelFetch(obstacleTexture, pos, 0).xyz;
   if (solid.x > 0)
   {
-    value = solid.yzx;
+    value = vec3(0);
     return;
   }
 

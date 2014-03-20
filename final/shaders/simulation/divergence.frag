@@ -28,19 +28,19 @@ void main()
   vec3 zDownO = texelFetchOffset(obstacleTexture, pos, 0, ivec3(0, 0, -1)).xyz;
 
   if (xUpO.x > 0)
-    xUpV = 0;
+    xUpV = -xUpV;
   if (xDownO.x > 0)
-    xDownV = 0;
+    xDownV = -xDownV;
 
   if (yUpO.x > 0)
-    yUpV = 0;
+    yUpV = -yUpV;
   if (yDownO.x > 0)
-    yDownV = 0;
+    yDownV = -yDownV;
 
   if (zUpO.x > 0)
-    zUpV = 0;
+    zUpV = -zUpV;
   if (xDownO.z > 0)
-    zDownV = 0;
+    zDownV = -zDownV;
 
     value = (xUpV.x - xDownV.x + yUpV.y - yDownV.y + zUpV.z - zDownV.z) / (2 * cellSize);
 }

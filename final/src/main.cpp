@@ -97,7 +97,7 @@ int main( void )
 	float speed = 3;
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	Simulation sim(VOLUME_WIDTH,VOLUME_HEIGHT,VOLUME_DEPTH,TIME_STEP);
+	Simulation sim(VOLUME_WIDTH,VOLUME_HEIGHT,VOLUME_DEPTH);
 	 glEnable(GL_TEXTURE_3D);
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{

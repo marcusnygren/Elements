@@ -6,3 +6,4 @@ addSource basic.vertex selectLayer.geom source.frag
 initializeObstacles basic.vertex selectLayer.geom initializeObstacles.frag
 initializeVelocity basic.vertex selectLayer.geom initializeVelocity.frag
 buoyancy basic.vertex selectLayer.geom buoyancy.frag
+initializeObstaclesWithImage basic.vertex selectLayer.geom initializeObstaclesWithImage.frag

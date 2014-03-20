@@ -2,6 +2,8 @@
 #define SIMULATION_H 
 
 #include <string>
+#include <sstream>
+#include <atomic>
 
 #include <GL/glew.h>
 #include "glm/glm.hpp"
@@ -10,11 +12,13 @@
 #include "Container.h"
 #include "Volume.h"
 #include "Surface.h"
+#include "lodepng.h"
+#include "Console.h"
 
 class Simulation
 {
   public:
-    Simulation(int width, int height, int depth, float timeStep);
+    Simulation(int width, int height, int depth);
     ~Simulation();
     
     void stepSimulation();
@@ -32,6 +36,7 @@ class Simulation
     void computeBuoyancy(Volume* velocity, Volume* temperature, Volume* density, Volume* destination);
     void addSource(Volume* destination, glm::vec3 position, glm::vec4 value, float radius);
     void initializeObstacles(Volume* obstacles);
+    void initializeObstaclesWithImage(Volume* obstacles, std::string fileName);
     void initializeVelocity(Volume* velocity);
 
     void resetGlState();
@@ -51,6 +56,8 @@ class Simulation
     void setUniform(std::string name, glm::vec4 value);
 
 
+    Console* _console;
+
     GLuint _vbo;
     GLuint _volumeVbo;
 
@@ -67,17 +74,19 @@ class Simulation
     Surface _cubeFront;
     Surface _cubeBack;
 
-    float _timeStep;
     glm::vec3 _gridScale;
     glm::vec3 _dimensions;
 
-
     float _ambientTemperature;
-    float _smokeBuoyancy = 1.0f;
-    float _smokeWeight = 0.0125f;
     glm::vec3 _sourcePosition;
     glm::vec3 _obstaclePosition;
     glm::vec3 _temperaturePosition;
+
+    std::atomic<float> _temperatureValue;
+    std::atomic<float> _sourceDensity;
+    std::atomic<float> _timeStep;
+    std::atomic<float> _smokeWeight;
+    std::atomic<float> _smokeBuoyancy;
 };
 
 #endif
