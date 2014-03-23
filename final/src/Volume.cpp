@@ -20,7 +20,7 @@ Volume::Volume(int width, int height, int depth, int nrOfComponents)
   switch(nrOfComponents)
   {
     case 1:
-      glTexImage3D(GL_TEXTURE_3D, 0, GL_R16F, width, height, depth, 0, GL_R, GL_HALF_FLOAT, 0);
+      glTexImage3D(GL_TEXTURE_3D, 0, GL_R16F, width, height, depth, 0, GL_RED, GL_HALF_FLOAT, 0);
     break;
 
     case 2:

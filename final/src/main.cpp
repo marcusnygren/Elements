@@ -98,21 +98,26 @@ int main( void )
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	Simulation sim(VOLUME_WIDTH,VOLUME_HEIGHT,VOLUME_DEPTH);
-	 glEnable(GL_TEXTURE_3D);
+	glEnable(GL_TEXTURE_3D);
+
+	std::stringstream titleStream;
+	titleStream << VOLUME_WIDTH << "x" << VOLUME_HEIGHT << "x" << VOLUME_DEPTH << " = " << VOLUME_WIDTH * VOLUME_HEIGHT * VOLUME_DEPTH << " Cells";
+	glfwSetWindowTitle(window, titleStream.str().c_str());
+
 	while(isRunning && glfwWindowShouldClose(window) == 0)
 	{
-		if (showFps)
-		{
-			nrOfFrames++;
-			if (glfwGetTime() - _time >= 1)
-			{
-				std::stringstream ss;
-				ss << "FPS: " << (int) (1000.f / (float) nrOfFrames);
-				glfwSetWindowTitle(window, ss.str().c_str());
-				nrOfFrames = 0;
-				_time += 1;
-			}
-		}
+		// if (showFps)
+		// {
+		// 	nrOfFrames++;
+		// 	if (glfwGetTime() - _time >= 1)
+		// 	{
+		// 		std::stringstream ss;
+		// 		ss << "FPS: " << (int) (1000.f / (float) nrOfFrames);
+		// 		glfwSetWindowTitle(window, ss.str().c_str());
+		// 		nrOfFrames = 0;
+		// 		_time += 1;
+		// 	}
+		// }
 
 		if(glfwGetKey(window, 'A') == GLFW_PRESS)
 		{
